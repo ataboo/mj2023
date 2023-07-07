@@ -14,6 +14,10 @@ config/name="mj2023"
 run/main_scene="res://scenes/levels/MainLevel.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+GameManager="*res://src/common/GameManager.cs"
+
 [gui]
 
 common/drop_mouse_on_gui_input_disabled=true
