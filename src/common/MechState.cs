@@ -1,7 +1,22 @@
 using Godot;
 
+// Vector3s follow OGL convention of:
+// -z => Forward
+// x => Right
 public class MechState {
     public Vector3 velocity;
 
+    public Vector3 fwdVelocity;
+
     public Vector2 walkInput;
+
+    public float turnInput;
+
+    public float walkCycleT;
+
+    public float walkSpeedSaturation;
+
+    public bool shuffling;
+
+    public float shuffleSaturation;
 }

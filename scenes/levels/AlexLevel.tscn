@@ -23,16 +23,17 @@ __meta__ = {
 "_editor_floor_": Vector3( 0, 1, 0 )
 }
 
-[node name="Player" type="KinematicBody" parent="."]
+[node name="PlayerChassis" type="KinematicBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.10294, 0 )
 script = ExtResource( 3 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Player"]
+[node name="CollisionShape" type="CollisionShape" parent="PlayerChassis"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
 shape = SubResource( 1 )
 
-[node name="Cockpit" type="Spatial" parent="Player"]
+[node name="Cockpit" type="Spatial" parent="PlayerChassis"]
 script = ExtResource( 4 )
+playerControlPath = NodePath("..")
 
-[node name="Camera" type="Camera" parent="Player/Cockpit"]
+[node name="Camera" type="Camera" parent="PlayerChassis/Cockpit"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.972106, 0 )
