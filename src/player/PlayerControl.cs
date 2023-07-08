@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public class PlayerControl : KinematicBody
 {
@@ -16,10 +15,19 @@ public class PlayerControl : KinematicBody
     public float rotationSpeed = 0.65f;
 
     [Export]
-    public float walkCyclePeriod = 1f;
+    public float walkCyclePeriod = 2f;
 
     [Export]
-    public float shuffleCyclePeriod = 0.7f;
+    public float shuffleCyclePeriod = 1.4f;
+
+    [Export]
+    public float mouseSensitivity = .001f;
+
+    [Export]
+    private float lookLimitX = Mathf.Pi / 3;
+
+    [Export]
+    private float lookLimitY = Mathf.Pi / 4;
 
     private Vector3 gravity = Vector3.Down * 10;
 
@@ -29,10 +37,13 @@ public class PlayerControl : KinematicBody
     [Signal]
     public delegate void OnPhysicsDone();
 
-    int debugCount = 0;
+    private GameManager _gameManager;
 
     public override void _Ready()
     {
+        _gameManager = GameManager.MustGetNode(this);
+
+        Input.MouseMode = Input.MouseModeEnum.Captured;
         InitState();
     }
 
@@ -40,12 +51,17 @@ public class PlayerControl : KinematicBody
     {
         ProcessMove(delta);
 
-        // if(debugCount++ > 100) {
-        //     debugCount = 0;
-        //     GD.Print($"Fwd z: {_state.fwdVelocity.z}, Fwd x: {_state.fwdVelocity.x}, Speed: {_state.fwdSpeedSaturation}");
-        // }
-
         EmitSignal(nameof(OnPhysicsDone), delta);
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        if(@event is InputEventMouseMotion eventMouseMotion) {
+            _state.lookTarget.x = Mathf.Clamp(_state.lookTarget.x - eventMouseMotion.Relative.x * mouseSensitivity, -lookLimitX, lookLimitX);
+            _state.lookTarget.y = Mathf.Clamp(_state.lookTarget.y - eventMouseMotion.Relative.y * mouseSensitivity, -lookLimitY, lookLimitY);
+        } else if (@event is InputEventMouseButton eventMouseButton) {
+            //TODO: handle mouse clicks here
+        }
     }
 
     private void ProcessInput(float delta) {

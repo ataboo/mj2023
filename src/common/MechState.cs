@@ -9,6 +9,8 @@ public class MechState {
     public Vector3 fwdVelocity;
 
     public Vector2 walkInput;
+    
+    public Vector2 lookTarget;
 
     public float turnInput;
 

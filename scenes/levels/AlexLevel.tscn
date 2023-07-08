@@ -1,9 +1,13 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://src/level/LevelManager.cs" type="Script" id=1]
 [ext_resource path="res://scenes/gridmap/TerrainMeshLib.tres" type="MeshLibrary" id=2]
 [ext_resource path="res://src/player/PlayerControl.cs" type="Script" id=3]
 [ext_resource path="res://src/player/CockpitControl.cs" type="Script" id=4]
+[ext_resource path="res://textures/UI/CrosshairsTop.png" type="Texture" id=5]
+[ext_resource path="res://textures/UI/CrosshairsBottom.png" type="Texture" id=6]
+[ext_resource path="res://src/player/HudControl.cs" type="Script" id=7]
+[ext_resource path="res://textures/UI/CrosshairsBottomHashed.png" type="Texture" id=8]
 
 [sub_resource type="CapsuleShape" id=1]
 height = 2.0
@@ -34,6 +38,45 @@ shape = SubResource( 1 )
 [node name="Cockpit" type="Spatial" parent="PlayerChassis"]
 script = ExtResource( 4 )
 playerControlPath = NodePath("..")
+cameraPath = NodePath("Camera")
+hudPath = NodePath("../../HUDCanvasLayer/HUD")
 
 [node name="Camera" type="Camera" parent="PlayerChassis/Cockpit"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.972106, 0 )
+
+[node name="HUDCanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="HUDCanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 7 )
+bottomCrosshairPath = NodePath("BottomCrosshair")
+topCrosshairPath = NodePath("TopCrosshair")
+cameraPath = NodePath("../../PlayerChassis/Cockpit/Camera")
+playerControlPath = NodePath("../../PlayerChassis")
+bottomCrosshairsText = ExtResource( 6 )
+bottomCrosshairsHashedText = ExtResource( 8 )
+
+[node name="TopCrosshair" type="TextureRect" parent="HUDCanvasLayer/HUD"]
+modulate = Color( 0, 0.870588, 0.278431, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -16.0
+margin_top = -16.0
+margin_right = 16.0
+margin_bottom = 16.0
+texture = ExtResource( 5 )
+
+[node name="BottomCrosshair" type="TextureRect" parent="HUDCanvasLayer/HUD"]
+modulate = Color( 0, 0.870588, 0.278431, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -64.0
+margin_top = -64.0
+margin_right = 64.0
+margin_bottom = 64.0
+texture = ExtResource( 6 )
