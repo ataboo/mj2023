@@ -1,4 +1,5 @@
 using Godot;
+using static MechGameExtensions;
 
 public class PlayerControl : KinematicBody
 {
@@ -35,7 +36,10 @@ public class PlayerControl : KinematicBody
     private MechState _state;
 
     [Signal]
-    public delegate void OnPhysicsDone();
+    public delegate void OnPhysicsDone(float delta);
+
+    [Signal]
+    public delegate void OnAbilityChange(int ability);
 
     private GameManager _gameManager;
 
@@ -56,34 +60,109 @@ public class PlayerControl : KinematicBody
 
     public override void _Input(InputEvent @event)
     {
-        if(@event is InputEventMouseMotion eventMouseMotion) {
+        if (@event is InputEventMouseMotion eventMouseMotion)
+        {
             _state.lookTarget.x = Mathf.Clamp(_state.lookTarget.x - eventMouseMotion.Relative.x * mouseSensitivity, -lookLimitX, lookLimitX);
             _state.lookTarget.y = Mathf.Clamp(_state.lookTarget.y - eventMouseMotion.Relative.y * mouseSensitivity, -lookLimitY, lookLimitY);
-        } else if (@event is InputEventMouseButton eventMouseButton) {
+        }
+        else if (@event is InputEventMouseButton eventMouseButton)
+        {
             //TODO: handle mouse clicks here
+
+            if (eventMouseButton.IsPressed())
+            {
+                switch ((ButtonList)eventMouseButton.ButtonIndex)
+                {
+                    case ButtonList.WheelUp:
+                        UpOneAbility();
+                        break;
+                    case ButtonList.WheelDown:
+                        DownOneAbility();
+                        break;
+                }
+            }
+        }
+        else if (@event is InputEventKey eventKey)
+        {
+            if (eventKey.IsPressed())
+            {
+                switch ((KeyList)eventKey.Scancode)
+                {
+                    case KeyList.Key1:
+                        SwitchAbility(MechAbility.Grab);
+                        break;
+                    case KeyList.Key2:
+                        SwitchAbility(MechAbility.Sauce);
+                        break;
+                    case KeyList.Key3:
+                        SwitchAbility(MechAbility.Pepperoni);
+                        break;
+                    case KeyList.Key4:
+                        SwitchAbility(MechAbility.Cheese);
+                        break;
+                    // case KeyList.Key5:
+                    //     SwitchAbility(MechAbility.Kick);
+                    //     break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 
-    private void ProcessInput(float delta) {
+    private void UpOneAbility()
+    {
+        var maxAbility = MechGameHelpers.MaxEnumValue<MechAbility>();
 
+        SwitchAbility((MechAbility)(((int)_state.activeAbility + 1) % (maxAbility + 1)));
+    }
+
+    private void DownOneAbility()
+    {
+        var maxAbility = MechGameHelpers.MaxEnumValue<MechAbility>();
+
+        SwitchAbility((MechAbility)(((int)_state.activeAbility + maxAbility) % (maxAbility + 1)));
+    }
+
+    private void SwitchAbility(MechAbility ability)
+    {
+        if (ability == _state.activeAbility)
+        {
+            return;
+        }
+
+        //TODO there might be a delay in pending and active with animations.
+
+        _state.activeAbility = ability;
+        this.EmitSignal(nameof(OnAbilityChange), (int)ability);
+    }
+
+    private void ProcessInput(float delta)
+    {
         _state.walkInput = Vector2.Zero;
         _state.turnInput = 0;
-        if(Input.IsActionPressed("turn_right")) {
+        if (Input.IsActionPressed("turn_right"))
+        {
             _state.turnInput += 1f;
         }
-        if(Input.IsActionPressed("turn_left")) {
+        if (Input.IsActionPressed("turn_left"))
+        {
             _state.turnInput -= 1f;
         }
-        if(Input.IsActionPressed("move_fwd")) {
+        if (Input.IsActionPressed("move_fwd"))
+        {
             _state.walkInput += Vector2.Up;
         }
-        if(Input.IsActionPressed("move_back")) {
+        if (Input.IsActionPressed("move_back"))
+        {
             _state.walkInput += Vector2.Down;
         }
-        if(Input.IsActionPressed("move_left")) {
+        if (Input.IsActionPressed("move_left"))
+        {
             _state.walkInput += Vector2.Left;
         }
-        if(Input.IsActionPressed("move_right")) {
+        if (Input.IsActionPressed("move_right"))
+        {
             _state.walkInput += Vector2.Right;
         }
 
@@ -98,7 +177,8 @@ public class PlayerControl : KinematicBody
         RotateY(-_state.turnInput * rotationSpeed * delta);
     }
 
-    private void ProcessMove(float delta) {
+    private void ProcessMove(float delta)
+    {
         _state.velocity += gravity * delta;
         ProcessInput(delta);
 
@@ -110,23 +190,31 @@ public class PlayerControl : KinematicBody
         _state.shuffleSaturation = Mathf.Max(Mathf.Abs(_state.fwdVelocity.x) / strafeSpeed, Mathf.Abs(_state.turnInput));
 
         var stopped = _state.walkInput.Length() < 0.01f && Mathf.Abs(_state.turnInput) < 0.01f;
-        if(stopped) {
+        if (stopped)
+        {
             _state.shuffling = true;
             _state.walkCycleT = Mathf.Lerp(_state.walkCycleT, 1f, 2 * delta);
-        } else {
+        }
+        else
+        {
             _state.shuffling = Mathf.Abs(_state.walkInput.y) < 0.01f;
-        
-            if(_state.shuffling) {
+
+            if (_state.shuffling)
+            {
                 _state.walkCycleT = (_state.walkCycleT + _state.shuffleSaturation * delta / shuffleCyclePeriod) % 1f;
-            } else {
+            }
+            else
+            {
                 _state.walkCycleT = (_state.walkCycleT + _state.walkSpeedSaturation * delta / walkCyclePeriod) % 1f;
             }
         }
     }
 
-    private void InitState() {
-        this._state = new MechState() {
-            
+    private void InitState()
+    {
+        this._state = new MechState()
+        {
+
         };
     }
 }

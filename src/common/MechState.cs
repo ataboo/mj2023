@@ -21,4 +21,6 @@ public class MechState {
     public bool shuffling;
 
     public float shuffleSaturation;
+
+    public MechAbility activeAbility;
 }

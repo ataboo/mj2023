@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://src/level/LevelManager.cs" type="Script" id=1]
 [ext_resource path="res://scenes/gridmap/TerrainMeshLib.tres" type="MeshLibrary" id=2]
@@ -8,6 +8,11 @@
 [ext_resource path="res://textures/UI/CrosshairsBottom.png" type="Texture" id=6]
 [ext_resource path="res://src/player/HudControl.cs" type="Script" id=7]
 [ext_resource path="res://textures/UI/CrosshairsBottomHashed.png" type="Texture" id=8]
+[ext_resource path="res://scenes/ui/AbilityContainer.tscn" type="PackedScene" id=9]
+[ext_resource path="res://src/ui/HotbarAbilityControl.cs" type="Script" id=10]
+[ext_resource path="res://textures/UI/AbilitySauce.png" type="Texture" id=11]
+[ext_resource path="res://textures/UI/AbilityRoni.png" type="Texture" id=12]
+[ext_resource path="res://textures/UI/AbilityCheese.png" type="Texture" id=13]
 
 [sub_resource type="CapsuleShape" id=1]
 height = 2.0
@@ -80,3 +85,54 @@ margin_top = -64.0
 margin_right = 64.0
 margin_bottom = 64.0
 texture = ExtResource( 6 )
+
+[node name="Hotbar" type="CenterContainer" parent="HUDCanvasLayer/HUD"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -88.0
+script = ExtResource( 10 )
+hotbarItemHolderPath = NodePath("MarginContainer/PanelContainer/HBoxContainer")
+playerControlPath = NodePath("../../../PlayerChassis")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUDCanvasLayer/HUD/Hotbar"]
+margin_left = 819.0
+margin_right = 1101.0
+margin_bottom = 88.0
+custom_constants/margin_bottom = 10
+
+[node name="PanelContainer" type="PanelContainer" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer"]
+margin_right = 282.0
+margin_bottom = 78.0
+grow_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 275.0
+margin_bottom = 71.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="AbilityContainer" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
+
+[node name="AbilityContainer2" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
+margin_left = 68.0
+margin_right = 132.0
+abilityTexture = ExtResource( 11 )
+labelText = "2"
+ability = 1
+
+[node name="AbilityContainer3" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
+margin_left = 136.0
+margin_right = 200.0
+abilityTexture = ExtResource( 12 )
+labelText = "3"
+ability = 2
+
+[node name="AbilityContainer4" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
+margin_left = 204.0
+margin_right = 268.0
+abilityTexture = ExtResource( 13 )
+labelText = "4"
+ability = 3
