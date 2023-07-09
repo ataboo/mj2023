@@ -21,6 +21,11 @@ public class MechLegControl : Spatial
 
     private PhysicsShapeQueryParameters _shapeQueryParams;
 
+    private bool _kickArmed = false;
+
+    [Export]
+    public float kickForce = 250f;
+
     public override void _Ready()
     {
         _tree = GetNode<AnimationTree>(animationTreePath) ?? throw new NullReferenceException();
@@ -50,7 +55,9 @@ public class MechLegControl : Spatial
 
     public override void _PhysicsProcess(float delta)
     {
-        if(_stateMachine.GetCurrentNode() == "KickStrike") {
+        var currentState = _stateMachine.GetCurrentNode();
+
+        if(_kickArmed && currentState == "KickStrike") {
             var progress = _stateMachine.GetCurrentPlayPosition() / _stateMachine.GetCurrentLength();
             if(progress < 0.3f) {
 
@@ -60,15 +67,23 @@ public class MechLegControl : Spatial
 
                 if(results.Contains("collider_id")) {
                     var colliderId = (ulong)(int)results["collider_id"];
+                    var point = (Vector3)results["point"];
+                    var linearVelocity = (Vector3)results["linear_velocity"];
                     var instance = GD.InstanceFromId(colliderId);
 
                     if(instance is GridMap gridMap) {
-                        _playerControl.QueueImpulse(-GlobalTransform.basis.z * 1);       
+                        _playerControl.QueueImpulse(-GlobalTransform.basis.z * kickForce);       
+                        _kickArmed = false;
+                    } else if(instance is IKickable kickable) {
+                        kickable.Kick(Vector3.Zero, GlobalTransform.basis.z * kickForce);
+                        _kickArmed = false;
                     }
                 }
             }
 
             // GD.InstanceFromId()
+        } else if (currentState == "KickWindup") {
+            _kickArmed = true;
         }
     }
 }
