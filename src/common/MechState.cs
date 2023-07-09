@@ -23,4 +23,10 @@ public class MechState {
     public float shuffleSaturation;
 
     public MechAbility activeAbility;
+
+    public bool legWindUp;
+
+    public bool legKick;
+
+    public Vector3? queuedImpulse;
 }

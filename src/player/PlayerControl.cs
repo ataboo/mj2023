@@ -1,5 +1,5 @@
+using System;
 using Godot;
-using static MechGameExtensions;
 
 public class PlayerControl : KinematicBody
 {
@@ -41,10 +41,19 @@ public class PlayerControl : KinematicBody
     [Signal]
     public delegate void OnAbilityChange(int ability);
 
+    [Signal]
+    public delegate void OnLegStateChange();
+
     private GameManager _gameManager;
+
+    [Export]
+    public NodePath legControlPath;
+    private MechLegControl _legControl;
 
     public override void _Ready()
     {
+        _legControl = GetNode<MechLegControl>(legControlPath) ?? throw new NullReferenceException();
+
         _gameManager = GameManager.MustGetNode(this);
 
         Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -67,19 +76,38 @@ public class PlayerControl : KinematicBody
         }
         else if (@event is InputEventMouseButton eventMouseButton)
         {
-            //TODO: handle mouse clicks here
+            var legChange = false;
 
-            if (eventMouseButton.IsPressed())
+            switch ((ButtonList)eventMouseButton.ButtonIndex)
             {
-                switch ((ButtonList)eventMouseButton.ButtonIndex)
-                {
-                    case ButtonList.WheelUp:
+                case ButtonList.WheelUp:
+                    if (eventMouseButton.IsPressed())
+                    {
                         UpOneAbility();
-                        break;
-                    case ButtonList.WheelDown:
+                    }
+                    break;
+                case ButtonList.WheelDown:
+                    if (eventMouseButton.IsPressed())
+                    {
                         DownOneAbility();
-                        break;
-                }
+                    }
+                    break;
+                case ButtonList.Left:
+                    if(_state.legKick != eventMouseButton.IsPressed()) {
+                        _state.legKick = eventMouseButton.IsPressed();
+                        legChange = true;
+                    }
+                    break;
+                case ButtonList.Right:
+                    if(_state.legWindUp != eventMouseButton.IsPressed()) {
+                        _state.legWindUp = eventMouseButton.IsPressed();
+                        legChange = true;
+                    }
+                    break;
+            }
+
+            if(legChange) {
+                EmitSignal(nameof(OnLegStateChange));
             }
         }
         else if (@event is InputEventKey eventKey)
@@ -108,6 +136,10 @@ public class PlayerControl : KinematicBody
                 }
             }
         }
+    }
+
+    public void QueueImpulse(Vector3 worldImpulse) {
+        MechState.queuedImpulse = worldImpulse;
     }
 
     private void UpOneAbility()
@@ -170,6 +202,10 @@ public class PlayerControl : KinematicBody
 
         var targetV = Transform.basis.Xform(_state.fwdVelocity);
 
+        if(_state.legWindUp || _state.legKick) {
+            targetV = Vector3.Zero;
+        }
+
         var originalVY = _state.velocity.y;
         _state.velocity = _state.velocity.LinearInterpolate(targetV, walkAccel);
         _state.velocity.y = originalVY;
@@ -180,7 +216,15 @@ public class PlayerControl : KinematicBody
     private void ProcessMove(float delta)
     {
         _state.velocity += gravity * delta;
-        ProcessInput(delta);
+
+        if(IsOnFloor()) {
+            ProcessInput(delta);
+        }
+
+        if(MechState.queuedImpulse != null) {
+            _state.velocity += MechState.queuedImpulse.Value;
+            MechState.queuedImpulse = null;
+        }
 
         _state.velocity = MoveAndSlide(_state.velocity, Vector3.Up, true, 4, 0.785f, true);
 

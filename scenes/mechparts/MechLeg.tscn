@@ -1,0 +1,92 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://models/entity/mechleg.glb" type="PackedScene" id=1]
+[ext_resource path="res://animations/KickWindup.tres" type="Animation" id=2]
+[ext_resource path="res://animations/KickStrike.tres" type="Animation" id=3]
+[ext_resource path="res://src/player/MechLegControl.cs" type="Script" id=4]
+[ext_resource path="res://animations/KickIdle.tres" type="Animation" id=5]
+
+[sub_resource type="BoxShape" id=10]
+extents = Vector3( 0.406946, 0.230435, 0.666767 )
+
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "KickIdle"
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "KickStrike"
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "KickWindup"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=3]
+switch_mode = 2
+advance_condition = "kick"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=7]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=8]
+advance_condition = "windup"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=9]
+advance_condition = "not_windup"
+xfade_time = 0.4
+priority = 2
+
+[sub_resource type="AnimationNodeStateMachine" id=4]
+states/KickIdle/node = SubResource( 6 )
+states/KickIdle/position = Vector2( 711.667, 351 )
+states/KickStrike/node = SubResource( 1 )
+states/KickStrike/position = Vector2( 845, 176.556 )
+states/KickWindup/node = SubResource( 2 )
+states/KickWindup/position = Vector2( 533, 176.309 )
+transitions = [ "KickWindup", "KickStrike", SubResource( 3 ), "KickStrike", "KickIdle", SubResource( 7 ), "KickIdle", "KickWindup", SubResource( 8 ), "KickWindup", "KickIdle", SubResource( 9 ) ]
+start_node = "KickIdle"
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=5]
+
+[node name="mechleg" instance=ExtResource( 1 )]
+script = ExtResource( 4 )
+animationTreePath = NodePath("AnimationTree")
+footColliderPath = NodePath("Armature/Skeleton/BoneAttachment4/Ankle/HitCollider")
+
+[node name="BoneAttachment" parent="Armature/Skeleton" index="0"]
+transform = Transform( 0.940244, -0.340501, -0.000341874, -0.265285, -0.733177, 0.62616, -0.213458, -0.588652, -0.779695, 4.94213e-08, 1.56512, -2.00116 )
+
+[node name="BoneAttachment2" parent="Armature/Skeleton" index="1"]
+transform = Transform( 0.940472, 0.33987, -0.000355308, 0.282379, -0.780802, 0.557325, 0.189141, -0.524249, -0.830295, -3.62398e-08, 1.56512, -2.00116 )
+
+[node name="BoneAttachment3" parent="Armature/Skeleton" index="2"]
+transform = Transform( 1, 1.11726e-09, 3.5538e-09, 1.02567e-09, 0.834523, -0.550973, -3.58131e-09, 0.550973, 0.834524, -9.66973e-10, 1.56512, -2.00116 )
+
+[node name="BoneAttachment4" parent="Armature/Skeleton" index="3"]
+transform = Transform( 1, -3.72529e-09, -1.52018e-16, 1.02567e-09, 0.275325, 0.961352, -3.58131e-09, -0.961352, 0.275325, -9.09309e-16, 1.49365, -1.75162 )
+
+[node name="HitCollider" type="KinematicBody" parent="Armature/Skeleton/BoneAttachment4/Ankle" index="0"]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape" type="CollisionShape" parent="Armature/Skeleton/BoneAttachment4/Ankle/HitCollider" index="0"]
+transform = Transform( 1, 1.45787e-14, 0, -1.42109e-14, 1, 0, 0, 0, 1, 2.13462e-09, -0.181373, 0.110436 )
+shape = SubResource( 10 )
+
+[node name="BoneAttachment5" parent="Armature/Skeleton" index="4"]
+transform = Transform( 1, -5.34447e-16, -2.9544e-17, -2.95442e-17, -0.110223, 0.993907, -5.34447e-16, -0.993907, -0.110223, 2.46616e-17, 1.68627, -0.014725 )
+
+[node name="BoneAttachment6" parent="Armature/Skeleton" index="5"]
+transform = Transform( 1, 1.46244e-17, -1.44972e-17, -1.44972e-17, 0.999962, 0.00873198, 1.46244e-17, -0.00873198, 0.999962, 0, -1.77636e-15, 1.42109e-14 )
+
+[node name="AnimationPlayer" parent="." index="2"]
+anims/KickIdle = ExtResource( 5 )
+anims/KickStrike = ExtResource( 3 )
+anims/KickWindup = ExtResource( 2 )
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="3"]
+tree_root = SubResource( 4 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/playback = SubResource( 5 )
+parameters/conditions/kick = false
+parameters/conditions/not_windup = false
+parameters/conditions/windup = false

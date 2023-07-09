@@ -40,7 +40,7 @@ public class CockpitControl : Spatial
         }
         var mechState = _playerControl.MechState;
         var bobScale = mechState.shuffling ? walkBobScale / 3 : walkBobScale;
-        var targetPos = new Vector3(Mathf.Cos(mechState.walkCycleT * Mathf.Pi*2) * bobScale, Mathf.Cos(mechState.walkCycleT * Mathf.Pi * 4) * bobScale, 0);
+        var targetPos = new Vector3(Mathf.Cos(mechState.walkCycleT * Mathf.Pi*2) * bobScale, Mathf.Cos(mechState.walkCycleT * Mathf.Pi * 4) * bobScale, 0) + _startPos;
 
         Translation = Translation.LinearInterpolate(targetPos, delta * 10f);
                   
