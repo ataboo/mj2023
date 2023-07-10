@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/AbilityRoni.png-20450a6beb108adf975bc56adfc0257c.stex"
+path="res://.import/AbilityLeg.png-c7fa53accca4804b35758ec30586fa7b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/UI/AbilityRoni.png"
-dest_files=[ "res://.import/AbilityRoni.png-20450a6beb108adf975bc56adfc0257c.stex" ]
+source_file="res://textures/UI/AbilityLeg.png"
+dest_files=[ "res://.import/AbilityLeg.png-c7fa53accca4804b35758ec30586fa7b.stex" ]
 
 [params]
 

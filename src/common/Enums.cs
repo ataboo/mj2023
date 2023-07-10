@@ -2,6 +2,7 @@ using Godot;
 
 public enum MechAbility {
     Grab = 0,
+    Kick,
     Sauce,
     Pepperoni,
     Cheese,

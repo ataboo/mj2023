@@ -33,6 +33,10 @@ public class PlayerControl : KinematicBody
     [Export]
     private float lookLimitY = Mathf.Pi / 4;
 
+    [Export]
+    public NodePath abilityControlPath;
+    private AbilityControl _abilityControl;
+
     private Vector3 gravity = Vector3.Down * 10;
 
     public MechState MechState => _state;
@@ -41,23 +45,12 @@ public class PlayerControl : KinematicBody
     [Signal]
     public delegate void OnPhysicsDone(float delta);
 
-    [Signal]
-    public delegate void OnAbilityChange(int ability);
-
-    [Signal]
-    public delegate void OnLegStateChange();
-
     private GameManager _gameManager;
-
-    [Export]
-    public NodePath legControlPath;
-    private MechLegControl _legControl;
 
     public override void _Ready()
     {
-        _legControl = GetNode<MechLegControl>(legControlPath) ?? throw new NullReferenceException();
-
         _gameManager = GameManager.MustGetNode(this);
+        _abilityControl = GetNode<AbilityControl>(abilityControlPath) ?? throw new NullReferenceException();
 
         Input.MouseMode = Input.MouseModeEnum.Captured;
         InitState();
@@ -77,99 +70,10 @@ public class PlayerControl : KinematicBody
             _state.lookTarget.x = Mathf.Clamp(_state.lookTarget.x - eventMouseMotion.Relative.x * mouseSensitivity, -lookLimitX, lookLimitX);
             _state.lookTarget.y = Mathf.Clamp(_state.lookTarget.y - eventMouseMotion.Relative.y * mouseSensitivity, -lookLimitY, lookLimitY);
         }
-        else if (@event is InputEventMouseButton eventMouseButton)
-        {
-            var legChange = false;
-
-            switch ((ButtonList)eventMouseButton.ButtonIndex)
-            {
-                case ButtonList.WheelUp:
-                    if (eventMouseButton.IsPressed())
-                    {
-                        UpOneAbility();
-                    }
-                    break;
-                case ButtonList.WheelDown:
-                    if (eventMouseButton.IsPressed())
-                    {
-                        DownOneAbility();
-                    }
-                    break;
-                case ButtonList.Left:
-                    if(_state.legKick != eventMouseButton.IsPressed()) {
-                        _state.legKick = eventMouseButton.IsPressed();
-                        legChange = true;
-                    }
-                    break;
-                case ButtonList.Right:
-                    if(_state.legWindUp != eventMouseButton.IsPressed()) {
-                        _state.legWindUp = eventMouseButton.IsPressed();
-                        legChange = true;
-                    }
-                    break;
-            }
-
-            if(legChange) {
-                EmitSignal(nameof(OnLegStateChange));
-            }
-        }
-        else if (@event is InputEventKey eventKey)
-        {
-            if (eventKey.IsPressed())
-            {
-                switch ((KeyList)eventKey.Scancode)
-                {
-                    case KeyList.Key1:
-                        SwitchAbility(MechAbility.Grab);
-                        break;
-                    case KeyList.Key2:
-                        SwitchAbility(MechAbility.Sauce);
-                        break;
-                    case KeyList.Key3:
-                        SwitchAbility(MechAbility.Pepperoni);
-                        break;
-                    case KeyList.Key4:
-                        SwitchAbility(MechAbility.Cheese);
-                        break;
-                    // case KeyList.Key5:
-                    //     SwitchAbility(MechAbility.Kick);
-                    //     break;
-                    default:
-                        break;
-                }
-            }
-        }
     }
 
     public void QueueImpulse(Vector3 worldImpulse) {
         MechState.queuedImpulse = worldImpulse;
-    }
-
-    private void UpOneAbility()
-    {
-        var maxAbility = MechGameHelpers.MaxEnumValue<MechAbility>();
-
-        SwitchAbility((MechAbility)(((int)_state.activeAbility + 1) % (maxAbility + 1)));
-    }
-
-    private void DownOneAbility()
-    {
-        var maxAbility = MechGameHelpers.MaxEnumValue<MechAbility>();
-
-        SwitchAbility((MechAbility)(((int)_state.activeAbility + maxAbility) % (maxAbility + 1)));
-    }
-
-    private void SwitchAbility(MechAbility ability)
-    {
-        if (ability == _state.activeAbility)
-        {
-            return;
-        }
-
-        //TODO there might be a delay in pending and active with animations.
-
-        _state.activeAbility = ability;
-        this.EmitSignal(nameof(OnAbilityChange), (int)ability);
     }
 
     private void ProcessInput(float delta)
@@ -205,7 +109,7 @@ public class PlayerControl : KinematicBody
 
         var targetV = Transform.basis.Xform(_state.fwdVelocity);
 
-        if(_state.legWindUp || _state.legKick) {
+        if(_abilityControl.AbilityState.activeAbility == MechAbility.Kick && (_abilityControl.AbilityState.legWindUp || _abilityControl.AbilityState.legKick)) {
             targetV = Vector3.Zero;
         }
 
