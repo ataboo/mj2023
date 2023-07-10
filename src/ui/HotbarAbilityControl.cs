@@ -9,15 +9,15 @@ public class HotbarAbilityControl : CenterContainer
     private Control _hotbarItemHolder;
 
     [Export]
-    public NodePath playerControlPath;
-    private PlayerControl _playerControl;
+    public NodePath abilityControlPath;
+    private AbilityControl _abilityControl;
 
     private List<HotbarAbilityItemControl> _hotbarItems;
 
     public override void _Ready()
     {
         _hotbarItemHolder = GetNode<Control>(hotbarItemHolderPath) ?? throw new NullReferenceException();
-        _playerControl = GetNode<PlayerControl>(playerControlPath) ?? throw new NullReferenceException();
+        _abilityControl = GetNode<AbilityControl>(abilityControlPath) ?? throw new NullReferenceException();
 
 
         _hotbarItems = new List<HotbarAbilityItemControl>();
@@ -27,7 +27,7 @@ public class HotbarAbilityControl : CenterContainer
             }
         }
         
-        _playerControl.Connect(nameof(PlayerControl.OnAbilityChange), this, nameof(_HandleAbilityChange));
+        _abilityControl.Connect(nameof(AbilityControl.OnAbilityChange), this, nameof(_HandleAbilityChange));
 
         _HandleAbilityChange((int)MechAbility.Grab);
     }

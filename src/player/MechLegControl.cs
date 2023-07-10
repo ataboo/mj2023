@@ -14,6 +14,10 @@ public class MechLegControl : Spatial
     private PlayerControl _playerControl;
 
     [Export]
+    NodePath abilityControlPath;
+    private AbilityControl _abilityControl;
+
+    [Export]
     NodePath footColliderPath;
     private KinematicBody _footCollider;
 
@@ -31,6 +35,7 @@ public class MechLegControl : Spatial
         _tree = GetNode<AnimationTree>(animationTreePath) ?? throw new NullReferenceException();
         _stateMachine = (AnimationNodeStateMachinePlayback)_tree.Get("parameters/playback");
         _playerControl = GetNode<PlayerControl>(playerControlPath) ?? throw new NullReferenceException();
+        _abilityControl = GetNode<AbilityControl>(abilityControlPath) ?? throw new NullReferenceException();
         _footCollider = GetNode<KinematicBody>(footColliderPath) ?? throw new NullReferenceException();
         _footColShape = _footCollider.GetChild<CollisionShape>(0) ?? throw new NullReferenceException();
 
@@ -41,16 +46,21 @@ public class MechLegControl : Spatial
             Exclude = new Godot.Collections.Array(_footCollider),
         };
 
-        _playerControl.Connect(nameof(PlayerControl.OnLegStateChange), this, nameof(_HandleLegStateChange));
+        _abilityControl.Connect(nameof(AbilityControl.OnLegStateChange), this, nameof(_HandleLegStateChange));
     }
 
     public void _HandleLegStateChange() {
+        var abilityState = _abilityControl.AbilityState;
+        var legKick = abilityState.legKick && abilityState.activeAbility == MechAbility.Kick;
+        var legWindup = abilityState.legWindUp && abilityState.activeAbility == MechAbility.Kick;
 
-        var mechState = _playerControl.MechState;
-        _tree.Set("parameters/conditions/kick", mechState.legKick);
-        _tree.Set("parameters/conditions/not_kick", !mechState.legKick);
-        _tree.Set("parameters/conditions/windup", mechState.legWindUp);
-        _tree.Set("parameters/conditions/not_windup", !mechState.legWindUp);
+        _tree.Set("parameters/conditions/kick", legKick);
+        _tree.Set("parameters/conditions/not_kick", !legKick);
+        _tree.Set("parameters/conditions/windup", legWindup);
+        _tree.Set("parameters/conditions/not_windup", !legWindup);
+
+        _tree.Set("parameters/conditions/active", abilityState.activeAbility == MechAbility.Kick);
+        _tree.Set("parameters/conditions/not_active", abilityState.activeAbility != MechAbility.Kick);
     }
 
     public override void _PhysicsProcess(float delta)
