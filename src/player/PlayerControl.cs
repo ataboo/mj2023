@@ -4,6 +4,9 @@ using Godot;
 public class PlayerControl : KinematicBody
 {
     [Export]
+    public float mass = 20f;
+
+    [Export]
     public float walkSpeed = 3f;
 
     [Export]
@@ -222,7 +225,7 @@ public class PlayerControl : KinematicBody
         }
 
         if(MechState.queuedImpulse != null) {
-            _state.velocity += MechState.queuedImpulse.Value;
+            _state.velocity += MechState.queuedImpulse.Value/mass;
             MechState.queuedImpulse = null;
         }
 
