@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://models/entity/doughball.glb" type="PackedScene" id=1]
 [ext_resource path="res://src/entity/DoughballControl.cs" type="Script" id=2]
+[ext_resource path="res://scenes/prefabs/doughpile.tscn" type="PackedScene" id=3]
 
 [node name="doughball" instance=ExtResource( 1 )]
 
@@ -11,8 +12,9 @@ collision_mask = 7
 mass = 5.0
 contacts_reported = 2
 contact_monitor = true
-linear_damp = 0.5
+linear_damp = 0.25
 angular_damp = 0.5
 script = ExtResource( 2 )
+doughPilePrefab = ExtResource( 3 )
 
 [connection signal="body_entered" from="DoughballMesh" to="DoughballMesh" method="_HandleBodyEntered"]

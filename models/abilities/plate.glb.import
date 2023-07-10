@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/spinplate.glb-5d01da4cb96fbcaffe72e5dbdb7b10f2.scn"
+path="res://.import/plate.glb-267e2a01a23570eb4e5eff777eb595f8.scn"
 
 [deps]
 
-source_file="res://models/abilities/spinplate.glb"
-dest_files=[ "res://.import/spinplate.glb-5d01da4cb96fbcaffe72e5dbdb7b10f2.scn" ]
+source_file="res://models/abilities/plate.glb"
+dest_files=[ "res://.import/plate.glb-267e2a01a23570eb4e5eff777eb595f8.scn" ]
 
 [params]
 
