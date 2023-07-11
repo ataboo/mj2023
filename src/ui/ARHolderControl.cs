@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Godot;
 
 public class ARHolderControl : Control
@@ -16,11 +17,14 @@ public class ARHolderControl : Control
         _camera = GetNode<Camera>(cameraPath) ?? throw new NullReferenceException();
     }
 
-    public ARProgressControl CreateProgressBar(Spatial target) {
-        var instance = barPrefab.Instance<ARProgressControl>();
-        instance.SetTarget(target, _camera);
-        AddChild(instance);
+    public ARProgressGroupControl CreateProgressBar(Spatial target, string[] labels) {
+        var newGroup = barPrefab.Instance<ARProgressGroupControl>();
+        AddChild(newGroup);
+        newGroup.SetTarget(target);
+        newGroup.SetBarCount(labels.Length);
+        newGroup.SetLabels(labels);
+        newGroup.SetProgresses(Enumerable.Repeat(0f, labels.Length).ToArray());
 
-        return instance;
+        return newGroup;
     }
 }

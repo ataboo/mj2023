@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://scenes/mechparts/ClawArm.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/mechparts/MechLeg.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/player/CockpitControl.cs" type="Script" id=4]
+[ext_resource path="res://src/player/PlayerControl.cs" type="Script" id=5]
+[ext_resource path="res://src/player/AbilityControl.cs" type="Script" id=9]
+[ext_resource path="res://scenes/mechparts/PlateArm.tscn" type="PackedScene" id=10]
+
+[sub_resource type="CapsuleShape" id=1]
+radius = 2.0
+height = 6.25
+
+[node name="PlayerChassis" type="KinematicBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.38176, 10.4045 )
+collision_mask = 3
+script = ExtResource( 5 )
+walkSpeed = 7.5
+strafeSpeed = 2.5
+abilityControlPath = NodePath("Cockpit/Abilities")
+cameraPath = NodePath("Cockpit/Camera")
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
+shape = SubResource( 1 )
+
+[node name="Cockpit" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.74527, 0 )
+script = ExtResource( 4 )
+playerControlPath = NodePath("..")
+cameraPath = NodePath("Camera")
+
+[node name="Camera" type="Camera" parent="Cockpit"]
+
+[node name="Abilities" type="Spatial" parent="Cockpit"]
+script = ExtResource( 9 )
+legControlPath = NodePath("mechleg")
+playerControlPath = NodePath("../..")
+
+[node name="mechleg" parent="Cockpit/Abilities" instance=ExtResource( 3 )]
+transform = Transform( -0.999854, 0, -0.0170858, 0, 1, 0, 0.0170858, 0, -0.999854, 1.16049, -8.08123, 0.195523 )
+playerControlPath = NodePath("../../..")
+abilityControlPath = NodePath("..")
+
+[node name="clawarm" parent="Cockpit/Abilities" instance=ExtResource( 2 )]
+transform = Transform( -0.993083, 0, -0.117416, 0, 1, 0, 0.117416, 0, -0.993083, 2.12959, -1.29454, -0.83345 )
+abilityControlPath = NodePath("..")
+
+[node name="platearm" parent="Cockpit/Abilities" instance=ExtResource( 10 )]
+transform = Transform( -0.995699, 0, -0.0926482, 0, 1, 0, 0.0926482, 0, -0.995699, 3.10164, -1.29084, 1.19973 )
+abilityControlPath = NodePath("..")

@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/plate.glb-267e2a01a23570eb4e5eff777eb595f8.scn"
+path="res://.import/pizza.glb-860f38e2b5a6e57fd91de7a8a376ae43.scn"
 
 [deps]
 
-source_file="res://models/abilities/plate.glb"
-dest_files=[ "res://.import/plate.glb-267e2a01a23570eb4e5eff777eb595f8.scn" ]
+source_file="res://models/entity/pizza.glb"
+dest_files=[ "res://.import/pizza.glb-860f38e2b5a6e57fd91de7a8a376ae43.scn" ]
 
 [params]
 

@@ -35,6 +35,8 @@ labelPath = NodePath("Label")
 [node name="Label" type="Label" parent="."]
 margin_right = 100.0
 margin_bottom = 27.0
+grow_horizontal = 2
+grow_vertical = 2
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 3 )
 text = "Gluten"
@@ -43,8 +45,10 @@ align = 1
 [node name="ProgressBack" type="Panel" parent="."]
 margin_top = 31.0
 margin_right = 100.0
-margin_bottom = 46.988
-rect_min_size = Vector2( 0, 15.988 )
+margin_bottom = 47.0
+rect_min_size = Vector2( 100, 16 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
 custom_styles/panel = SubResource( 1 )
 
 [node name="ProgressFore" type="Panel" parent="ProgressBack"]

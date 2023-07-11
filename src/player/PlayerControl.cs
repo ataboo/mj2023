@@ -34,8 +34,17 @@ public class PlayerControl : KinematicBody
     private float lookLimitY = Mathf.Pi / 4;
 
     [Export]
-    public NodePath abilityControlPath;
+    private NodePath abilityControlPath;
     private AbilityControl _abilityControl;
+    public AbilityControl AbilityControl {
+        get {
+            if(_abilityControl == null) {
+                _abilityControl = GetNode<AbilityControl>(abilityControlPath) ?? throw new NullReferenceException();
+            }
+
+            return _abilityControl;
+        }
+    }
 
     private Vector3 gravity = Vector3.Down * 10;
 
@@ -47,10 +56,25 @@ public class PlayerControl : KinematicBody
 
     private GameManager _gameManager;
 
+    private LevelManager _levelManager;
+
+    [Export]
+    private NodePath cameraPath;
+    private Camera _camera;
+    public Camera Camera {
+        get {
+            if(_camera == null) {
+                _camera = GetNode<Camera>(cameraPath) ?? throw new NullReferenceException();
+            }
+
+            return _camera;
+        }
+    }
+
     public override void _Ready()
     {
         _gameManager = GameManager.MustGetNode(this);
-        _abilityControl = GetNode<AbilityControl>(abilityControlPath) ?? throw new NullReferenceException();
+        _levelManager = LevelManager.MustGetNode(this);
 
         Input.MouseMode = Input.MouseModeEnum.Captured;
         InitState();

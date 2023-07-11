@@ -20,7 +20,7 @@ public class DoughballControl : RigidBody, IKickable
 
     private float _health;
 
-    private ARProgressControl _progress;
+    private ARProgressGroupControl _progress;
 
     public void Kick(Vector3 position, Vector3 impulse)
     {
@@ -38,10 +38,7 @@ public class DoughballControl : RigidBody, IKickable
     private void InitProgressBar()
     {
         var level = LevelManager.MustGetNode(this);
-        _progress = level.ARHolder.CreateProgressBar(this);
-
-        _progress.SetLabel("Gluten");
-        _progress.SetProgress(0);
+        _progress = level.ARHolder.CreateProgressBar(this, new[]{"Gluten"});
         _progress.SetTargetOffset(new Vector3(0, 1, 0));
     }
 
@@ -71,7 +68,7 @@ public class DoughballControl : RigidBody, IKickable
 
         if (_progress != null)
         {
-            _progress.SetProgress((startHealth - _health) / startHealth);
+            _progress.SetProgresses(new[]{(startHealth - _health) / startHealth});
         }
     }
 
