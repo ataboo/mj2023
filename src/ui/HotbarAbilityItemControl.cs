@@ -8,25 +8,25 @@ public class HotbarAbilityItemControl : Container
     Color innactiveColor = new Color("#777777");
 
     [Export]
-    Texture abilityTexture;
+    private Texture abilityTexture;
 
     [Export]
-    public string labelText;
+    private  string labelText;
 
     [Export]
     public MechAbility ability;
 
     [Export]
-    NodePath abilityRectPath;
-    TextureRect _abilityRect;
+    private NodePath abilityRectPath;
+    private TextureRect _abilityRect;
 
     [Export]
-    NodePath backgroundPanelPath;
-    Panel _backgroundPanel;
+    private NodePath backgroundPanelPath;
+    private Panel _backgroundPanel;
 
     [Export]
-    NodePath keyNumberLabelPath;
-    Label _keyNumberLabel;
+    private NodePath keyNumberLabelPath;
+    private Label _keyNumberLabel;
 
     public override void _Ready()
     {

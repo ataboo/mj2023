@@ -11,11 +11,11 @@ public class CockpitControl : Spatial
     public NodePath cameraPath;
     private Camera _camera;
 
-    [Export]
-    public NodePath hudPath;
     private HudControl _hudControl;
 
     private GameManager _gameManager;
+
+    private LevelManager _levelManager;
 
     [Export]
     float walkBobScale = 0.2f;
@@ -28,7 +28,9 @@ public class CockpitControl : Spatial
         this._startPos = this.Translation;
         this._playerControl = GetNode<PlayerControl>(playerControlPath) ?? throw new NullReferenceException();
         this._camera = GetNode<Camera>(cameraPath) ?? throw new NullReferenceException();
-        this._hudControl = GetNode<HudControl>(hudPath) ?? throw new NullReferenceException();
+        
+        _levelManager = LevelManager.MustGetNode(this) ?? throw new NullReferenceException();
+        this._hudControl = _levelManager.HudControl ?? throw new NullReferenceException();
 
         _playerControl.Connect(nameof(PlayerControl.OnPhysicsDone), this, nameof(_HandleChassisPhysicsComplete));
     }
