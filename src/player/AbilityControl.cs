@@ -7,7 +7,7 @@ public class AbilityControl : Spatial
     public delegate void OnAbilityChange(int ability);
 
     [Signal]
-    public delegate void OnLegStateChange();
+    public delegate void OnClick(bool isPressed, bool isLeft);
 
     private GameManager _gameManager;
 
@@ -21,6 +21,8 @@ public class AbilityControl : Spatial
 
     private AbilityState _abilityState;
     public AbilityState AbilityState => _abilityState;
+    
+    private bool _changeLock = false;
 
     public override void _Ready()
     {
@@ -28,6 +30,12 @@ public class AbilityControl : Spatial
         _gameManager = GameManager.MustGetNode(this);
         _playerControl = GetNode<PlayerControl>(playerControlPath) ?? throw new NullReferenceException();
         _abilityState = new AbilityState();
+
+        CallDeferred(nameof(SwitchAbility), 0, true);
+    }
+
+    public void SetChangeLock(bool changeLock) {
+        _changeLock = changeLock;
     }
 
     public override void _Input(InputEvent @event)
@@ -50,10 +58,10 @@ public class AbilityControl : Spatial
                     }
                     break;
                 case ButtonList.Left:
-                    HandleLeftClick(eventMouseButton.IsPressed());
+                    EmitSignal(nameof(OnClick), eventMouseButton.IsPressed(), true);
                     break;
                 case ButtonList.Right:
-                    HandleRightClick(eventMouseButton.IsPressed());
+                    EmitSignal(nameof(OnClick), eventMouseButton.IsPressed(), false);
                     break;
             }
         }
@@ -70,12 +78,15 @@ public class AbilityControl : Spatial
                         SwitchAbility(MechAbility.Kick);
                         break;
                     case KeyList.Key3:
-                        SwitchAbility(MechAbility.Sauce);
+                        SwitchAbility(MechAbility.Plate);
                         break;
                     case KeyList.Key4:
-                        SwitchAbility(MechAbility.Pepperoni);
+                        SwitchAbility(MechAbility.Sauce);
                         break;
                     case KeyList.Key5:
+                        SwitchAbility(MechAbility.Pepperoni);
+                        break;
+                    case KeyList.Key6:
                         SwitchAbility(MechAbility.Cheese);
                         break;
                     default:
@@ -99,52 +110,14 @@ public class AbilityControl : Spatial
         SwitchAbility((MechAbility)(((int)_abilityState.activeAbility + maxAbility) % (maxAbility + 1)));
     }
 
-    private void SwitchAbility(MechAbility ability)
+    private void SwitchAbility(MechAbility ability, bool force = false)
     {
-        if (ability == _abilityState.activeAbility)
+        if (!force && (ability == _abilityState.activeAbility || _changeLock))
         {
             return;
         }
 
-        //TODO there might be a delay in pending and active with animations.
-
-        var lastAbility = _abilityState.activeAbility;
-
         _abilityState.activeAbility = ability;
         this.EmitSignal(nameof(OnAbilityChange), (int)ability);
-
-        if (lastAbility == MechAbility.Kick || ability == MechAbility.Kick)
-        {
-            this.EmitSignal(nameof(OnLegStateChange));
-        }
-    }
-
-    private void HandleLeftClick(bool isPressed)
-    {
-        switch (_abilityState.activeAbility)
-        {
-            case MechAbility.Kick:
-                if (_abilityState.legKick != isPressed)
-                {
-                    _abilityState.legKick = isPressed;
-                    EmitSignal(nameof(OnLegStateChange));
-                }
-                break;
-        }
-    }
-
-    private void HandleRightClick(bool isPressed)
-    {
-        switch (_abilityState.activeAbility)
-        {
-            case MechAbility.Kick:
-                if (_abilityState.legWindUp != isPressed)
-                {
-                    _abilityState.legWindUp = isPressed;
-                    EmitSignal(nameof(OnLegStateChange));
-                }
-                break;
-        }
-
     }
 }

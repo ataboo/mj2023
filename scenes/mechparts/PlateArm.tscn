@@ -1,0 +1,167 @@
+[gd_scene load_steps=25 format=2]
+
+[ext_resource path="res://models/abilities/platearm.glb" type="PackedScene" id=1]
+[ext_resource path="res://src/player/PlateArmControl.cs" type="Script" id=2]
+[ext_resource path="res://models/entity/doughpile.glb" type="PackedScene" id=3]
+
+[sub_resource type="SphereShape" id=18]
+radius = 1.30728
+
+[sub_resource type="Animation" id=3]
+resource_name = "PlateStashed"
+length = 0.001
+tracks/0/type = "transform"
+tracks/0/path = NodePath("Armature/Skeleton:BClawArm")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0, 1, 1.93401e-13, 0, -2.38419e-07, 6.86938e-31, 3.54417e-15, -8.30665e-17, 1, 1.00241, 1.00241, 1.00241, 0.0666667, 1, -1.14353e-13, -2.38419e-07, -4.18164e-07, 0, 0, 1.92134e-15, 1, 0.982324, 0.982325, 0.982325, 0.133333, 1, 1.49214e-13, -2.38419e-07, -4.89876e-07, 2.99579e-09, 8.3113e-15, -9.82097e-16, 1, 0.854912, 0.854912, 0.854912, 0.2, 1, 2.10276e-13, 0, -5.96046e-08, -1.18149e-08, 5.54713e-15, 1.65764e-15, 1, 0.64046, 0.64046, 0.64046, 0.266667, 1, 1.34559e-13, -2.38419e-07, -9.31323e-10, 1.57803e-08, 7.40885e-15, -1.83774e-15, 1, 0.479523, 0.479523, 0.479523, 0.333333, 1, -1.72973e-13, -2.38419e-07, -9.31323e-10, 8.48016e-09, 4.04366e-15, -1.375e-14, 1, 0.439295, 0.439295, 0.439295, 0.4, 1, 4.37428e-14, 0, -3.91155e-08, -1.5882e-08, 3.48691e-15, 4.76726e-16, 1, 0.509436, 0.509436, 0.509436, 0.466667, 1, 5.10703e-15, 0, 1.19209e-07, 1.35542e-08, -1.89744e-14, -1.33117e-14, 1, 0.936185, 0.936185, 0.936185, 0.533333, 1, -9.54792e-15, 0, -1.78814e-07, 2.83108e-08, -8.54568e-23, -3.93739e-15, 1, 1.23362, 1.23362, 1.23362, 0.6, 1, -4.13003e-14, 0, -1.19209e-07, 1.65139e-08, 8.39941e-15, -8.6072e-15, 1, 1.26892, 1.26892, 1.26892, 0.733333, 1, 2.88658e-15, 0, 0, -1.06626e-10, -6.50793e-15, -1.38548e-15, 1, 1.09181, 1.09181, 1.09181, 0.8, 1, 4.66294e-15, -2.38419e-07, -1.30385e-08, 4.30533e-09, 2.06579e-25, -1.82334e-15, 1, 1.02751, 1.02751, 1.02751, 0.875, 1, 4.44089e-16, -2.38419e-07, -9.31323e-10, 2.95824e-31, 3.55272e-15, 5.55113e-17, 1, 0.999998, 0.999998, 0.999998 )
+tracks/1/type = "transform"
+tracks/1/path = NodePath("Armature/Skeleton:BForearm")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = PoolRealArray( 0, 1, 0, 0, -4.76837e-07, -0.108718, 1.04983e-14, 5.18405e-08, 0.994073, 1, 1, 1, 0.0666667, 1, 1.13687e-13, 0, 0, -0.109532, -4.46777e-16, 5.22286e-08, 0.993983, 1, 1, 1, 0.133333, 1, 0, 0, 0, -0.113149, 2.83819e-14, 5.3953e-08, 0.993578, 1, 1, 1, 0.2, 1, 3.41061e-13, 2.38419e-07, 2.38419e-07, -0.108058, -1.07209e-14, 5.15256e-08, 0.994145, 1, 1, 1, 0.266667, 1, 1.13687e-13, 2.38419e-07, -2.38419e-07, -0.0831602, 5.34759e-15, 3.96535e-08, 0.996536, 1, 1, 1, 0.333333, 1, 1.13687e-13, 0, -2.38419e-07, -0.0252401, -2.92915e-15, 1.20352e-08, 0.999681, 1, 1, 1, 0.4, 1, 1.13687e-13, 2.38419e-07, 2.38419e-07, 0.111192, 6.7029e-15, -5.30204e-08, 0.993799, 1, 1, 1, 0.466667, 1, 0, 2.38419e-07, -4.76837e-07, 0.134844, -2.10646e-14, -6.42989e-08, 0.990867, 1, 1, 1, 0.533333, 1, 4.54747e-13, 7.15256e-07, 4.76837e-07, 0.117447, 2.10177e-14, -5.60032e-08, 0.993079, 1, 1, 1, 0.8, 1, 2.27374e-13, 4.76837e-07, 0, 0.0111501, -9.035e-15, -5.31679e-09, 0.999938, 1, 1, 1, 0.875, 1, 3.41061e-13, 4.76837e-07, 4.76837e-07, -2.98023e-08, 2.13163e-14, 6.35275e-22, 1, 1, 1, 1 )
+tracks/2/type = "transform"
+tracks/2/path = NodePath("Armature/Skeleton:BUpperArm")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = PoolRealArray( 0, 1, 0, 0, 0, 0.738357, -3.68752e-13, -1.76038e-07, 0.67441, 1, 1, 1, 0.0666667, 1, 0, 0, 0, 0.735045, -3.5631e-13, -1.75248e-07, 0.678018, 1, 1, 1, 0.133333, 1, 0, 0, 0, 0.711046, -3.23367e-13, -1.69527e-07, 0.703145, 1, 1, 1, 0.2, 1, 0, 0, 0, 0.656086, -2.495e-13, -1.56423e-07, 0.754686, 1, 1, 1, 0.266667, 1, 0, 0, 0, 0.572299, -2.29614e-13, -1.36447e-07, 0.820045, 1, 1, 1, 0.333333, 1, 0, 0, 0, 0.46467, -1.60487e-13, -1.10786e-07, 0.885484, 1, 1, 1, 0.4, 1, 0, 0, 0, 0.325616, -1.31512e-13, -7.7633e-08, 0.945502, 1, 1, 1, 0.466667, 1, 0, 0, 0, 0.253011, -1.00985e-13, -6.03225e-08, 0.967464, 1, 1, 1, 0.666667, 1, 0, 0, 0, 0.104141, -4.02982e-14, -2.48292e-08, 0.994563, 1, 1, 1, 0.733333, 1, 0, 0, 0, 0.0559148, -1.95983e-14, -1.33311e-08, 0.998436, 1, 1, 1, 0.8, 1, 0, 0, 0, 0.0183021, -1.84363e-14, -4.36356e-09, 0.999833, 1, 1, 1, 0.875, 1, 0, 0, 0, 5.96046e-08, -1.77636e-14, 8.47033e-22, 1, 1, 1, 1 )
+tracks/3/type = "transform"
+tracks/3/path = NodePath("Armature/Skeleton:BPlate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = PoolRealArray( 0, 1, 8.94065e-08, -1.78814e-07, -2.98022e-08, 2.27374e-13, 1.49012e-08, -9.09494e-13, 1, 1, 1, 1, 0.875, 1, -9.04947e-11, -4.47035e-08, -1.23805e-10, 2.27374e-13, -2.06795e-25, -9.09495e-13, 1, 1, 1, 1 )
+tracks/4/type = "transform"
+tracks/4/path = NodePath("Armature/Skeleton:BClawWrist")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = PoolRealArray( 0, 1, 1.46202e-06, -9.2908, 3.75449, 0.660655, -1.0601e-12, -2.5727e-07, 0.75069, 1, 1, 1, 0.0666667, 1, 1.46231e-06, -9.2236, 3.75523, 0.656353, -1.05481e-12, -2.55595e-07, 0.754454, 1, 1, 1, 0.133333, 1, 1.4642e-06, -8.76832, 3.76009, 0.626916, -1.02146e-12, -2.44132e-07, 0.779087, 1, 1, 1, 0.2, 1, 1.46766e-06, -7.88723, 3.76897, 0.57069, -9.51814e-13, -2.22237e-07, 0.821166, 1, 1, 1, 0.266667, 1, 1.47183e-06, -6.72586, 3.77966, 0.502117, -8.70925e-13, -1.95534e-07, 0.8648, 1, 1, 1, 0.333333, 1, 1.47594e-06, -5.42383, 3.79021, 0.442167, -7.96153e-13, -1.72188e-07, 0.896933, 1, 1, 1, 0.4, 1, 1.47909e-06, -4.11206, 3.79829, 0.428724, -8.14017e-13, -1.66953e-07, 0.903436, 1, 1, 1, 0.466667, 1, 1.47241e-06, -2.9229, 3.78112, 0.381151, -7.85852e-13, -1.48428e-07, 0.924513, 1, 1, 1, 0.533333, 1, 1.34968e-06, -1.95585, 3.46595, 0.319046, -6.56008e-13, -1.24243e-07, 0.947739, 1, 1, 1, 0.6, 1, 1.08092e-06, -1.21206, 2.77577, 0.2461, -5.50733e-13, -9.58368e-08, 0.969245, 1, 1, 1, 0.733333, 1, 4.00705e-07, -0.294865, 1.029, 0.0898232, -2.82361e-13, -3.49805e-08, 0.995958, 1, 1, 1, 0.8, 1, 1.31603e-07, -0.0802922, 0.337952, 0.0294434, -1.56082e-13, -1.14678e-08, 0.999567, 1, 1, 1, 0.875, 1, -2.09832e-14, -2.14577e-06, 1.06171e-07, -5.84126e-06, -5.69039e-14, 1.91848e-13, 1, 1, 1, 1 )
+tracks/5/type = "transform"
+tracks/5/path = NodePath("Armature/Skeleton:BClawControl")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = PoolRealArray( 0, 1, -2.21362e-06, -3.76979, -9.28461, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.0666667, 1, -2.1976e-06, -3.77042, -9.21741, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.133333, 1, -2.08905e-06, -3.77453, -8.76212, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.2, 1, -1.87898e-06, -3.78196, -7.88102, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.466667, 1, -6.95388e-07, -3.78593, -2.91667, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.533333, 1, -4.6495e-07, -3.46916, -1.95014, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.6, 1, -2.87886e-07, -2.77777, -1.20748, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.733333, 1, -6.98968e-08, -1.02948, -0.293169, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.8, 1, -1.901e-08, -0.338084, -0.0797336, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.875, 1, 0, -2.32831e-10, 0, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1 )
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "DrawPlate"
+
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "PlateExtend"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "PlateIdle-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=19]
+animation = "PlateLook"
+
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "PlateRetract"
+
+[sub_resource type="AnimationNodeAnimation" id=9]
+animation = "PlateStashed"
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "StashPlate"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=10]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=11]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=12]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=13]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=14]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=15]
+switch_mode = 2
+auto_advance = true
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=16]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=17]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=20]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachine" id=1]
+states/DrawPlate/node = SubResource( 4 )
+states/DrawPlate/position = Vector2( 374.63, 50.5226 )
+states/PlateExtend/node = SubResource( 5 )
+states/PlateExtend/position = Vector2( 862.753, 51.0027 )
+states/PlateIdle/node = SubResource( 8 )
+states/PlateIdle/position = Vector2( 595, 99.7655 )
+states/PlateLook/node = SubResource( 19 )
+states/PlateLook/position = Vector2( 618.333, 285 )
+states/PlateRetract/node = SubResource( 6 )
+states/PlateRetract/position = Vector2( 863.971, 153.584 )
+states/PlateStashed/node = SubResource( 9 )
+states/PlateStashed/position = Vector2( 148.333, 99.6667 )
+states/StashPlate/node = SubResource( 7 )
+states/StashPlate/position = Vector2( 374.778, 152.333 )
+transitions = [ "PlateStashed", "DrawPlate", SubResource( 10 ), "StashPlate", "PlateStashed", SubResource( 11 ), "DrawPlate", "PlateIdle", SubResource( 12 ), "PlateIdle", "StashPlate", SubResource( 13 ), "PlateIdle", "PlateExtend", SubResource( 14 ), "PlateExtend", "PlateRetract", SubResource( 15 ), "PlateRetract", "PlateIdle", SubResource( 16 ), "PlateExtend", "PlateIdle", SubResource( 17 ), "PlateIdle", "PlateLook", SubResource( 20 ), "PlateLook", "PlateIdle", SubResource( 21 ) ]
+start_node = "PlateStashed"
+graph_offset = Vector2( 29, -53.6431 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=2]
+
+[node name="platearm" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+animationTreePath = NodePath("AnimationTree")
+doughPilePrefab = ExtResource( 3 )
+
+[node name="BoneAttachment" parent="Armature/Skeleton" index="0"]
+transform = Transform( 1, 8.2423e-13, -4.76837e-07, -5.92283e-08, -0.992255, -0.124212, -4.73145e-07, 0.124212, -0.992255, -2.28044e-12, 0.216099, -5.8206 )
+
+[node name="BoneAttachment2" parent="Armature/Skeleton" index="1"]
+transform = Transform( 1, -6.39488e-13, -2.38419e-07, 1.81793e-07, -0.646991, 0.762498, -1.54255e-07, -0.762497, -0.646991, 6.11514e-16, 2.75402, -2.8296 )
+
+[node name="BoneAttachment3" parent="Armature/Skeleton" index="2"]
+transform = Transform( 0.288088, -4.50802e-06, -0.957604, -0.121683, -0.991894, -0.0366027, -0.949841, 0.127069, -0.285753, 5.42993e-08, -3.95764, -5.29432 )
+
+[node name="Area" type="Area" parent="Armature/Skeleton/BoneAttachment3/Plate" index="0"]
+collision_layer = 0
+collision_mask = 6
+monitorable = false
+
+[node name="CollisionShape" type="CollisionShape" parent="Armature/Skeleton/BoneAttachment3/Plate/Area" index="0"]
+shape = SubResource( 18 )
+
+[node name="BoneAttachment4" parent="Armature/Skeleton" index="3"]
+transform = Transform( 1, 2.84217e-13, -3.89414e-07, -4.94736e-08, -0.991897, -0.127047, -3.86259e-07, 0.127047, -0.991897, 2.84257e-12, -3.75804, -5.31988 )
+
+[node name="BoneAttachment5" parent="Armature/Skeleton" index="4"]
+transform = Transform( 1, 2.84217e-13, -3.89414e-07, -4.94736e-08, -0.991897, -0.127047, -3.86259e-07, 0.127047, -0.991897, 2.84257e-12, -3.75804, -5.31988 )
+
+[node name="AnimationPlayer" parent="." index="1"]
+anims/PlateStashed = SubResource( 3 )
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+tree_root = SubResource( 1 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/playback = SubResource( 2 )
+
+[connection signal="body_entered" from="Armature/Skeleton/BoneAttachment3/Plate/Area" to="." method="_HandlePlateDetectorBodyEntered"]

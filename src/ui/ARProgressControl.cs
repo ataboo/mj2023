@@ -36,9 +36,19 @@ public class ARProgressControl : VBoxContainer
             return;
         }
 
-        var centerScreenPos = _camera.UnprojectPosition(_target.GlobalTranslation + _targetOffset);
+        if(!IsInstanceValid(_target)) {
+            QueueFree();
+            return;
+        }
 
-        RectPosition = new Vector2(centerScreenPos.x - _halfWidth, centerScreenPos.y);
+        if(_camera.IsPositionBehind(_target.GlobalTranslation)) {
+            Visible = false;
+        } else {
+            Visible = true;
+            var centerScreenPos = _camera.UnprojectPosition(_target.GlobalTranslation + _targetOffset);
+
+            RectPosition = new Vector2(centerScreenPos.x - _halfWidth, centerScreenPos.y);
+        }
     }
 
     public void SetLabel(string label) {

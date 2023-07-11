@@ -23,4 +23,6 @@ public class MechState {
     public float shuffleSaturation;
 
     public Vector3? queuedImpulse;
+
+    public bool moveLocked;
 }
