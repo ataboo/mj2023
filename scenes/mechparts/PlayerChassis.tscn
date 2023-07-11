@@ -47,5 +47,5 @@ transform = Transform( -0.993083, 0, -0.117416, 0, 1, 0, 0.117416, 0, -0.993083,
 abilityControlPath = NodePath("..")
 
 [node name="platearm" parent="Cockpit/Abilities" instance=ExtResource( 10 )]
-transform = Transform( -0.995699, 0, -0.0926482, 0, 1, 0, 0.0926482, 0, -0.995699, 3.10164, -1.29084, 1.19973 )
+transform = Transform( -0.975661, 0, -0.219284, -0.0060386, 0.999621, 0.0268676, 0.219201, 0.0275378, -0.975291, 3.54589, -1.29084, 1.19973 )
 abilityControlPath = NodePath("..")

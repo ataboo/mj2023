@@ -107,6 +107,7 @@ public class PlateArmControl : Spatial
             _heldPizza = pizzaPrefab.Instance<PizzaControl>();
             AddPizzaToPlate();
             _spinDoughT = 0;
+            _stateMachine.Travel("PlateIdle");
         }
     }
 
@@ -151,6 +152,25 @@ public class PlateArmControl : Spatial
         }
     }
 
+    public void _HandlePlateDetectorAreaEntered(Area area) {
+        if (_stateMachine.GetCurrentNode() != "PlateExtend")
+        {
+            return;
+        }
+        
+        if(area is StickTargetControl stickTarget) {
+            if(_heldPizza != null && _droppingItem) {
+                _plate.RemoveChild(_heldPizza);
+                stickTarget.AddChild(_heldPizza);
+                _heldPizza.GlobalTranslation = _plate.GlobalTranslation;
+                _heldPizza.Translation = new Vector3(0, _heldPizza.Translation.y, _heldPizza.Translation.z);
+                _heldPizza.Rotation = new Vector3(0, 0, -Mathf.Pi/2);
+                _heldPizza.SetRBActive(false, true);
+                _heldPizza = null;
+            }
+        }
+    }
+
     public void _HandlePlateDetectorBodyEntered(Node body)
     { 
         if(_stateMachine.GetCurrentNode() == "PlateIdle" && _droppingItem) {
@@ -180,8 +200,6 @@ public class PlateArmControl : Spatial
             }
             else if (_heldPizza != null)
             {
-                //TODO if pizza wall...
-
                 _plate.RemoveChild(_heldPizza);
                 _entityHolder.AddChild(_heldPizza);
                 _heldPizza.Translation = _plate.GlobalTranslation;

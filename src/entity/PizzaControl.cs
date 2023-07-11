@@ -37,15 +37,14 @@ public class PizzaControl : RigidBody
         _sauceMesh.Translation = new Vector3(0, sauceY, 0);
     }
 
-    public void SetRBActive(bool active) {
+    public void SetRBActive(bool active, bool? collision = null) {
         if(active) {
             Mode = ModeEnum.Rigid;
-            CollisionLayer = _originalCollisionLayer;
-            CollisionMask = _originalCollisionLayer;
         } else {
             Mode = ModeEnum.Kinematic;
-            CollisionLayer = 0;
-            CollisionMask = 0;
         }
+
+        CollisionLayer = collision ?? active ? _originalCollisionLayer : 0;
+        CollisionMask = collision ?? active ? _originalCollisionLayer : 0;
     }
 }
