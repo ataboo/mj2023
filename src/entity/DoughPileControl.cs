@@ -2,7 +2,7 @@ using Godot;
 
 public class DoughPileControl : RigidBody, IKickable
 {
-    ARProgressControl _progress;
+    ARProgressGroupControl _progress;
 
     public void Kick(Vector3 position, Vector3 direction)
     {
@@ -18,10 +18,8 @@ public class DoughPileControl : RigidBody, IKickable
     private void InitProgressBar()
     {
         var level = LevelManager.MustGetNode(this);
-        _progress = level.ARHolder.CreateProgressBar(this);
-
-        _progress.SetLabel("Kneaded");
-        _progress.SetProgress(1);
+        _progress = level.ARHolder.CreateProgressBar(this, new[]{"Kneaded"});
+        _progress.SetProgresses(new []{1f});
         _progress.SetTargetOffset(new Vector3(0, 1, 0));
     }
 

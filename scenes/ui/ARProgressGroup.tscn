@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/ui/ARProgressBar.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/ui/ARProgressGroupControl.cs" type="Script" id=2]
+
+[node name="ARProgressGroup" type="VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 2 )
+progressControlPrefab = ExtResource( 1 )

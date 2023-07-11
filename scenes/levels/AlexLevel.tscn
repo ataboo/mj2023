@@ -1,8 +1,9 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://src/level/LevelManager.cs" type="Script" id=1]
 [ext_resource path="res://scenes/gridmap/TerrainMeshLib.tres" type="MeshLibrary" id=2]
 [ext_resource path="res://scenes/mechparts/PlayerChassis.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/ui/ARProgressGroup.tscn" type="PackedScene" id=4]
 [ext_resource path="res://textures/UI/CrosshairsTop.png" type="Texture" id=5]
 [ext_resource path="res://textures/UI/CrosshairsBottom.png" type="Texture" id=6]
 [ext_resource path="res://src/player/HudControl.cs" type="Script" id=7]
@@ -13,10 +14,10 @@
 [ext_resource path="res://textures/UI/AbilityRoni.png" type="Texture" id=12]
 [ext_resource path="res://textures/UI/AbilityCheese.png" type="Texture" id=13]
 [ext_resource path="res://scenes/prefabs/doughball.tscn" type="PackedScene" id=14]
+[ext_resource path="res://scenes/prefabs/pizza.tscn" type="PackedScene" id=15]
 [ext_resource path="res://src/ui/ARHolderControl.cs" type="Script" id=16]
 [ext_resource path="res://src/entity/SpawnerControl.cs" type="Script" id=17]
 [ext_resource path="res://textures/UI/AbilityPlate.png" type="Texture" id=19]
-[ext_resource path="res://scenes/ui/ARProgressBar.tscn" type="PackedScene" id=20]
 [ext_resource path="res://textures/UI/AbilityLeg.png" type="Texture" id=21]
 
 [sub_resource type="CylinderShape" id=2]
@@ -29,6 +30,7 @@ arHolderPath = NodePath("HUDCanvasLayer/HUD/ARHolder")
 hudControlPath = NodePath("HUDCanvasLayer/HUD")
 playerControlPath = NodePath("PlayerChassis")
 hotbarAbilityControlPath = NodePath("HUDCanvasLayer/HUD/Hotbar")
+entityHolderPath = NodePath("Entities")
 
 [node name="Entities" type="Spatial" parent="."]
 
@@ -75,7 +77,7 @@ bottomCrosshairsHashedText = ExtResource( 8 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 16 )
-barPrefab = ExtResource( 20 )
+barPrefab = ExtResource( 4 )
 cameraPath = NodePath("../../../PlayerChassis/Cockpit/Camera")
 
 [node name="TopCrosshair" type="TextureRect" parent="HUDCanvasLayer/HUD"]
@@ -165,5 +167,8 @@ margin_right = 404.0
 abilityTexture = ExtResource( 13 )
 labelText = "6"
 ability = 5
+
+[node name="Pizza" parent="." instance=ExtResource( 15 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.133839, 0.00600052, -3.21066 )
 
 [connection signal="body_exited" from="Entities/DoughSpawner" to="Entities/DoughSpawner" method="_HandleBodyExited"]

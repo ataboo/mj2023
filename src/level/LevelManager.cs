@@ -71,6 +71,19 @@ public class LevelManager : Node
         }
     }
 
+    [Export]
+    private NodePath entityHolderPath;
+    private Spatial _entityHolder;
+    public Spatial EntityHolder {
+        get {
+            if(_entityHolder == null) {
+                _entityHolder = GetNode<Spatial>(entityHolderPath);
+            }
+
+            return _entityHolder;
+        }
+    }
+
     public Camera Camera => PlayerControl.Camera;
 
     public override void _Ready()

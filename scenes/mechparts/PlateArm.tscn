@@ -1,9 +1,10 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://models/abilities/platearm.glb" type="PackedScene" id=1]
 [ext_resource path="res://src/player/PlateArmControl.cs" type="Script" id=2]
-[ext_resource path="res://models/entity/doughpile.glb" type="PackedScene" id=3]
+[ext_resource path="res://scenes/prefabs/doughpile.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/prefabs/SpinDough.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/prefabs/pizza.tscn" type="PackedScene" id=5]
 
 [sub_resource type="SphereShape" id=18]
 radius = 1.30728
@@ -132,16 +133,17 @@ graph_offset = Vector2( 29, -53.6431 )
 script = ExtResource( 2 )
 animationTreePath = NodePath("AnimationTree")
 doughPilePrefab = ExtResource( 3 )
+pizzaPrefab = ExtResource( 5 )
 spinDoughPath = NodePath("Armature/Skeleton/BoneAttachment3/Plate/spindough")
 
 [node name="BoneAttachment" parent="Armature/Skeleton" index="0"]
-transform = Transform( 1, 8.2423e-13, -4.76837e-07, -5.92283e-08, -0.992255, -0.124212, -4.73145e-07, 0.124212, -0.992255, -2.28044e-12, 0.216099, -5.8206 )
+transform = Transform( 1, 5.25802e-13, -4.76838e-07, -5.92283e-08, -0.992256, -0.124212, -4.73145e-07, 0.124212, -0.992256, -2.90183e-12, 0.216096, -5.8206 )
 
 [node name="BoneAttachment2" parent="Armature/Skeleton" index="1"]
-transform = Transform( 1, -6.39488e-13, -2.38419e-07, 1.81793e-07, -0.646991, 0.762498, -1.54255e-07, -0.762497, -0.646991, 6.11514e-16, 2.75402, -2.8296 )
+transform = Transform( 1, -7.95808e-13, -2.38419e-07, 1.81793e-07, -0.646992, 0.762497, -1.54256e-07, -0.762497, -0.646992, 6.11514e-16, 2.75402, -2.8296 )
 
 [node name="BoneAttachment3" parent="Armature/Skeleton" index="2"]
-transform = Transform( 0.288088, -4.50802e-06, -0.957604, -0.121683, -0.991894, -0.0366027, -0.949841, 0.127069, -0.285753, 5.42993e-08, -3.95764, -5.29432 )
+transform = Transform( 0.758461, -1.43811e-05, -0.651719, -0.0828202, -0.991895, -0.096363, -0.646435, 0.127063, -0.752314, 8.72465e-08, -3.95762, -5.29433 )
 
 [node name="Plate" parent="Armature/Skeleton/BoneAttachment3" index="0"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.0475464, 2.06556, -0.3612 )
@@ -159,10 +161,10 @@ shape = SubResource( 18 )
 transform = Transform( 0.999997, 0.00174505, 0.00177574, -0.0017586, 0.988993, -0.00329452, -0.00178154, 0.00325518, 0.999993, 0, 0, 0 )
 
 [node name="BoneAttachment4" parent="Armature/Skeleton" index="3"]
-transform = Transform( 1, 2.84217e-13, -3.89414e-07, -4.94736e-08, -0.991897, -0.127047, -3.86259e-07, 0.127047, -0.991897, 2.84257e-12, -3.75804, -5.31988 )
+transform = Transform( 1, 1.98952e-13, -3.89413e-07, -4.9473e-08, -0.991897, -0.127045, -3.86258e-07, 0.127045, -0.991897, 9.97002e-12, -3.75803, -5.31989 )
 
 [node name="BoneAttachment5" parent="Armature/Skeleton" index="4"]
-transform = Transform( 1, 2.84217e-13, -3.89414e-07, -4.94736e-08, -0.991897, -0.127047, -3.86259e-07, 0.127047, -0.991897, 2.84257e-12, -3.75804, -5.31988 )
+transform = Transform( 1, 1.98952e-13, -3.89413e-07, -4.9473e-08, -0.991897, -0.127045, -3.86258e-07, 0.127045, -0.991897, 9.97002e-12, -3.75803, -5.31989 )
 
 [node name="AnimationPlayer" parent="." index="1"]
 anims/PlateStashed = SubResource( 3 )
