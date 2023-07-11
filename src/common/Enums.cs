@@ -7,7 +7,6 @@ public enum MechAbility {
     Sauce,
     Pepperoni,
     Cheese,
-    // Kick,
 }
 
 public enum MechLegState {
