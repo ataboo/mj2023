@@ -1,0 +1,170 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://models/abilities/clawarm.glb" type="PackedScene" id=1]
+[ext_resource path="res://src/player/ClawArmControl.cs" type="Script" id=2]
+
+[sub_resource type="SphereShape" id=17]
+radius = 0.717535
+
+[sub_resource type="Animation" id=16]
+resource_name = "ClawStowed"
+length = 0.001
+step = 0.0666667
+tracks/0/type = "transform"
+tracks/0/path = NodePath("Armature/Skeleton:BClawArm")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0, 1, 1.23235e-13, 2.38419e-07, 6.56582e-07, 1.15959e-10, -1.06164e-14, -3.16556e-15, 1, 1.00393, 1.00393, 1.00393, 0.0666667, 1, 4.39648e-14, 0, 3.5204e-07, -6.82583e-30, -3.61115e-15, -1.862e-15, 1, 0.983819, 0.983819, 0.983819, 0.133333, 1, -1.48326e-13, -2.38419e-07, -3.57628e-07, -2.31137e-09, -8.29853e-15, 2.55277e-15, 1, 0.856227, 0.856227, 0.856227, 0.2, 1, -5.08482e-14, 0, 5.01052e-07, -3.90177e-09, 5.53827e-15, -2.88812e-15, 1, 0.641485, 0.641485, 0.641485, 0.266667, 1, -1.39888e-13, 2.38419e-07, 4.84288e-08, -5.45415e-09, -3.69883e-15, 2.09504e-15, 1, 0.480248, 0.480248, 0.480248, 0.333333, 1, -7.66054e-14, 0, 2.3935e-07, -1.69358e-08, -2.0189e-14, 4.46366e-15, 1, 0.439932, 0.439932, 0.439932, 0.4, 1, -1.60094e-13, 0, -4.85219e-07, -3.42257e-09, -1.04449e-14, 3.68562e-15, 1, 0.51021, 0.51021, 0.510209, 0.466667, 1, 4.77396e-14, -2.38419e-07, -1.31316e-07, 1.60165e-08, 1.51561e-14, -7.25242e-15, 1, 0.937634, 0.937634, 0.937634, 0.533333, 1, 3.73035e-14, -2.38419e-07, -1.67638e-07, 2.54405e-09, 5.75099e-15, -6.14412e-15, 1, 1.23551, 1.23551, 1.23551, 0.6, 1, -1.42109e-14, -2.38419e-07, -8.3819e-08, -7.05344e-09, -5.59101e-15, 5.73297e-15, 1, 1.27087, 1.27087, 1.27087, 0.733333, 1, -9.99201e-15, 2.38419e-07, 3.63216e-08, 5.32314e-09, 2.27429e-14, -1.26914e-15, 1, 1.09348, 1.09348, 1.09348, 0.8, 1, 1.33227e-15, -2.38419e-07, 2.42144e-08, 1.47063e-09, -6.90462e-15, 5.52909e-16, 1, 1.02908, 1.02908, 1.02908, 0.875, 1, 2.22045e-16, 0, 9.31323e-10, -1.96616e-31, 1.41892e-14, 6.92834e-17, 1, 1.00152, 1.00152, 1.00152 )
+tracks/1/type = "transform"
+tracks/1/path = NodePath("Armature/Skeleton:BForearm")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = PoolRealArray( 0, 1, 0, -2.38419e-07, -2.38419e-07, -0.108702, -7.14778e-15, 5.18331e-08, 0.994074, 1, 1, 0.999999, 0.0666667, 1, 0, -4.76837e-07, 0, -0.109517, -2.41259e-14, 5.22214e-08, 0.993985, 1, 1, 1, 0.133333, 1, -1.13687e-13, -4.76837e-07, -2.38419e-07, -0.113137, 1.56436e-14, 5.39477e-08, 0.993579, 1, 1, 0.999999, 0.2, 1, -1.13687e-13, -4.76837e-07, -2.38419e-07, -0.108056, 2.7919e-14, 5.15251e-08, 0.994145, 1, 1, 0.999999, 0.266667, 1, 1.13687e-13, -4.76837e-07, 0, -0.0831439, 9.6925e-15, 3.9646e-08, 0.996538, 1, 1, 0.999999, 0.333333, 1, -1.13687e-13, 0, -4.76837e-07, -0.0252138, -2.61957e-14, 1.20228e-08, 0.999682, 1, 1, 1, 0.4, 1, 1.13687e-13, -4.76837e-07, 0, 0.111206, -2.0779e-14, -5.30274e-08, 0.993797, 1, 1, 1, 0.466667, 1, -2.27374e-13, -7.15256e-07, -4.76837e-07, 0.134849, -4.25774e-14, -6.43008e-08, 0.990866, 1, 1, 1, 0.533333, 1, 1.13687e-13, -4.76837e-07, 0, 0.117454, -2.4148e-14, -5.60065e-08, 0.993078, 1, 1, 1, 0.8, 1, -2.27374e-13, -7.15256e-07, -4.76837e-07, 0.0111653, -1.1613e-14, -5.32407e-09, 0.999938, 1, 1, 1, 0.875, 1, -1.13687e-13, -4.76837e-07, -2.38419e-07, 1.63317e-05, -1.26719e-16, -7.75913e-12, 1, 1, 1, 1 )
+tracks/2/type = "transform"
+tracks/2/path = NodePath("Armature/Skeleton:BUpperArm")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = PoolRealArray( 0, 1, -5.68434e-14, 0, 0, 0.73835, -2.10713e-13, -1.76037e-07, 0.674417, 1, 1, 1, 0.0666667, 1, -5.68434e-14, 0, 0, 0.735039, -1.88633e-13, -1.75247e-07, 0.678025, 1, 1, 1, 0.133333, 1, -5.68434e-14, 0, 0, 0.711041, -1.51577e-13, -1.69526e-07, 0.70315, 1, 1, 1, 0.2, 1, -5.68434e-14, 0, 0, 0.656085, -1.41226e-14, -1.56423e-07, 0.754687, 1, 1, 1, 0.266667, 1, -5.68434e-14, 0, 0, 0.572291, -5.63201e-14, -1.36445e-07, 0.82005, 1, 1, 1, 0.333333, 1, -5.68434e-14, 0, 0, 0.464657, -3.00911e-14, -1.10783e-07, 0.885491, 1, 1, 1, 0.4, 1, -5.68434e-14, 0, 0, 0.325607, -4.41504e-14, -7.7631e-08, 0.945505, 1, 1, 1, 0.466667, 1, -5.68434e-14, 0, 0, 0.253007, -1.65249e-14, -6.03218e-08, 0.967464, 1, 1, 1, 0.666667, 1, -5.68434e-14, 0, 0, 0.104134, -1.48467e-14, -2.48276e-08, 0.994563, 1, 1, 1, 0.733333, 1, -5.68434e-14, 0, 0, 0.0559069, -1.52061e-14, -1.33293e-08, 0.998436, 1, 1, 1, 0.8, 1, -5.68434e-14, 0, 0, 0.0182932, 9.21639e-15, -4.36145e-09, 0.999833, 1, 1, 1, 0.875, 1, -5.68434e-14, 0, 0, -9.47714e-06, 1.06367e-14, 2.26663e-12, 1, 1, 1, 1 )
+tracks/3/type = "transform"
+tracks/3/path = NodePath("Armature/Skeleton:BClawTop")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = PoolRealArray( 0, 1, -2.4869e-13, -9.53674e-07, 4.76837e-07, -0.0661285, 6.38507e-15, 1.11047e-14, 0.997811, 1, 1, 1, 0.875, 1, 1.27898e-13, 9.68575e-08, 4.02331e-07, -0.0661285, 6.38507e-15, 1.11047e-14, 0.997811, 1, 1, 1 )
+tracks/4/type = "transform"
+tracks/4/path = NodePath("Armature/Skeleton:BClawBottom")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = PoolRealArray( 0, 1, -6.39488e-14, 7.15256e-07, 7.15256e-07, 0.0661285, -2.57543e-14, -1.25352e-14, 0.997811, 1, 1, 1, 0.875, 1, -1.35003e-13, 3.12924e-07, 1.19209e-07, 0.0661286, -1.42006e-15, 5.43487e-15, 0.997811, 1, 1, 1 )
+tracks/5/type = "transform"
+tracks/5/path = NodePath("Armature/Skeleton:BClawWrist")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = PoolRealArray( 0, 1, 1.46196e-06, -9.28915, 3.75424, 0.660665, 4.16474e-13, -2.57272e-07, 0.750681, 1, 1, 1, 0.0666667, 1, 1.46225e-06, -9.22195, 3.75498, 0.656364, 4.14396e-13, -2.55597e-07, 0.754445, 1, 1, 1, 0.133333, 1, 1.46415e-06, -8.76667, 3.75985, 0.626925, 3.37451e-13, -2.44133e-07, 0.77908, 1, 1, 1, 0.2, 1, 1.46762e-06, -7.88558, 3.76875, 0.570697, 3.46116e-13, -2.22237e-07, 0.821161, 1, 1, 1, 0.266667, 1, 1.47179e-06, -6.72422, 3.77947, 0.502129, 1.88976e-13, -1.95536e-07, 0.864793, 1, 1, 1, 0.333333, 1, 1.47591e-06, -5.42219, 3.79007, 0.442184, 6.33759e-14, -1.72193e-07, 0.896924, 1, 1, 1, 0.4, 1, 1.47907e-06, -4.11041, 3.79818, 0.428736, 9.43793e-14, -1.66956e-07, 0.90343, 1, 1, 1, 0.466667, 1, 1.47239e-06, -2.92125, 3.78104, 0.381159, 1.92141e-15, -1.48429e-07, 0.92451, 1, 1, 1, 0.533333, 1, 1.34967e-06, -1.95419, 3.46589, 0.319055, -1.18082e-13, -1.24245e-07, 0.947736, 1, 1, 1, 0.6, 1, 1.08092e-06, -1.21038, 2.77574, 0.24611, -1.75942e-13, -9.58386e-08, 0.969242, 1, 1, 1, 0.733333, 1, 4.00703e-07, -0.293142, 1.02899, 0.0898359, -2.70211e-13, -3.4983e-08, 0.995957, 1, 1, 1, 0.8, 1, 1.31602e-07, -0.0785503, 0.33795, 0.0294569, -3.45568e-13, -1.14705e-08, 0.999566, 1, 1, 1, 0.875, 1, -1.07137e-13, 0.00175023, 4.84288e-07, 8.10623e-06, -3.26861e-13, -2.69296e-12, 1, 1, 1, 1 )
+tracks/6/type = "transform"
+tracks/6/path = NodePath("Armature/Skeleton:BClawControl")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = PoolRealArray( 0, 1, -2.21362e-06, -3.76979, -9.28461, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.0666667, 1, -2.1976e-06, -3.77042, -9.21741, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.133333, 1, -2.08905e-06, -3.77453, -8.76212, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.2, 1, -1.87898e-06, -3.78196, -7.88102, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.466667, 1, -6.95388e-07, -3.78593, -2.91667, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.533333, 1, -4.6495e-07, -3.46916, -1.95014, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.6, 1, -2.87886e-07, -2.77777, -1.20748, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.733333, 1, -6.98968e-08, -1.02948, -0.293169, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.8, 1, -1.901e-08, -0.338084, -0.0797336, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1, 0.875, 1, 0, -2.32831e-10, 0, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1 )
+
+[sub_resource type="AnimationNodeAnimation" id=18]
+animation = "ClawExtend"
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "ClawIdle-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=19]
+animation = "ClawRetract"
+
+[sub_resource type="AnimationNodeAnimation" id=9]
+animation = "ClawStowed"
+
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "DrawClaw"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "StashClaw"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=10]
+advance_condition = "active"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=11]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=12]
+advance_condition = "not_active"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=13]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=20]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+switch_mode = 2
+auto_advance = true
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=23]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachine" id=3]
+states/ClawExtend/node = SubResource( 18 )
+states/ClawExtend/position = Vector2( 809.827, 156.222 )
+states/ClawIdle/node = SubResource( 7 )
+states/ClawIdle/position = Vector2( 611, 203.889 )
+states/ClawRetract/node = SubResource( 19 )
+states/ClawRetract/position = Vector2( 809.407, 253.333 )
+states/ClawStowed/node = SubResource( 9 )
+states/ClawStowed/position = Vector2( 225, 204.144 )
+states/DrawClaw/node = SubResource( 5 )
+states/DrawClaw/position = Vector2( 416.333, 172.333 )
+states/StashClaw/node = SubResource( 8 )
+states/StashClaw/position = Vector2( 416.778, 248.333 )
+transitions = [ "ClawStowed", "DrawClaw", SubResource( 10 ), "DrawClaw", "ClawIdle", SubResource( 11 ), "ClawIdle", "StashClaw", SubResource( 12 ), "StashClaw", "ClawStowed", SubResource( 13 ), "ClawIdle", "ClawExtend", SubResource( 20 ), "ClawExtend", "ClawRetract", SubResource( 21 ), "ClawRetract", "ClawIdle", SubResource( 22 ), "ClawExtend", "ClawIdle", SubResource( 23 ) ]
+start_node = "ClawStowed"
+graph_offset = Vector2( 57, 73 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=4]
+
+[node name="clawarm" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+animationTreePath = NodePath("AnimationTree")
+
+[node name="BoneAttachment" parent="Armature/Skeleton" index="0"]
+transform = Transform( 1, 1.10845e-12, -4.76837e-07, -5.92282e-08, -0.992255, -0.124213, -4.73145e-07, 0.124213, -0.992254, 7.82398e-13, 0.216092, -5.8206 )
+
+[node name="BoneAttachment2" parent="Armature/Skeleton" index="1"]
+transform = Transform( 1, 1.84741e-13, -2.3842e-07, 1.81794e-07, -0.646993, 0.762496, -1.54255e-07, -0.762497, -0.646992, -5.62319e-14, 2.75402, -2.8296 )
+
+[node name="BoneAttachment3" parent="Armature/Skeleton" index="2"]
+transform = Transform( 1, 6.29267e-08, -4.72668e-07, -4.11944e-07, -0.385238, -0.922817, -2.40159e-07, 0.922817, -0.385238, -5.97507e-12, -3.95764, -5.29432 )
+
+[node name="BoneAttachment4" parent="Armature/Skeleton" index="3"]
+transform = Transform( 1, -6.29276e-08, -4.72666e-07, 3.0685e-07, -0.673817, 0.738898, -3.64987e-07, -0.738898, -0.673817, -5.90402e-12, -3.95764, -5.29432 )
+
+[node name="BoneAttachment5" parent="Armature/Skeleton" index="4"]
+transform = Transform( 1, 2.84217e-14, -3.89414e-07, -4.94742e-08, -0.991897, -0.127048, -3.86259e-07, 0.127048, -0.991897, -5.50476e-12, -3.75805, -5.31988 )
+
+[node name="GrabDetector" type="Area" parent="Armature/Skeleton/BoneAttachment5/Hand" index="0"]
+transform = Transform( 1, -2.22835e-15, -5.32907e-15, -8.14507e-18, 1, 1.81899e-12, 0, -1.81899e-12, 1, -1.99634e-09, -0.037806, 0.400977 )
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape" type="CollisionShape" parent="Armature/Skeleton/BoneAttachment5/Hand/GrabDetector" index="0"]
+transform = Transform( 1, -1.78418e-15, -4.44089e-15, -8.14507e-18, 1, 2.72848e-12, 0, -2.72848e-12, 1, 0, 0, 0 )
+shape = SubResource( 17 )
+
+[node name="BoneAttachment6" parent="Armature/Skeleton" index="5"]
+transform = Transform( 1, 2.84217e-14, -3.89414e-07, -4.94742e-08, -0.991897, -0.127048, -3.86259e-07, 0.127048, -0.991897, -5.50476e-12, -3.75805, -5.31988 )
+
+[node name="AnimationPlayer" parent="." index="1"]
+anims/ClawStowed = SubResource( 16 )
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+tree_root = SubResource( 3 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/playback = SubResource( 4 )
+parameters/conditions/active = false
+parameters/conditions/not_active = false
+
+[connection signal="body_entered" from="Armature/Skeleton/BoneAttachment5/Hand/GrabDetector" to="." method="_HandleGrabDetectorBodyEntered"]

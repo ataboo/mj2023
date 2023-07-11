@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public class DoughballControl : RigidBody, IKickable
@@ -41,6 +42,7 @@ public class DoughballControl : RigidBody, IKickable
 
         _progress.SetLabel("Gluten");
         _progress.SetProgress(0);
+        _progress.SetTargetOffset(new Vector3(0, 1, 0));
     }
 
     private void RemoveEmptyParent()
@@ -71,8 +73,6 @@ public class DoughballControl : RigidBody, IKickable
         {
             _progress.SetProgress((startHealth - _health) / startHealth);
         }
-
-        //TODO update progress bar
     }
 
     private void SpawnDoughPile(Vector3? pendingImpulse)
@@ -101,5 +101,11 @@ public class DoughballControl : RigidBody, IKickable
     {
         lastVelocity = currentVelocity;
         currentVelocity = state.LinearVelocity;
+    }
+
+    public void Punch(Vector3 impulse, float damage)
+    {
+        ApplyImpulse(Vector3.Zero, impulse);
+        ApplyDamage(damage, kickMultiplier, impulse);
     }
 }

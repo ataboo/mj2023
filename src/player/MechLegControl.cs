@@ -46,7 +46,8 @@ public class MechLegControl : Spatial
             Exclude = new Godot.Collections.Array(_footCollider),
         };
 
-        _abilityControl.Connect(nameof(AbilityControl.OnLegStateChange), this, nameof(_HandleLegStateChange));
+        _abilityControl.Connect(nameof(AbilityControl.OnAbilityChange), this, nameof(_HandleAbilityChange));
+        _abilityControl.Connect(nameof(AbilityControl.OnClick), this, nameof(_HandleClick));
     }
 
     public void _HandleLegStateChange() {
@@ -55,12 +56,8 @@ public class MechLegControl : Spatial
         var legWindup = abilityState.legWindUp && abilityState.activeAbility == MechAbility.Kick;
 
         _tree.Set("parameters/conditions/kick", legKick);
-        _tree.Set("parameters/conditions/not_kick", !legKick);
         _tree.Set("parameters/conditions/windup", legWindup);
         _tree.Set("parameters/conditions/not_windup", !legWindup);
-
-        _tree.Set("parameters/conditions/active", abilityState.activeAbility == MechAbility.Kick);
-        _tree.Set("parameters/conditions/not_active", abilityState.activeAbility != MechAbility.Kick);
     }
 
     public override void _PhysicsProcess(float delta)
@@ -94,6 +91,38 @@ public class MechLegControl : Spatial
             // GD.InstanceFromId()
         } else if (currentState == "KickWindup") {
             _kickArmed = true;
+        }
+    }
+
+    private void _HandleAbilityChange(MechAbility ability) {
+        if(ability == MechAbility.Kick) {
+            if(_stateMachine.GetCurrentNode() == "Hidden") {
+                _stateMachine.Travel("KickIdle");   
+            }
+        } else {
+            if(_stateMachine.GetCurrentNode() != "Hidden") {
+                _stateMachine.Travel("Hidden");
+            }
+
+            _tree.Set("parameters/conditions/kick", false);
+            _tree.Set("parameters/conditions/windup", false);
+            _tree.Set("parameters/conditions/not_windup", true);
+            _playerControl.SetMoveLocked(false);
+        }
+    }
+
+    private void _HandleClick(bool isPressed, bool isLeft)
+    {
+        if(_abilityControl.AbilityState.activeAbility != MechAbility.Kick) {
+            return;
+        }
+
+        if(isLeft) {
+            _tree.Set("parameters/conditions/kick", isPressed);
+        } else {
+            _tree.Set("parameters/conditions/windup", isPressed);
+            _tree.Set("parameters/conditions/not_windup", !isPressed);
+            _playerControl.SetMoveLocked(isPressed);
         }
     }
 }

@@ -76,6 +76,10 @@ public class PlayerControl : KinematicBody
         MechState.queuedImpulse = worldImpulse;
     }
 
+    public void SetMoveLocked(bool moveLocked) {
+        MechState.moveLocked = moveLocked;
+    }
+
     private void ProcessInput(float delta)
     {
         _state.walkInput = Vector2.Zero;
@@ -109,7 +113,7 @@ public class PlayerControl : KinematicBody
 
         var targetV = Transform.basis.Xform(_state.fwdVelocity);
 
-        if(_abilityControl.AbilityState.activeAbility == MechAbility.Kick && (_abilityControl.AbilityState.legWindUp || _abilityControl.AbilityState.legKick)) {
+        if(MechState.moveLocked) {
             targetV = Vector3.Zero;
         }
 
