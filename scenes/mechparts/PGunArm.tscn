@@ -1,0 +1,135 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://models/abilities/PGunArm.glb" type="PackedScene" id=1]
+[ext_resource path="res://scenes/mechparts/PGunControl.cs" type="Script" id=2]
+[ext_resource path="res://scenes/prefabs/Pepperoni.tscn" type="PackedScene" id=3]
+
+[sub_resource type="Animation" id=1]
+resource_name = "PGunStowed"
+length = 0.001
+tracks/0/type = "transform"
+tracks/0/path = NodePath("Armature/Skeleton:BClawArm")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0, 1, -5.39568e-14, 2.38419e-07, -1.77883e-07, -8.84749e-09, 4.15391e-15, -7.58575e-15, 1, 0.213817, 0.213817, 0.213817 )
+tracks/1/type = "transform"
+tracks/1/path = NodePath("Armature/Skeleton:BForearm")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = PoolRealArray( 0, 1, 0, -2.38419e-07, 4.76837e-07, -0.372501, -5.35951e-14, 1.77622e-07, 0.928032, 1, 1, 0.999999 )
+tracks/2/type = "transform"
+tracks/2/path = NodePath("Armature/Skeleton:BUpperArm")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = PoolRealArray( 0, 1, -5.68434e-14, 0, 0, 0.807727, -2.04887e-13, -1.92577e-07, 0.589557, 1, 1, 1 )
+tracks/3/type = "transform"
+tracks/3/path = NodePath("Armature/Skeleton:BGun")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = PoolRealArray( 0, 1, 7.32356e-07, -8.90856, 1.88066, 0.529986, 1.80148e-13, -2.06384e-07, 0.848006, 1, 1, 1 )
+tracks/4/type = "transform"
+tracks/4/path = NodePath("Armature/Skeleton:BGunControl")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = PoolRealArray( 0, 1, -2.12363e-06, -1.89555, -8.90716, -0.0661776, -0.0422548, -0.00537646, 0.996898, 1, 1, 1 )
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "DrawPgun"
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "PGunFire"
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "PGunIdle-loop"
+
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "PGunReload"
+
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "PGunStowed"
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "StashPgun"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=8]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=9]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=10]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=11]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=12]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=13]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=15]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=18]
+
+[sub_resource type="AnimationNodeStateMachine" id=16]
+states/DrawPGun/node = SubResource( 2 )
+states/DrawPGun/position = Vector2( 220, 71 )
+states/PGunFire/node = SubResource( 3 )
+states/PGunFire/position = Vector2( 611, 71 )
+states/PGunIdle/node = SubResource( 4 )
+states/PGunIdle/position = Vector2( 429, 128 )
+states/PGunReload/node = SubResource( 5 )
+states/PGunReload/position = Vector2( 611, 209 )
+states/PGunStowed/node = SubResource( 6 )
+states/PGunStowed/position = Vector2( 27, 128 )
+states/StashPGun/node = SubResource( 7 )
+states/StashPGun/position = Vector2( 220, 194 )
+transitions = [ "PGunStowed", "DrawPGun", SubResource( 8 ), "DrawPGun", "PGunIdle", SubResource( 9 ), "PGunIdle", "PGunFire", SubResource( 10 ), "PGunFire", "PGunIdle", SubResource( 11 ), "PGunIdle", "StashPGun", SubResource( 12 ), "StashPGun", "PGunStowed", SubResource( 13 ), "PGunReload", "PGunIdle", SubResource( 15 ), "PGunIdle", "PGunReload", SubResource( 18 ) ]
+start_node = "PGunStowed"
+graph_offset = Vector2( -142.536, 16 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=17]
+
+[node name="PGunArm" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+animationTreePath = NodePath("AnimationTree")
+pepperoniPrefab = ExtResource( 3 )
+
+[node name="Skeleton" parent="Armature" index="0"]
+bones/0/bound_children = [ NodePath("BoneAttachment2") ]
+bones/1/bound_children = [ NodePath("BoneAttachment") ]
+bones/3/bound_children = [ NodePath("BoneAttachment3") ]
+
+[node name="BoneAttachment" parent="Armature/Skeleton" index="0"]
+transform = Transform( 1, 1.81188e-11, -4.76834e-07, -4.76831e-07, -0.00320596, -0.999995, -1.5469e-09, 0.999996, -0.00320691, 3.68964e-11, 0.00401521, -0.0323393 )
+
+[node name="BoneAttachment2" parent="Armature/Skeleton" index="1"]
+transform = Transform( 1, 9.42026e-12, -2.38423e-07, -1.70014e-07, -0.701058, -0.713106, -1.67155e-07, 0.713105, -0.701058, -5.62319e-14, 2.75402, -2.8296 )
+
+[node name="BoneAttachment3" parent="Armature/Skeleton" index="2"]
+transform = Transform( 1, 6.35442e-12, -3.89413e-07, -3.89413e-07, -0.000127838, -1, -5.61127e-11, 1, -0.000127838, 3.93451e-11, -0.00443474, 3.97084 )
+
+[node name="PSpawner" type="Spatial" parent="Armature/Skeleton/BoneAttachment3/Gun" index="0"]
+transform = Transform( 1, -3.75871e-21, 3.46945e-18, 8.92561e-19, 1, 0, -3.46945e-18, 0, 1, 0, 7.541, 3.5 )
+
+[node name="AnimationPlayer" parent="." index="1"]
+anims/PGunStowed = SubResource( 1 )
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+tree_root = SubResource( 16 )
+anim_player = NodePath("../AnimationPlayer")
+parameters/playback = SubResource( 17 )

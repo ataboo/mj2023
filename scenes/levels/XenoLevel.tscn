@@ -1,9 +1,9 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://src/level/LevelManager.cs" type="Script" id=1]
 [ext_resource path="res://scenes/gridmap/TerrainMeshLib.tres" type="MeshLibrary" id=2]
-[ext_resource path="res://src/player/PlayerControl.cs" type="Script" id=3]
-[ext_resource path="res://src/player/CockpitControl.cs" type="Script" id=4]
+[ext_resource path="res://scenes/mechparts/PlayerChassis.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/ui/ARProgressGroup.tscn" type="PackedScene" id=4]
 [ext_resource path="res://textures/UI/CrosshairsTop.png" type="Texture" id=5]
 [ext_resource path="res://textures/UI/CrosshairsBottom.png" type="Texture" id=6]
 [ext_resource path="res://src/player/HudControl.cs" type="Script" id=7]
@@ -14,27 +14,24 @@
 [ext_resource path="res://textures/UI/AbilityRoni.png" type="Texture" id=12]
 [ext_resource path="res://textures/UI/AbilityCheese.png" type="Texture" id=13]
 [ext_resource path="res://scenes/prefabs/doughball.tscn" type="PackedScene" id=14]
-[ext_resource path="res://scenes/mechparts/MechLeg.tscn" type="PackedScene" id=15]
+[ext_resource path="res://scenes/prefabs/pizza.tscn" type="PackedScene" id=15]
 [ext_resource path="res://src/ui/ARHolderControl.cs" type="Script" id=16]
 [ext_resource path="res://src/entity/SpawnerControl.cs" type="Script" id=17]
-[ext_resource path="res://models/abilities/spindough.glb" type="PackedScene" id=18]
-[ext_resource path="res://models/abilities/plate.glb" type="PackedScene" id=19]
-[ext_resource path="res://scenes/ui/ARProgressBar.tscn" type="PackedScene" id=20]
-[ext_resource path="res://models/terrain/Scaffold.gltf" type="PackedScene" id=21]
-[ext_resource path="res://models/terrain/Incinerator.gltf" type="PackedScene" id=22]
-[ext_resource path="res://models/terrain/BarrierPillar.gltf" type="PackedScene" id=23]
-[ext_resource path="res://models/terrain/BarrierWall.gltf" type="PackedScene" id=24]
+[ext_resource path="res://scenes/prefabs/Pepperoni.tscn" type="PackedScene" id=18]
+[ext_resource path="res://textures/UI/AbilityPlate.png" type="Texture" id=19]
+[ext_resource path="res://textures/UI/AbilityLeg.png" type="Texture" id=21]
 
 [sub_resource type="CylinderShape" id=2]
 height = 15.0
 radius = 5.0
 
-[sub_resource type="CapsuleShape" id=1]
-radius = 2.0
-height = 6.25
-
 [node name="Level" type="Spatial"]
 script = ExtResource( 1 )
+arHolderPath = NodePath("HUDCanvasLayer/HUD/ARHolder")
+hudControlPath = NodePath("HUDCanvasLayer/HUD")
+playerControlPath = NodePath("PlayerChassis")
+hotbarAbilityControlPath = NodePath("HUDCanvasLayer/HUD/Hotbar")
+entityHolderPath = NodePath("Entities")
 
 [node name="Entities" type="Spatial" parent="."]
 
@@ -62,39 +59,7 @@ __meta__ = {
 "_editor_floor_": Vector3( 0, 0, 0 )
 }
 
-[node name="PlayerChassis" type="KinematicBody" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.38176, 10.4045 )
-collision_mask = 3
-script = ExtResource( 3 )
-walkSpeed = 7.5
-strafeSpeed = 2.5
-legControlPath = NodePath("Cockpit/Abilities/mechleg")
-
-[node name="CollisionShape" type="CollisionShape" parent="PlayerChassis"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
-shape = SubResource( 1 )
-
-[node name="Cockpit" type="Spatial" parent="PlayerChassis"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.74527, 0 )
-script = ExtResource( 4 )
-playerControlPath = NodePath("..")
-cameraPath = NodePath("Camera")
-hudPath = NodePath("../../HUDCanvasLayer/HUD")
-
-[node name="Camera" type="Camera" parent="PlayerChassis/Cockpit"]
-
-[node name="Abilities" type="Spatial" parent="PlayerChassis/Cockpit"]
-
-[node name="plate" parent="PlayerChassis/Cockpit/Abilities" instance=ExtResource( 19 )]
-transform = Transform( 0.908953, -0.4169, 0, 0.105362, 0.229718, -0.967537, 0.403366, 0.879446, 0.252728, 1.54985, -0.389929, -5.09846 )
-visible = false
-
-[node name="spindough" parent="PlayerChassis/Cockpit/Abilities/plate" instance=ExtResource( 18 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, -7.45058e-09, 0, 1, 0, 0, 0 )
-
-[node name="mechleg" parent="PlayerChassis/Cockpit/Abilities" instance=ExtResource( 15 )]
-transform = Transform( -0.999854, 0, -0.0170858, 0, 1, 0, 0.0170858, 0, -0.999854, 1.16049, -6.94742, 0.720613 )
-playerControlPath = NodePath("../../..")
+[node name="PlayerChassis" parent="." instance=ExtResource( 3 )]
 
 [node name="HUDCanvasLayer" type="CanvasLayer" parent="."]
 
@@ -113,7 +78,7 @@ bottomCrosshairsHashedText = ExtResource( 8 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 16 )
-barPrefab = ExtResource( 20 )
+barPrefab = ExtResource( 4 )
 cameraPath = NodePath("../../../PlayerChassis/Cockpit/Camera")
 
 [node name="TopCrosshair" type="TextureRect" parent="HUDCanvasLayer/HUD"]
@@ -147,60 +112,76 @@ anchor_bottom = 1.0
 margin_top = -88.0
 script = ExtResource( 10 )
 hotbarItemHolderPath = NodePath("MarginContainer/PanelContainer/HBoxContainer")
-playerControlPath = NodePath("../../../PlayerChassis")
 
 [node name="MarginContainer" type="MarginContainer" parent="HUDCanvasLayer/HUD/Hotbar"]
-margin_left = 819.0
-margin_right = 1101.0
+margin_left = 751.0
+margin_right = 1169.0
 margin_bottom = 88.0
 custom_constants/margin_bottom = 10
 
 [node name="PanelContainer" type="PanelContainer" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer"]
-margin_right = 282.0
+margin_right = 418.0
 margin_bottom = 78.0
 grow_vertical = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 275.0
+margin_right = 411.0
 margin_bottom = 71.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="AbilityContainer" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
+[node name="ClawContainer" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
 
-[node name="AbilityContainer2" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
+[node name="KickContainer" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
 margin_left = 68.0
 margin_right = 132.0
-abilityTexture = ExtResource( 11 )
+abilityTexture = ExtResource( 21 )
 labelText = "2"
 ability = 1
 
-[node name="AbilityContainer3" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
+[node name="PlateContainer" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
 margin_left = 136.0
 margin_right = 200.0
-abilityTexture = ExtResource( 12 )
+abilityTexture = ExtResource( 19 )
 labelText = "3"
 ability = 2
 
-[node name="AbilityContainer4" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
+[node name="TomatoContainer" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
 margin_left = 204.0
 margin_right = 268.0
-abilityTexture = ExtResource( 13 )
+abilityTexture = ExtResource( 11 )
 labelText = "4"
 ability = 3
 
-[node name="BarrierPillar" parent="." instance=ExtResource( 23 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -26.2667, 0.000314713, -6.86511 )
+[node name="PepperoniContainer" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
+margin_left = 272.0
+margin_right = 336.0
+abilityTexture = ExtResource( 12 )
+labelText = "5"
+ability = 4
 
-[node name="BarrierWall" parent="." instance=ExtResource( 24 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -34.1787, 0.000745773, -6.92955 )
+[node name="CheeseContainer" parent="HUDCanvasLayer/HUD/Hotbar/MarginContainer/PanelContainer/HBoxContainer" instance=ExtResource( 9 )]
+margin_left = 340.0
+margin_right = 404.0
+abilityTexture = ExtResource( 13 )
+labelText = "6"
+ability = 5
 
-[node name="Incinerator" parent="." instance=ExtResource( 22 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -51.2347, 0.00271606, 4.56371 )
+[node name="Pizza" parent="." instance=ExtResource( 15 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.133839, 0.00600052, -3.21066 )
 
-[node name="Scaffold" parent="." instance=ExtResource( 21 )]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -29.9541, 4.00543e-05, 25.7588 )
+[node name="Pepperoni" parent="." instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.61447, 2.05482, 5.07127 )
+
+[node name="Pepperoni2" parent="." instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.99728, 2.05482, -5.63831 )
+
+[node name="Pepperoni3" parent="." instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.52222, 2.05482, -4.2148 )
+
+[node name="Pepperoni4" parent="." instance=ExtResource( 18 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.92591, 2.05482, -3.35116 )
 
 [connection signal="body_exited" from="Entities/DoughSpawner" to="Entities/DoughSpawner" method="_HandleBodyExited"]

@@ -1,5 +1,6 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
+[ext_resource path="res://scenes/mechparts/PGunArm.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/mechparts/ClawArm.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/mechparts/MechLeg.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/player/CockpitControl.cs" type="Script" id=4]
@@ -49,3 +50,8 @@ abilityControlPath = NodePath("..")
 [node name="platearm" parent="Cockpit/Abilities" instance=ExtResource( 10 )]
 transform = Transform( -0.995699, 0, -0.0926482, 0, 1, 0, 0.0926482, 0, -0.995699, 3.10164, -1.29084, 1.19973 )
 abilityControlPath = NodePath("..")
+
+[node name="PGunArm" parent="Cockpit/Abilities" instance=ExtResource( 1 )]
+transform = Transform( -0.993068, 0, 0.117537, 0, 1, 0, -0.117537, 0, -0.993068, -2.13, -1.295, -0.833 )
+abilityControlPath = NodePath("..")
+cameraPath = NodePath("../../Camera")

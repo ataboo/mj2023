@@ -3,106 +3,106 @@ using Godot;
 
 public class DoughballControl : RigidBody, IKickable
 {
-    [Export]
-    public PackedScene doughPilePrefab;
+	[Export]
+	public PackedScene doughPilePrefab;
 
-    public Vector3 lastVelocity;
-    public Vector3 currentVelocity;
+	public Vector3 lastVelocity;
+	public Vector3 currentVelocity;
 
-    [Export]
-    public float kickMultiplier = 1f;
+	[Export]
+	public float kickMultiplier = 1f;
 
-    [Export]
-    public float impactMultiplier = 5f;
+	[Export]
+	public float impactMultiplier = 5f;
 
-    [Export]
-    public float startHealth = 100f;
+	[Export]
+	public float startHealth = 100f;
 
-    private float _health;
+	private float _health;
 
-    private ARProgressGroupControl _progress;
+	private ARProgressGroupControl _progress;
 
-    public void Kick(Vector3 position, Vector3 impulse)
-    {
-        this.ApplyImpulse(position, impulse);
-        this.ApplyDamage(impulse.Length() / Mass, kickMultiplier, impulse);
-    }
+	public void Kick(Vector3 position, Vector3 impulse)
+	{
+		this.ApplyImpulse(position, impulse);
+		this.ApplyDamage(impulse.Length() / Mass, kickMultiplier, impulse);
+	}
 
-    public override void _Ready()
-    {
-        _health = startHealth;
-        CallDeferred(nameof(RemoveEmptyParent));
-        CallDeferred(nameof(InitProgressBar));
-    }
+	public override void _Ready()
+	{
+		_health = startHealth;
+		CallDeferred(nameof(RemoveEmptyParent));
+		CallDeferred(nameof(InitProgressBar));
+	}
 
-    private void InitProgressBar()
-    {
-        var level = LevelManager.MustGetNode(this);
-        _progress = level.ARHolder.CreateProgressBar(this, new[]{"Gluten"});
-        _progress.SetTargetOffset(new Vector3(0, 1, 0));
-    }
+	private void InitProgressBar()
+	{
+		var level = LevelManager.MustGetNode(this);
+		_progress = level.ARHolder.CreateProgressBar(this, new[]{"Gluten"});
+		_progress.SetTargetOffset(new Vector3(0, 1, 0));
+	}
 
-    private void RemoveEmptyParent()
-    {
-        var emptyParent = GetParent<Spatial>();
-        emptyParent.RemoveChild(this);
-        Transform = emptyParent.Transform;
-        emptyParent.GetParent().AddChild(this);
-        emptyParent.QueueFree();
-    }
+	private void RemoveEmptyParent()
+	{
+		var emptyParent = GetParent<Spatial>();
+		emptyParent.RemoveChild(this);
+		Transform = emptyParent.Transform;
+		emptyParent.GetParent().AddChild(this);
+		emptyParent.QueueFree();
+	}
 
-    public void _HandleBodyEntered(Node body)
-    {
-        this.ApplyDamage((currentVelocity - lastVelocity).Length(), impactMultiplier, null);
-    }
+	public void _HandleBodyEntered(Node body)
+	{
+		this.ApplyDamage((currentVelocity - lastVelocity).Length(), impactMultiplier, null);
+	}
 
-    private void ApplyDamage(float damage, float multiplier, Vector3? pendingImpulse)
-    {
-        _health -= damage * multiplier;
+	private void ApplyDamage(float damage, float multiplier, Vector3? pendingImpulse)
+	{
+		_health -= damage * multiplier;
 
-        if (_health <= 0)
-        {
-            SpawnDoughPile(pendingImpulse);
-            return;
-        }
+		if (_health <= 0)
+		{
+			SpawnDoughPile(pendingImpulse);
+			return;
+		}
 
-        if (_progress != null)
-        {
-            _progress.SetProgresses(new[]{(startHealth - _health) / startHealth});
-        }
-    }
+		if (_progress != null)
+		{
+			_progress.SetProgresses(new[]{(startHealth - _health) / startHealth});
+		}
+	}
 
-    private void SpawnDoughPile(Vector3? pendingImpulse)
-    {
-        this.CollisionLayer = 0;
-        this.CollisionMask = 0;
+	private void SpawnDoughPile(Vector3? pendingImpulse)
+	{
+		this.CollisionLayer = 0;
+		this.CollisionMask = 0;
 
-        var doughPileParent = doughPilePrefab.Instance<Spatial>();
-        var doughPile = doughPileParent.GetChild<DoughPileControl>(0);
+		var doughPileParent = doughPilePrefab.Instance<Spatial>();
+		var doughPile = doughPileParent.GetChild<DoughPileControl>(0);
 
-        doughPileParent.Translation = Translation + Vector3.Up * 1f;
-        doughPile.LinearVelocity = LinearVelocity;
+		doughPileParent.Translation = Translation + Vector3.Up * 1f;
+		doughPile.LinearVelocity = LinearVelocity;
 
-        GetParent().AddChild(doughPileParent);
+		GetParent().AddChild(doughPileParent);
 
-        if (pendingImpulse != null)
-        {
-            doughPile.ApplyImpulse(Vector3.Zero, pendingImpulse.Value);
-        }
+		if (pendingImpulse != null)
+		{
+			doughPile.ApplyImpulse(Vector3.Zero, pendingImpulse.Value);
+		}
 
-        _progress.QueueFree();
-        QueueFree();
-    }
+		_progress.QueueFree();
+		QueueFree();
+	}
 
-    public override void _IntegrateForces(PhysicsDirectBodyState state)
-    {
-        lastVelocity = currentVelocity;
-        currentVelocity = state.LinearVelocity;
-    }
+	public override void _IntegrateForces(PhysicsDirectBodyState state)
+	{
+		lastVelocity = currentVelocity;
+		currentVelocity = state.LinearVelocity;
+	}
 
-    public void Punch(Vector3 impulse, float damage)
-    {
-        ApplyImpulse(Vector3.Zero, impulse);
-        ApplyDamage(damage, kickMultiplier, impulse);
-    }
+	public void Punch(Vector3 impulse, float damage)
+	{
+		ApplyImpulse(Vector3.Zero, impulse);
+		ApplyDamage(damage, kickMultiplier, impulse);
+	}
 }
