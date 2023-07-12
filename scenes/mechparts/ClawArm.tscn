@@ -121,7 +121,7 @@ states/StashClaw/node = SubResource( 8 )
 states/StashClaw/position = Vector2( 416.778, 248.333 )
 transitions = [ "ClawStowed", "DrawClaw", SubResource( 10 ), "DrawClaw", "ClawIdle", SubResource( 11 ), "ClawIdle", "StashClaw", SubResource( 12 ), "StashClaw", "ClawStowed", SubResource( 13 ), "ClawIdle", "ClawExtend", SubResource( 20 ), "ClawExtend", "ClawRetract", SubResource( 21 ), "ClawRetract", "ClawIdle", SubResource( 22 ), "ClawExtend", "ClawIdle", SubResource( 23 ) ]
 start_node = "ClawStowed"
-graph_offset = Vector2( 57, 73 )
+graph_offset = Vector2( 54.2914, 105.136 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=4]
 
