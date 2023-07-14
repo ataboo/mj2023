@@ -1,5 +1,6 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
+[ext_resource path="res://scenes/mechparts/SauceArm.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/mechparts/ClawArm.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/mechparts/MechLeg.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/player/CockpitControl.cs" type="Script" id=4]
@@ -48,4 +49,8 @@ abilityControlPath = NodePath("..")
 
 [node name="platearm" parent="Cockpit/Abilities" instance=ExtResource( 10 )]
 transform = Transform( -0.975661, 0, -0.219284, -0.0060386, 0.999621, 0.0268676, 0.219201, 0.0275378, -0.975291, 3.54589, -1.29084, 1.19973 )
+abilityControlPath = NodePath("..")
+
+[node name="saucearm" parent="Cockpit/Abilities" instance=ExtResource( 1 )]
+transform = Transform( -0.997972, 0, 0.0636615, 0, 1, 0, -0.0636615, 0, -0.997972, -3.00568, -2.23809, -0.256538 )
 abilityControlPath = NodePath("..")
