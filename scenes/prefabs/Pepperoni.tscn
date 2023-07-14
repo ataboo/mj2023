@@ -1,0 +1,24 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://models/entity/PRaw1.glb" type="PackedScene" id=1]
+[ext_resource path="res://models/entity/PCooked1.glb" type="PackedScene" id=2]
+[ext_resource path="res://pepperoni.cs" type="Script" id=3]
+[ext_resource path="res://models/entity/PRaw2.glb" type="PackedScene" id=4]
+[ext_resource path="res://models/entity/PCooked2.glb" type="PackedScene" id=5]
+[ext_resource path="res://models/entity/PCooked3.glb" type="PackedScene" id=6]
+[ext_resource path="res://models/entity/PRaw3.glb" type="PackedScene" id=7]
+
+[sub_resource type="CylinderShape" id=1]
+height = 0.019
+radius = 0.188
+
+[node name="RigidBody" type="RigidBody"]
+collision_layer = 7
+collision_mask = 7
+script = ExtResource( 3 )
+Raw = [ ExtResource( 1 ), ExtResource( 4 ), ExtResource( 7 ) ]
+Cooked = [ ExtResource( 2 ), ExtResource( 5 ), ExtResource( 6 ) ]
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0206655, 0 )
+shape = SubResource( 1 )
