@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class pepperoni : RigidBody
+public class pepperoni : Spatial
 {
 	public bool initialForce = false;
 	
@@ -12,6 +12,10 @@ public class pepperoni : RigidBody
 	// Declare member variables here. Examples:
 	// private int a = 2;
 	// private string b = "text";
+	
+	[Export]
+	NodePath rigidBodyPath;
+	private RigidBody _RBNode;
 	
 	private Random rnd = new Random();
 	// Called when the node enters the scene tree for the first time.
@@ -30,12 +34,14 @@ public class pepperoni : RigidBody
 		//get existing child, delete it, instantiate new cooked instance
 	}
 	
-	public override void _PhysicsProcess (float delta)
+	
+	public override void _PhysicsProcess(float delta)
 	{
 		if(initialForce)
 		{
-			apply_impulse(Transform.basis.z, -Transform.basis.z);
+			//_RBNode.add_force(-Transform.basis.z, Transform.basis.z);
 			initialForce = false;
 		}
 	}
+	
 }
