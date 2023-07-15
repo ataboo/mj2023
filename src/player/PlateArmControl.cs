@@ -173,6 +173,10 @@ public class PlateArmControl : Spatial
 
     public void _HandlePlateDetectorBodyEntered(Node body)
     { 
+        if(body is PlayerControl) {
+            return;
+        }
+
         if(_stateMachine.GetCurrentNode() == "PlateIdle" && _droppingItem) {
             _droppingItem = false;
         }
@@ -261,10 +265,10 @@ public class PlateArmControl : Spatial
         {
             parent.RemoveChild(_heldPizza);
         }
-        _heldPizza.SetRBActive(false);
         _plate.AddChild(_heldPizza);
         _heldPizza.Translation = Vector3.Zero;
         _heldPizza.Rotation = Vector3.Zero;
+        _heldPizza.SetRBActive(false);
     }
 
     private void ShowSpinProgress()

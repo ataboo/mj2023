@@ -10,12 +10,12 @@
 [ext_resource path="res://scenes/mechparts/PlateArm.tscn" type="PackedScene" id=10]
 
 [sub_resource type="CapsuleShape" id=1]
-radius = 2.0
+radius = 3.63241
 height = 6.25
 
 [node name="PlayerChassis" type="KinematicBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.38176, 10.4045 )
-collision_mask = 3
+collision_mask = 6
 script = ExtResource( 5 )
 walkSpeed = 7.5
 strafeSpeed = 2.5
@@ -31,8 +31,14 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.74527, 0 )
 script = ExtResource( 4 )
 playerControlPath = NodePath("..")
 cameraPath = NodePath("Camera")
+raycastPath = NodePath("Camera/RayCast")
 
 [node name="Camera" type="Camera" parent="Cockpit"]
+
+[node name="RayCast" type="RayCast" parent="Cockpit/Camera"]
+enabled = true
+cast_to = Vector3( 0, 0, -1 )
+collision_mask = 6
 
 [node name="Abilities" type="Spatial" parent="Cockpit"]
 script = ExtResource( 9 )
@@ -55,8 +61,9 @@ abilityControlPath = NodePath("..")
 [node name="PGunArm" parent="Cockpit/Abilities" instance=ExtResource( 1 )]
 transform = Transform( -0.993068, 0, 0.117537, 0, 1, 0, -0.117537, 0, -0.993068, -2.13, -1.295, -0.833 )
 abilityControlPath = NodePath("..")
-cameraPath = NodePath("../../Camera")
+cockpitControlPath = NodePath("../..")
 
 [node name="saucearm" parent="Cockpit/Abilities" instance=ExtResource( 6 )]
 transform = Transform( -0.997972, 0, 0.0636615, 0, 1, 0, -0.0636615, 0, -0.997972, -3.00568, -2.23809, -0.256538 )
 abilityControlPath = NodePath("..")
+cockpitControlPath = NodePath("../..")

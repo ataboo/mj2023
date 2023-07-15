@@ -22,17 +22,23 @@ public class CockpitControl : Spatial
 
     private Vector3 _startPos;
 
+    [Export]
+    private NodePath raycastPath;
+    private RayCast _camRaycast;
+
     public override void _Ready()
     {
         _gameManager = GameManager.MustGetNode(this);
         this._startPos = this.Translation;
         this._playerControl = GetNode<PlayerControl>(playerControlPath) ?? throw new NullReferenceException();
         this._camera = GetNode<Camera>(cameraPath) ?? throw new NullReferenceException();
+        _camRaycast = GetNode<RayCast>(raycastPath) ?? throw new NullReferenceException();
         
         _levelManager = LevelManager.MustGetNode(this) ?? throw new NullReferenceException();
         this._hudControl = _levelManager.HudControl ?? throw new NullReferenceException();
 
         _playerControl.Connect(nameof(PlayerControl.OnPhysicsDone), this, nameof(_HandleChassisPhysicsComplete));
+        _camRaycast.CastTo = new Vector3(0, 0, -300);
     }
 
     public void _HandleChassisPhysicsComplete(float delta) {
@@ -50,4 +56,11 @@ public class CockpitControl : Spatial
         RotateObjectLocal(Vector3.Right, mechState.lookTarget.y);
     }
 
+    public Vector3 AimPoint() {
+        if(!_camRaycast.IsColliding()) {
+            return ToGlobal(Translation + _camRaycast.CastTo);
+        }
+
+        return _camRaycast.GetCollisionPoint();
+    }
 }

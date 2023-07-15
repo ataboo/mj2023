@@ -1,18 +1,20 @@
 using Godot;
-using System;
 
 public class SauceGlobControl : RigidBody
 {
 
     private bool _hit = false;
 
+	private SceneTreeTimer _deathTimer;
+
+	[Export]
+	float lifetimeSeconds = 5;
+
     public override void _Ready()
     {
         
-    }
-
-    public void Fire(Vector3 velocity) {
-        LinearVelocity = velocity;
+		_deathTimer = GetTree().CreateTimer(lifetimeSeconds);
+		_deathTimer.Connect("timeout", this, nameof(_HandleDeathTimer));
     }
 
     public override void _PhysicsProcess(float delta)
@@ -34,6 +36,15 @@ public class SauceGlobControl : RigidBody
         AngularVelocity = Vector3.Zero;
         // Mode = ModeEnum.Static;
         _hit = true;
-        Scale = new Vector3(3, 0.3f, 3f);
+        // Scale = new Vector3(3, 0.5f, 3f);
     }
+
+	public void CancelDeath() {
+		_deathTimer.Disconnect("timeout", this, nameof(_HandleDeathTimer));
+	}
+
+	private void _HandleDeathTimer() {
+		QueueFree();
+	}
+
 }
