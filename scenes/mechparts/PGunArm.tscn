@@ -108,17 +108,20 @@ graph_offset = Vector2( -142.536, 16 )
 script = ExtResource( 2 )
 animationTreePath = NodePath("AnimationTree")
 pepperoniPrefab = ExtResource( 3 )
-abilityControlPath = NodePath("")
-spawnerPath = NodePath("Armature/Skeleton/BoneAttachment3/Gun/PSpawner")
+
+[node name="Skeleton" parent="Armature" index="0"]
+bones/0/bound_children = [ NodePath("BoneAttachment2") ]
+bones/1/bound_children = [ NodePath("BoneAttachment") ]
+bones/3/bound_children = [ NodePath("BoneAttachment3") ]
 
 [node name="BoneAttachment" parent="Armature/Skeleton" index="0"]
-transform = Transform( 1, 3.55271e-13, -4.76837e-07, -2.0774e-07, -0.90011, -0.435663, -4.29206e-07, 0.435663, -0.900109, -3.40501e-12, 0.927663, -6.30114 )
+transform = Transform( 1, 1.81188e-11, -4.76834e-07, -4.76831e-07, -0.00320596, -0.999995, -1.5469e-09, 0.999996, -0.00320691, 3.68964e-11, 0.00401521, -0.0323393 )
 
 [node name="BoneAttachment2" parent="Armature/Skeleton" index="1"]
-transform = Transform( 1, -7.95808e-13, -2.38418e-07, 2.11e-07, -0.465592, 0.885, -1.11006e-07, -0.885, -0.465592, -5.62319e-14, 2.75402, -2.8296 )
+transform = Transform( 1, 9.42026e-12, -2.38423e-07, -1.70014e-07, -0.701058, -0.713106, -1.67155e-07, 0.713105, -0.701058, -5.62319e-14, 2.75402, -2.8296 )
 
 [node name="BoneAttachment3" parent="Armature/Skeleton" index="2"]
-transform = Transform( 1, -5.68434e-14, -3.89414e-07, -1.70653e-07, -0.898863, -0.43823, -3.5003e-07, 0.43823, -0.898863, -1.63941e-12, -1.88443, -4.93931 )
+transform = Transform( 1, 6.35442e-12, -3.89413e-07, -3.89413e-07, -0.000127838, -1, -5.61127e-11, 1, -0.000127838, 3.93451e-11, -0.00443474, 3.97084 )
 
 [node name="PSpawner" type="Spatial" parent="Armature/Skeleton/BoneAttachment3/Gun" index="0"]
 transform = Transform( 1, -3.75871e-21, 3.46945e-18, 8.92561e-19, 1, 0, -3.46945e-18, 0, 1, 0, 7.541, 3.5 )
@@ -129,5 +132,4 @@ anims/PGunStowed = SubResource( 1 )
 [node name="AnimationTree" type="AnimationTree" parent="." index="2"]
 tree_root = SubResource( 16 )
 anim_player = NodePath("../AnimationPlayer")
-active = true
 parameters/playback = SubResource( 17 )

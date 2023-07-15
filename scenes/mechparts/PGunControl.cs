@@ -26,8 +26,7 @@ public class PGunControl : Spatial
 	private AbilityControl _abilityControl;
 	
 	[Export]
-	NodePath spawnerPath;
-	public Spatial _pSpawner;
+	public Spatial PSpawner;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -35,7 +34,6 @@ public class PGunControl : Spatial
 		_stateMachine = (AnimationNodeStateMachinePlayback)_tree.Get("parameters/playback") ?? throw new NullReferenceException();
 		_animationPlayer = _tree.GetNode<AnimationPlayer>(_tree.AnimPlayer) ?? throw new NullReferenceException();
 		_abilityControl = GetNode<AbilityControl>(abilityControlPath) ?? throw new NullReferenceException();
-		_pSpawner = GetNode<Spatial>(spawnerPath) ?? throw new NullReferenceException();
 
 		_abilityControl.Connect(nameof(AbilityControl.OnAbilityChange), this, nameof(_HandleAbilityChanged));
 		_abilityControl.Connect(nameof(AbilityControl.OnClick), this, nameof(_HandleClick));
@@ -74,19 +72,18 @@ public class PGunControl : Spatial
 			{
 				if(ammo > 0 || mag > 0)
 				{
-					if(mag > 0)//Fire if mag not empty
+					if(mag > 0)//reload if out of ammo
 					{
 						_stateMachine.Start("PGunFire");
 						mag -= 1;
 						GD.Print("Mag: " + mag);
 						
 						//spawn pepperoni
-						var pBullet = pepperoniPrefab.Instance<pepperoni>();
-						_pSpawner.AddChild(pBullet);
-						//pBullet.global_transform.set_global_translation(PSpawner.global_transform.get_global_translation());
+						var pBullet = pepperoniPrefab.Instance<RigidBody>();
+						PSpawner.AddChild(pBullet);
 						pBullet.initialForce = true;
 					}
-					else//reload otherwise
+					else
 					{
 						reload();
 					}
