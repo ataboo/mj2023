@@ -14,3 +14,9 @@ public enum MechLegState {
     Windup,
     Kick,
 }
+
+public enum CookedState {
+    Raw,
+    Cooked,
+    Burned
+}
