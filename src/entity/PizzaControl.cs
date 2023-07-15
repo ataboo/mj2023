@@ -171,7 +171,6 @@ public class PizzaControl : RigidBody, ICookable
         var newCheese = cheesePrefab.Instance<MeshInstance>();
         _sauceMesh.AddChild(newCheese);
         var randPos = MechGameHelpers.RandomPointInCircle(_rng, Vector2.Zero, 1.8f);
-        GD.Print(randPos);
         newCheese.Translation = new Vector3(randPos.x, _cheeseHeight, randPos.y);
         var scale = Mathf.Lerp(0.2f, 1.2f, (float)_rng.NextDouble());
         newCheese.Scale = new Vector3(scale, scale, scale);
