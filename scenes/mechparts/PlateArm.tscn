@@ -175,4 +175,5 @@ anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/playback = SubResource( 2 )
 
+[connection signal="area_entered" from="Armature/Skeleton/BoneAttachment3/Plate/Area" to="." method="_HandlePlateDetectorAreaEntered"]
 [connection signal="body_entered" from="Armature/Skeleton/BoneAttachment3/Plate/Area" to="." method="_HandlePlateDetectorBodyEntered"]
