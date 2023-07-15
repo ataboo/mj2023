@@ -6,11 +6,16 @@ public class SpawnerControl : Area
     [Export]
     public PackedScene entityPrefab;
 
+    [Export]
+    private NodePath timerPath;
+    public Timer _timer;
+
 
 
     public override void _Ready()
     {    
-        CallDeferred(nameof(CheckSpawn));
+        _timer = GetNode<Timer>(timerPath) ?? throw new NullReferenceException();
+        _timer.Connect("timeout", this, nameof(CheckSpawn));
     }
 
     public void _HandleBodyExited(Node body) {
@@ -23,6 +28,8 @@ public class SpawnerControl : Area
             var newInstance = entityPrefab.Instance<Spatial>();
             newInstance.Translation = Vector3.Zero;
             AddChild(newInstance);
+        } else {
+            var body = bodies[0] as Spatial;
         }
     }
 

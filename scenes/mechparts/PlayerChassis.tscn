@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scenes/mechparts/PGunArm.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/mechparts/ClawArm.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://src/player/CockpitControl.cs" type="Script" id=4]
 [ext_resource path="res://src/player/PlayerControl.cs" type="Script" id=5]
 [ext_resource path="res://scenes/mechparts/SauceArm.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/mechparts/CheeseArm.tscn" type="PackedScene" id=7]
 [ext_resource path="res://src/player/AbilityControl.cs" type="Script" id=9]
 [ext_resource path="res://scenes/mechparts/PlateArm.tscn" type="PackedScene" id=10]
 
@@ -65,5 +66,10 @@ cockpitControlPath = NodePath("../..")
 
 [node name="saucearm" parent="Cockpit/Abilities" instance=ExtResource( 6 )]
 transform = Transform( -0.997972, 0, 0.0636615, 0, 1, 0, -0.0636615, 0, -0.997972, -3.00568, -2.23809, -0.256538 )
+abilityControlPath = NodePath("..")
+cockpitControlPath = NodePath("../..")
+
+[node name="cheesearm" parent="Cockpit/Abilities" instance=ExtResource( 7 )]
+transform = Transform( -0.992937, 0, 0.118647, 0, 1, 0, -0.118647, 0, -0.992937, -2.17722, -1.1662, 0 )
 abilityControlPath = NodePath("..")
 cockpitControlPath = NodePath("../..")

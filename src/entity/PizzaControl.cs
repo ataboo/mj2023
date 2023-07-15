@@ -10,7 +10,9 @@ public class PizzaControl : RigidBody, ICookable
 
     private float _maxSauceY = 0.15f;
 
-    private float _roniHeight = 0.2f;
+    private float _roniHeight = 0.25f;
+
+    private float _cheeseHeight = 0.23f;
 
     private float _sauceLevel = 0f;
 
@@ -18,6 +20,7 @@ public class PizzaControl : RigidBody, ICookable
 
     private ARProgressGroupControl _progress;
 
+    private bool _assembled;
 
     private int _roniCount = 0;
 
@@ -27,12 +30,17 @@ public class PizzaControl : RigidBody, ICookable
     private int roniQuota = 10;
 
     [Export]
-    private int cheeseQuota = 10;
+    private int cheeseQuota = 80;
 
     private List<ICookable> _cookables = new List<ICookable>();
 
+    private float _cookProgress = 0f;
+
     [Export]
     private float saucePerGlob = 0.1f;
+
+    [Export]
+    public PackedScene cheesePrefab;
 
     private CookedState _cookedState;
     public CookedState CookedState
@@ -42,6 +50,8 @@ public class PizzaControl : RigidBody, ICookable
             SetCooked(value);
         }
     }
+
+    private Random _rng = new Random();
 
     public override void _Ready()
     {
@@ -100,13 +110,13 @@ public class PizzaControl : RigidBody, ICookable
             AddSauce(sauceGlob);
             return;
         }
-
-        // if(body is CheeseBallControl cheeseBall) {
-        //     //TODO add cheese ball
-
-        //     return;
-        // }
     }
+
+    public void _HandleAreaEnteredToppingDetector(Area area) {
+        // if(area is OvenControl oven) {
+        //     //TODO...
+        // }
+    } 
 
     private void AddRoniChild(PepperoniControl pc) {
         if (pc.GetParent() == _sauceMesh)
@@ -153,14 +163,42 @@ public class PizzaControl : RigidBody, ICookable
         UpdateProgress();
     }
 
-    // private void AddCheese(CheeseBallControl cheese) {
+    public void AddCheese() {
+        if(_cheeseCount > cheeseQuota) {
+            return;
+        }
 
-    // }
+        var newCheese = cheesePrefab.Instance<MeshInstance>();
+        _sauceMesh.AddChild(newCheese);
+        var randPos = MechGameHelpers.RandomPointInCircle(_rng, Vector2.Zero, 1.8f);
+        GD.Print(randPos);
+        newCheese.Translation = new Vector3(randPos.x, _cheeseHeight, randPos.y);
+        var scale = Mathf.Lerp(0.2f, 1.2f, (float)_rng.NextDouble());
+        newCheese.Scale = new Vector3(scale, scale, scale);
+        newCheese.Rotation = new Vector3(-Mathf.Pi/2, 0, 0);
+        newCheese.RotateY((float)_rng.NextDouble() * Mathf.Pi * 2);
+
+        _cheeseCount++;
+
+        UpdateProgress();
+    }
 
     private void UpdateProgress()
     {
+        if(_assembled) {
+            _progress.SetProgresses(new []{_cookProgress});
+        }
+
         var roniProgress = Mathf.Clamp((float)_roniCount / roniQuota, 0f, 1f);
         var cheeseProgress = Mathf.Clamp((float)_cheeseCount / cheeseQuota, 0f, 1f);
+
+        if(roniProgress >= 1 && cheeseProgress == 1 && _sauceLevel == 1) {
+            _assembled = true;
+            _progress.SetBarCount(1);
+            _progress.SetLabels(new []{"Cooking"});
+            _progress.SetProgresses(new []{0f});
+            return;
+        }
 
         _progress.SetProgresses(new[] { roniProgress, cheeseProgress, _sauceLevel });
     }
