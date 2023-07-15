@@ -34,4 +34,5 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.052169, 0 )
 shape = SubResource( 4 )
 
 [connection signal="area_entered" from="ToppingDetector" to="." method="_HandleAreaEnteredToppingDetector"]
+[connection signal="area_exited" from="ToppingDetector" to="." method="_HandleAreaExitedToppingDetector"]
 [connection signal="body_entered" from="ToppingDetector" to="." method="_HandleBodyEnteredToppingDetector"]

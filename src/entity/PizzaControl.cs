@@ -20,8 +20,6 @@ public class PizzaControl : RigidBody, ICookable
 
     private ARProgressGroupControl _progress;
 
-    private bool _assembled;
-
     private int _roniCount = 0;
 
     private int _cheeseCount = 0;
@@ -42,6 +40,32 @@ public class PizzaControl : RigidBody, ICookable
     [Export]
     public PackedScene cheesePrefab;
 
+    private MeshInstance _crustMesh;
+
+    [Export]
+    private Color rawCrustColor = Colors.White;
+
+    [Export]
+    private Color cookedCrustColor = Colors.SandyBrown;
+
+    [Export]
+    private Color burntCrustColor = new Color("#29251e");
+
+    [Export]
+    private Color rawSauceColor = Colors.Red;
+
+    [Export]
+    private Color cookedSauceColor = Colors.DarkRed;
+
+    [Export]
+    private Color burntSauceColor = new Color("#29251e");
+
+    private float _cookRate = 0f;
+
+    private SpatialMaterial _crustMaterial;
+
+    private SpatialMaterial _sauceMaterial;
+
     private CookedState _cookedState;
     public CookedState CookedState
     {
@@ -56,7 +80,49 @@ public class PizzaControl : RigidBody, ICookable
     public override void _Ready()
     {
         _sauceMesh = GetNode<MeshInstance>("pizza/PizzaCrust/PizzaSauce") ?? throw new NullReferenceException();
+        _crustMesh = GetNode<MeshInstance>("pizza/PizzaCrust") ?? throw new NullReferenceException();
+
+        _sauceMaterial = _sauceMesh.GetActiveMaterial(0) as SpatialMaterial ?? throw new NullReferenceException();
+        _crustMaterial = _crustMesh.GetActiveMaterial(0) as SpatialMaterial ?? throw new NullReferenceException();
+
         CallDeferred("InitProgressBars");
+    }
+
+    public override void _Process(float delta)
+    {
+        if(_cookRate > 0) {
+            if(_cookedState == CookedState.Raw) {
+                SetCooked(CookedState.Cooking);
+                _progress.SetBarCount(1);
+                _progress.SetTargetOffset(Vector3.Zero);
+                _progress.SetLabels(new[]{"Cooking"});
+            }
+
+            _cookProgress += delta * _cookRate;
+
+            switch(_cookedState) {
+                case CookedState.Raw:
+                    SetCooked(CookedState.Cooking);
+                    _progress.SetBarCount(1);
+                    _progress.SetTargetOffset(Vector3.Zero);
+                    _progress.SetLabels(new[]{"Cooking"});
+                    break;
+                case CookedState.Cooking:
+                    if(_cookProgress >= 1f) {
+                        _progress.SetLabels(new[]{"Cooked"});
+                        SetCooked(CookedState.Cooked);
+                    }
+                    break;
+                case CookedState.Cooked:
+                    if(_cookProgress > 1.5f) {
+                        _progress.SetLabels(new[]{"Burnt"});
+                        SetCooked(CookedState.Burned);
+                    }
+                    break;
+            }
+
+            UpdateProgress();
+        }
     }
 
     private void InitProgressBars()
@@ -93,6 +159,21 @@ public class PizzaControl : RigidBody, ICookable
     {
         _cookedState = cooked;
 
+        switch(cooked) {
+            case CookedState.Raw:
+                _crustMaterial.AlbedoColor = rawCrustColor;
+                _sauceMaterial.AlbedoColor = rawSauceColor;
+                break;
+            case CookedState.Cooked:
+                _crustMaterial.AlbedoColor = cookedCrustColor;
+                _sauceMaterial.AlbedoColor = cookedSauceColor;
+                break;
+            case CookedState.Burned:
+                _crustMaterial.AlbedoColor = burntCrustColor;
+                _sauceMaterial.AlbedoColor = burntSauceColor;
+                break;
+        }
+
         foreach(var cookable in _cookables) {
             cookable.CookedState = cooked;
         }
@@ -100,6 +181,10 @@ public class PizzaControl : RigidBody, ICookable
 
     public void _HandleBodyEnteredToppingDetector(Node body)
     {
+        if(_cookedState != CookedState.Raw) {
+            return;
+        }
+
         if (body is PepperoniControl pc)
         {
             AddRoniChild(pc);
@@ -113,9 +198,17 @@ public class PizzaControl : RigidBody, ICookable
     }
 
     public void _HandleAreaEnteredToppingDetector(Area area) {
-        // if(area is OvenControl oven) {
-        //     //TODO...
-        // }
+        if(area is OvenControl oven) {
+            _cookRate = oven.CookRate;
+            oven.CookingActive(true);
+        }
+    } 
+
+    public void _HandleAreaExitedToppingDetector(Area area) {
+        if(area is OvenControl oven) {
+            _cookRate = 0;
+            oven.CookingActive(false);
+        }
     } 
 
     private void AddRoniChild(PepperoniControl pc) {
@@ -164,11 +257,15 @@ public class PizzaControl : RigidBody, ICookable
     }
 
     public void AddCheese() {
+        if(_cookedState != CookedState.Raw) {
+            return;
+        }
+
         if(_cheeseCount > cheeseQuota) {
             return;
         }
 
-        var newCheese = cheesePrefab.Instance<MeshInstance>();
+        var newCheese = cheesePrefab.Instance<CheeseMeshControl>();
         _sauceMesh.AddChild(newCheese);
         var randPos = MechGameHelpers.RandomPointInCircle(_rng, Vector2.Zero, 1.8f);
         newCheese.Translation = new Vector3(randPos.x, _cheeseHeight, randPos.y);
@@ -177,6 +274,8 @@ public class PizzaControl : RigidBody, ICookable
         newCheese.Rotation = new Vector3(-Mathf.Pi/2, 0, 0);
         newCheese.RotateY((float)_rng.NextDouble() * Mathf.Pi * 2);
 
+        _cookables.Add(newCheese);
+
         _cheeseCount++;
 
         UpdateProgress();
@@ -184,20 +283,13 @@ public class PizzaControl : RigidBody, ICookable
 
     private void UpdateProgress()
     {
-        if(_assembled) {
+        if(_cookedState != CookedState.Raw) {
             _progress.SetProgresses(new []{_cookProgress});
+            return;
         }
 
         var roniProgress = Mathf.Clamp((float)_roniCount / roniQuota, 0f, 1f);
         var cheeseProgress = Mathf.Clamp((float)_cheeseCount / cheeseQuota, 0f, 1f);
-
-        if(roniProgress >= 1 && cheeseProgress == 1 && _sauceLevel == 1) {
-            _assembled = true;
-            _progress.SetBarCount(1);
-            _progress.SetLabels(new []{"Cooking"});
-            _progress.SetProgresses(new []{0f});
-            return;
-        }
 
         _progress.SetProgresses(new[] { roniProgress, cheeseProgress, _sauceLevel });
     }
