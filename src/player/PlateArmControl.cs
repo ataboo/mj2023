@@ -58,7 +58,7 @@ public class PlateArmControl : Spatial
     private Vector2 _stretchSpeedRange = new Vector2(10f, 80f);
     private Vector2 _stretchRate = new Vector2(.1f, 0.3f);
 
-    private bool _droppingItem;
+    private float _actionDebounce;
 
     public override void _Ready()
     {
@@ -80,6 +80,10 @@ public class PlateArmControl : Spatial
 
     public override void _PhysicsProcess(float delta)
     {
+        if(_actionDebounce > 0) {
+            _actionDebounce -= delta;
+        }
+
         if (_spinning)
         {
             _spinV += _spinAccel * delta;
@@ -102,6 +106,7 @@ public class PlateArmControl : Spatial
 
         if (_holdingDough && _heldPizza == null && _spinDoughT == 1)
         {
+            _actionDebounce = 0.5f;
             HideSpinDough();
 
             _heldPizza = pizzaPrefab.Instance<PizzaControl>();
@@ -138,7 +143,6 @@ public class PlateArmControl : Spatial
             }
             else if (isPressed)
             {
-                _droppingItem = true;
                 _stateMachine.Travel("PlateExtend");
             }
             return;
@@ -157,9 +161,15 @@ public class PlateArmControl : Spatial
         {
             return;
         }
+
+        if(_actionDebounce > 0) {
+            return;
+        }
         
         if(area is StickTargetControl stickTarget) {
-            if(_heldPizza != null && _droppingItem) {
+            if(_heldPizza != null) {
+                GD.Print("Hit stick target!");
+                _actionDebounce = 0.5f;
                 _plate.RemoveChild(_heldPizza);
                 stickTarget.AddChild(_heldPizza);
                 _heldPizza.GlobalTranslation = _plate.GlobalTranslation;
@@ -167,6 +177,8 @@ public class PlateArmControl : Spatial
                 _heldPizza.Rotation = new Vector3(0, 0, -Mathf.Pi/2);
                 _heldPizza.SetRBActive(false, true);
                 _heldPizza = null;
+
+                _abilityControl.SetChangeLock(false);
             }
         }
     }
@@ -177,10 +189,6 @@ public class PlateArmControl : Spatial
             return;
         }
 
-        if(_stateMachine.GetCurrentNode() == "PlateIdle" && _droppingItem) {
-            _droppingItem = false;
-        }
-
         if (_stateMachine.GetCurrentNode() != "PlateExtend")
         {
             return;
@@ -188,38 +196,54 @@ public class PlateArmControl : Spatial
 
         _stateMachine.Travel("PlateIdle");
 
-        if (_droppingItem)
+        if(_actionDebounce > 0) {
+            return;
+        }
+
+        if (_holdingDough)
         {
+            _actionDebounce = 0.5f;
+            //Drop dough on ground
+            HideSpinDough();
+            var instance = doughPilePrefab.Instance<Spatial>();
+            _entityHolder.AddChild(instance);
+            instance.Translation = _plate.GlobalTranslation;
             _abilityControl.SetChangeLock(false);
-            _stateMachine.Travel("PlateIdle");
-            _droppingItem = false;
 
-            if (_holdingDough)
-            {
-                HideSpinDough();
-                var instance = doughPilePrefab.Instance<Spatial>();
-                _entityHolder.AddChild(instance);
-                instance.Translation = _plate.GlobalTranslation;
+            return;
+        }
+            
+        if (_heldPizza != null)
+        {
+            GD.Print($"Dropping pizza, hit: {body.Name}");
 
-            }
-            else if (_heldPizza != null)
-            {
-                _plate.RemoveChild(_heldPizza);
-                _entityHolder.AddChild(_heldPizza);
-                _heldPizza.Translation = _plate.GlobalTranslation;
-                _heldPizza.SetRBActive(true);
-                _heldPizza = null;
-            }
+            _actionDebounce = 0.5f;
+            //Drop pizza on ground
+
+            _plate.RemoveChild(_heldPizza);
+            _entityHolder.AddChild(_heldPizza);
+            _heldPizza.Translation = _plate.GlobalTranslation;
+            _heldPizza.SetRBActive(true);
+            _heldPizza = null;
+            _abilityControl.SetChangeLock(false);
 
             return;
         }
 
         if (body is DoughballControl doughBall)
         {
+            _actionDebounce = 0.5f;
+            // Punch doughball
+
             doughBall.Punch(GlobalTransform.basis.z * _punchForce, _punchDamage);
+
+            return;
         }
-        else if (body is DoughPileControl doughPile)
+        
+        if (body is DoughPileControl doughPile)
         {
+            // Pickup doughpile
+
             doughPile.QueueFree();
             _stateMachine.Travel("PlateLook");
 
@@ -231,9 +255,15 @@ public class PlateArmControl : Spatial
             ShowSpinProgress();
 
             _abilityControl.SetChangeLock(true);
+            _actionDebounce = 0.5f;
+
+            return;
         }
-        else if (body is PizzaControl pizza)
+        
+        if (body is PizzaControl pizza)
         {
+            _actionDebounce = 0.5f;
+            // Pickup pizza
             if(_heldPizza != null) {
                 return;
             }
@@ -243,6 +273,7 @@ public class PlateArmControl : Spatial
             _abilityControl.SetChangeLock(true);
 
             AddPizzaToPlate();
+            return;
         }
     }
 
@@ -261,10 +292,14 @@ public class PlateArmControl : Spatial
     private void AddPizzaToPlate()
     {
         var parent = _heldPizza.GetParent();
-        if (parent != null)
-        {
+        if(parent == _plate) {
+            return;
+        }
+
+        if(parent != null) {
             parent.RemoveChild(_heldPizza);
         }
+
         _plate.AddChild(_heldPizza);
         _heldPizza.Translation = Vector3.Zero;
         _heldPizza.Rotation = Vector3.Zero;
