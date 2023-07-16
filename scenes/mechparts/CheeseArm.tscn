@@ -98,17 +98,23 @@ animationTreePath = NodePath("AnimationTree")
 particlePath = NodePath("Armature/Skeleton/BoneAttachment4/CPUParticles")
 barrelPath = NodePath("Armature/Skeleton/BoneAttachment4/GunBody")
 
+[node name="Skeleton" parent="Armature" index="0"]
+bones/0/bound_children = [ NodePath("BoneAttachment2") ]
+bones/1/bound_children = [ NodePath("BoneAttachment") ]
+bones/3/bound_children = [ NodePath("BoneAttachment5") ]
+bones/4/bound_children = [ NodePath("BoneAttachment3"), NodePath("BoneAttachment4") ]
+
 [node name="BoneAttachment" parent="Armature/Skeleton" index="0"]
-transform = Transform( 1, 3.83693e-13, -4.76837e-07, -5.92295e-08, -0.992256, -0.124214, -4.73144e-07, 0.124214, -0.992256, -2.93995e-12, 0.216093, -5.8206 )
+transform = Transform( -1, 1.88954e-08, 3.91481e-07, -1.36806e-07, -0.952841, -0.303468, 3.67286e-07, -0.303468, 0.952841, -2.30539e-12, 0.184788, -5.82798 )
 
 [node name="BoneAttachment2" parent="Armature/Skeleton" index="1"]
-transform = Transform( 1, -7.24754e-13, -2.38419e-07, 1.81793e-07, -0.646992, 0.762496, -1.54256e-07, -0.762496, -0.646992, 2.90332e-14, 2.75402, -2.8296 )
+transform = Transform( 1, -6.25278e-13, -2.38419e-07, 1.81045e-07, -0.650672, 0.759358, -1.55133e-07, -0.759358, -0.650672, 2.90332e-14, 2.75402, -2.8296 )
 
 [node name="BoneAttachment3" parent="Armature/Skeleton" index="2"]
-transform = Transform( 1, -1.7053e-13, -3.89414e-07, -4.94736e-08, -0.991897, -0.127046, -3.86258e-07, 0.127046, -0.991897, 4.66058e-12, -3.75804, -5.31989 )
+transform = Transform( 1, 0, -3.89414e-07, -3.89414e-07, 0, -1, 0, 1, 0, 0, 0, 4.06172 )
 
 [node name="BoneAttachment4" parent="Armature/Skeleton" index="3"]
-transform = Transform( 1, -1.7053e-13, -3.89414e-07, -4.94736e-08, -0.991897, -0.127046, -3.86258e-07, 0.127046, -0.991897, 4.66058e-12, -3.75804, -5.31989 )
+transform = Transform( 1, 0, -3.89414e-07, -3.89414e-07, 0, -1, 0, 1, 0, 0, 0, 4.06172 )
 
 [node name="CPUParticles" type="CPUParticles" parent="Armature/Skeleton/BoneAttachment4" index="1"]
 transform = Transform( 1, -3.55271e-15, 1.7053e-13, 2.13163e-14, 1, -8.9407e-08, 0, 8.9407e-08, 1, 4.54747e-13, 1.60137, -0.308639 )
@@ -125,6 +131,9 @@ angular_velocity = 418.6
 angular_velocity_random = 1.0
 scale_amount = 0.2
 scale_amount_random = 1.0
+
+[node name="BoneAttachment5" parent="Armature/Skeleton" index="4"]
+transform = Transform( 1, 0, -3.89414e-07, -3.89414e-07, 0, -1, 0, 1, 0, 0, 0, 3.06172 )
 
 [node name="AnimationPlayer" parent="." index="1"]
 anims/GunStashed = SubResource( 1 )

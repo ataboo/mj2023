@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://src/level/LevelManager.cs" type="Script" id=1]
 [ext_resource path="res://scenes/gridmap/TerrainMeshLib.tres" type="MeshLibrary" id=2]
@@ -13,10 +13,8 @@
 [ext_resource path="res://textures/UI/AbilitySauce.png" type="Texture" id=11]
 [ext_resource path="res://textures/UI/AbilityRoni.png" type="Texture" id=12]
 [ext_resource path="res://textures/UI/AbilityCheese.png" type="Texture" id=13]
-[ext_resource path="res://scenes/prefabs/doughball.tscn" type="PackedScene" id=14]
 [ext_resource path="res://scenes/prefabs/pizza.tscn" type="PackedScene" id=15]
 [ext_resource path="res://src/ui/ARHolderControl.cs" type="Script" id=16]
-[ext_resource path="res://src/entity/SpawnerControl.cs" type="Script" id=17]
 [ext_resource path="res://models/terrain/BarrierWall.gltf" type="PackedScene" id=18]
 [ext_resource path="res://textures/UI/AbilityPlate.png" type="Texture" id=19]
 [ext_resource path="res://models/terrain/BarrierPillar.gltf" type="PackedScene" id=20]
@@ -25,29 +23,13 @@
 [ext_resource path="res://models/terrain/Scaffold.gltf" type="PackedScene" id=23]
 [ext_resource path="res://models/terrain/Hole.gltf" type="PackedScene" id=24]
 
-[sub_resource type="CylinderShape" id=2]
-height = 15.0
-radius = 5.0
-
 [node name="Level" type="Spatial"]
 script = ExtResource( 1 )
 arHolderPath = NodePath("HUDCanvasLayer/HUD/ARHolder")
 hudControlPath = NodePath("HUDCanvasLayer/HUD")
 playerControlPath = NodePath("PlayerChassis")
 hotbarAbilityControlPath = NodePath("HUDCanvasLayer/HUD/Hotbar")
-entityHolderPath = NodePath("Entities")
-
-[node name="Entities" type="Spatial" parent="."]
-
-[node name="DoughSpawner" type="Area" parent="Entities"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.6283, 5.56305, -7.39126 )
-collision_layer = 0
-collision_mask = 4
-script = ExtResource( 17 )
-entityPrefab = ExtResource( 14 )
-
-[node name="CollisionShape" type="CollisionShape" parent="Entities/DoughSpawner"]
-shape = SubResource( 2 )
+entityHolderPath = NodePath("")
 
 [node name="Terrain" type="Spatial" parent="."]
 
@@ -399,5 +381,3 @@ ability = 5
 
 [node name="Pizza" parent="." instance=ExtResource( 15 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.133839, 0.00600052, -3.21066 )
-
-[connection signal="body_exited" from="Entities/DoughSpawner" to="Entities/DoughSpawner" method="_HandleBodyExited"]
