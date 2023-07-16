@@ -168,7 +168,6 @@ public class PlateArmControl : Spatial
         
         if(area is StickTargetControl stickTarget) {
             if(_heldPizza != null) {
-                GD.Print("Hit stick target!");
                 _actionDebounce = 0.5f;
                 _plate.RemoveChild(_heldPizza);
                 stickTarget.AddChild(_heldPizza);
@@ -215,8 +214,6 @@ public class PlateArmControl : Spatial
             
         if (_heldPizza != null)
         {
-            GD.Print($"Dropping pizza, hit: {body.Name}");
-
             _actionDebounce = 0.5f;
             //Drop pizza on ground
 
