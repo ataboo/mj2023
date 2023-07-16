@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/entity/StickTargetControl.cs" type="Script" id=1]
+[ext_resource path="res://models/terrain/Scaffold.gltf" type="PackedScene" id=2]
+
+[sub_resource type="BoxShape" id=3]
+extents = Vector3( 3.74533, 7.46133, 1.27814 )
+
+[sub_resource type="BoxShape" id=4]
+extents = Vector3( 0.794786, 5.27685, 2.15311 )
+
+[node name="AssemblyWall" type="StaticBody"]
+transform = Transform( 0.906227, 0, -0.422792, 0, 1, 0, 0.422792, 0, 0.906227, -30.1961, 3.8147e-06, 10.5266 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="Scaffold" parent="." instance=ExtResource( 2 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 7.53563, 0 )
+shape = SubResource( 3 )
+
+[node name="StickTarget" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, 7.8, 0 )
+collision_layer = 7
+collision_mask = 7
+script = ExtResource( 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="StickTarget"]
+shape = SubResource( 4 )

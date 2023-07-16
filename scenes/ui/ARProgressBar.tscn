@@ -25,6 +25,7 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [node name="ARProgress" type="VBoxContainer"]
+modulate = Color( 1, 1, 1, 0.784314 )
 margin_right = 100.0
 margin_bottom = 38.0
 rect_min_size = Vector2( 100, 0 )

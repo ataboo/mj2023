@@ -1,0 +1,60 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://models/entity/Dragon.glb" type="PackedScene" id=1]
+[ext_resource path="res://src/entity/DragonControl.cs" type="Script" id=2]
+[ext_resource path="res://src/entity/DragonMouthControl.cs" type="Script" id=3]
+
+[sub_resource type="SphereShape" id=7]
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "Chew"
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "DragonIdle-loop"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=5]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=6]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachine" id=2]
+states/Chew/node = SubResource( 4 )
+states/Chew/position = Vector2( 796.333, 91.4445 )
+states/DragonIdle/node = SubResource( 1 )
+states/DragonIdle/position = Vector2( 532.333, 91.6667 )
+transitions = [ "Chew", "DragonIdle", SubResource( 5 ), "DragonIdle", "Chew", SubResource( 6 ) ]
+start_node = "DragonIdle"
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=3]
+
+[node name="Dragon" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+animationTreePath = NodePath("AnimationTree")
+
+[node name="DragonArmature" parent="." index="0"]
+transform = Transform( 5, 0, 0, 0, 5, 0, 0, 0, 5, -2.27492, 4.42941, 5.96046e-08 )
+
+[node name="Skeleton" parent="DragonArmature" index="0"]
+bones/17/bound_children = [ NodePath("BoneAttachment") ]
+
+[node name="BoneAttachment" parent="DragonArmature/Skeleton" index="0"]
+transform = Transform( 0.331984, 0.942774, 0.0310284, -0.940714, 0.328473, 0.0846299, 0.069595, -0.0572847, 0.995929, 5.71096, 7.52821, -0.535574 )
+
+[node name="Empty" parent="DragonArmature/Skeleton/BoneAttachment" index="0"]
+transform = Transform( 0.243877, -0.969806, -8.9407e-08, 0.969807, 0.243877, 3.72529e-08, -3.72529e-09, -7.45058e-08, 1, 0.445415, 1.20323, 0.0221245 )
+
+[node name="DragonMouth" type="Area" parent="DragonArmature/Skeleton/BoneAttachment/Empty" index="0"]
+transform = Transform( 0.998593, -0.0473912, -0.0237809, 0.0458557, 0.997059, -0.0614065, 0.0266211, 0.0602296, 0.997829, 0.5, 0, 0 )
+script = ExtResource( 3 )
+dragonControlPath = NodePath("../../../../..")
+
+[node name="CollisionShape" type="CollisionShape" parent="DragonArmature/Skeleton/BoneAttachment/Empty/DragonMouth" index="0"]
+shape = SubResource( 7 )
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+tree_root = SubResource( 2 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/playback = SubResource( 3 )

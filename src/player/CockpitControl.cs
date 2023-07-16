@@ -63,4 +63,16 @@ public class CockpitControl : Spatial
 
         return _camRaycast.GetCollisionPoint();
     }
+
+    public PizzaControl AimedPizza() {
+        if(!_camRaycast.IsColliding()) {
+            return null;
+        }
+        
+        if(_camRaycast.GetCollider() is PizzaControl pizza) {
+            return pizza;
+        }
+
+        return null;
+    }
 }

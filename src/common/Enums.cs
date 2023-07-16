@@ -17,6 +17,7 @@ public enum MechLegState {
 
 public enum CookedState {
     Raw,
+    Cooking,
     Cooked,
     Burned
 }
