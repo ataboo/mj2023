@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://src/level/LevelManager.cs" type="Script" id=1]
 [ext_resource path="res://scenes/gridmap/TerrainMeshLib.tres" type="MeshLibrary" id=2]
@@ -22,17 +22,18 @@
 [ext_resource path="res://scenes/scenery/IncineratorChimney.tscn" type="PackedScene" id=20]
 [ext_resource path="res://textures/UI/AbilityLeg.png" type="Texture" id=21]
 [ext_resource path="res://models/terrain/Cliff.glb" type="PackedScene" id=22]
+[ext_resource path="res://textures/Terrain/HillHorizon.png" type="Texture" id=23]
 
 [sub_resource type="CylinderShape" id=2]
 height = 15.0
 radius = 5.0
 
-[sub_resource type="ProceduralSky" id=5]
-sun_latitude = 133.28
+[sub_resource type="PanoramaSky" id=7]
+panorama = ExtResource( 23 )
 
 [sub_resource type="Environment" id=6]
 background_mode = 2
-background_sky = SubResource( 5 )
+background_sky = SubResource( 7 )
 ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_sky_contribution = 0.0
 adjustment_enabled = true
