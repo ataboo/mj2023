@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/ui/ButtonCheckbox.cs" type="Script" id=1]
+[ext_resource path="res://textures/UI/CheckedBox.png" type="Texture" id=2]
+[ext_resource path="res://textures/UI/UncheckedBox.png" type="Texture" id=3]
+[ext_resource path="res://fonts/MenuButtonFont.tres" type="DynamicFont" id=4]
+
+[node name="CheckboxRow" type="PanelContainer"]
+margin_top = 216.0
+margin_right = 256.0
+margin_bottom = 279.0
+script = ExtResource( 1 )
+Checked = true
+checkboxPath = NodePath("Margin/HBoxContainer/CheckBox")
+labelPath = NodePath("Margin/HBoxContainer/CheckboxLabel")
+
+[node name="Margin" type="MarginContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 249.0
+margin_bottom = 56.0
+mouse_filter = 2
+custom_constants/margin_right = 12
+custom_constants/margin_left = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Margin"]
+margin_left = 12.0
+margin_right = 230.0
+margin_bottom = 49.0
+mouse_filter = 2
+
+[node name="CheckboxLabel" type="Label" parent="Margin/HBoxContainer"]
+margin_top = 4.0
+margin_right = 90.0
+margin_bottom = 45.0
+size_flags_horizontal = 2
+custom_fonts/font = ExtResource( 4 )
+text = "Label"
+
+[node name="CheckBox" type="CheckBox" parent="Margin/HBoxContainer"]
+margin_left = 178.0
+margin_right = 218.0
+margin_bottom = 49.0
+mouse_filter = 2
+custom_fonts/font = ExtResource( 4 )
+custom_icons/checked = ExtResource( 2 )
+custom_icons/unchecked = ExtResource( 3 )
+pressed = true
