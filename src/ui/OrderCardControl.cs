@@ -50,8 +50,6 @@ public class OrderCardControl : PanelContainer
     }
 
     public async Task EndOrder(bool failed) {
-        GD.Print("Show icon");
-
         var startingBGColor = _panelStyleBox.BgColor;
 
         var finalColor = failed ? Colors.PaleVioletRed : Colors.LightGreen;

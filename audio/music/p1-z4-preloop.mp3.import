@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/p1-z4-preloop.mp3-00da22962612d8740a4ff650a71f8c93.mp3str"
+
+[deps]
+
+source_file="res://audio/music/p1-z4-preloop.mp3"
+dest_files=[ "res://.import/p1-z4-preloop.mp3-00da22962612d8740a4ff650a71f8c93.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
