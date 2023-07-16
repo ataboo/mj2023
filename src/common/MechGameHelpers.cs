@@ -14,4 +14,16 @@ public static class MechGameHelpers {
 
         return new Vector2(center.x + r * Mathf.Cos(theta), center.y + r * Mathf.Sin(theta));
     }
+
+    public static bool RandomBool(Random rand) {
+        return rand.Next(0, 2) == 1;
+    }
+
+    public static float RandomRangef(Random rand, float min, float max) {
+        if(max < min) {
+            (max, min) = (min, max);
+        }
+        
+        return min + ((float)rand.NextDouble() * (max - min));
+    }
 }

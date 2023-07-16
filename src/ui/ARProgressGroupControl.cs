@@ -16,6 +16,7 @@ public class ARProgressGroupControl : VBoxContainer
 
     public override void _Ready()
     {
+        Visible = false;
         _camera = LevelManager.MustGetNode(this).Camera;
     }
 
