@@ -20,6 +20,7 @@ collision_mask = 6
 script = ExtResource( 5 )
 walkSpeed = 7.5
 strafeSpeed = 2.5
+rotationSpeed = 0.8
 abilityControlPath = NodePath("Cockpit/Abilities")
 cameraPath = NodePath("Cockpit/Camera")
 

@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using static MechGameConstants;
 
 public class PizzaControl : RigidBody, ICookable
 {
@@ -14,8 +15,6 @@ public class PizzaControl : RigidBody, ICookable
 
     private float _cheeseHeight = 0.23f;
 
-    private float _sauceLevel = 0f;
-
     private uint _originalCollisionLayer = 7; //(1 << 0  | 1 << 1 | 1 << 2)
 
     private ARProgressGroupControl _progress;
@@ -23,12 +22,6 @@ public class PizzaControl : RigidBody, ICookable
     private int _roniCount = 0;
 
     private int _cheeseCount = 0;
-
-    [Export]
-    private int roniQuota = 10;
-
-    [Export]
-    private int cheeseQuota = 80;
 
     private List<ICookable> _cookables = new List<ICookable>();
 
@@ -66,10 +59,12 @@ public class PizzaControl : RigidBody, ICookable
 
     private SpatialMaterial _sauceMaterial;
 
-    private CookedState _cookedState;
+    private PizzaState _pizzaState;
+    public PizzaState PizzaState => _pizzaState;
+
     public CookedState CookedState
     {
-        get => _cookedState; set
+        get => _pizzaState.cookedState; set
         {
             SetCooked(value);
         }
@@ -79,6 +74,7 @@ public class PizzaControl : RigidBody, ICookable
 
     public override void _Ready()
     {
+        _pizzaState = new PizzaState(){cookedState = CookedState.Raw};
         _sauceMesh = GetNode<MeshInstance>("pizza/PizzaCrust/PizzaSauce") ?? throw new NullReferenceException();
         _crustMesh = GetNode<MeshInstance>("pizza/PizzaCrust") ?? throw new NullReferenceException();
 
@@ -91,7 +87,7 @@ public class PizzaControl : RigidBody, ICookable
     public override void _Process(float delta)
     {
         if(_cookRate > 0) {
-            if(_cookedState == CookedState.Raw) {
+            if(CookedState == CookedState.Raw) {
                 SetCooked(CookedState.Cooking);
                 _progress.SetBarCount(1);
                 _progress.SetTargetOffset(Vector3.Zero);
@@ -100,7 +96,7 @@ public class PizzaControl : RigidBody, ICookable
 
             _cookProgress += delta * _cookRate;
 
-            switch(_cookedState) {
+            switch(CookedState) {
                 case CookedState.Raw:
                     SetCooked(CookedState.Cooking);
                     _progress.SetBarCount(1);
@@ -135,8 +131,8 @@ public class PizzaControl : RigidBody, ICookable
     public void SetSauceLevel(float t)
     {
         t = Mathf.Clamp(t, 0, 1);
-        _sauceLevel = t;
-        var sauceY = Mathf.Lerp(0, _maxSauceY, _sauceLevel);
+        _pizzaState.sauceLevel = t;
+        var sauceY = Mathf.Lerp(0, _maxSauceY, _pizzaState.sauceLevel);
         _sauceMesh.Translation = new Vector3(0, sauceY, 0);
     }
 
@@ -157,7 +153,7 @@ public class PizzaControl : RigidBody, ICookable
 
     private void SetCooked(CookedState cooked)
     {
-        _cookedState = cooked;
+        _pizzaState.cookedState = cooked;
 
         switch(cooked) {
             case CookedState.Raw:
@@ -181,7 +177,7 @@ public class PizzaControl : RigidBody, ICookable
 
     public void _HandleBodyEnteredToppingDetector(Node body)
     {
-        if(_cookedState != CookedState.Raw) {
+        if(CookedState != CookedState.Raw) {
             return;
         }
 
@@ -241,6 +237,7 @@ public class PizzaControl : RigidBody, ICookable
         pc.Translation = new Vector3(pc.Translation.x, _roniHeight, pc.Translation.z);
 
         _roniCount++;
+        _pizzaState.roniLevel = (float)_roniCount / RoniQuota;
         
         _cookables.Add(pc);
 
@@ -248,7 +245,7 @@ public class PizzaControl : RigidBody, ICookable
     }
 
     private void AddSauce(SauceGlobControl sauce) {
-        this.SetSauceLevel(this._sauceLevel + saucePerGlob);
+        this.SetSauceLevel(_pizzaState.sauceLevel + saucePerGlob);
         sauce.CollisionLayer = 0;
         sauce.CollisionMask = 0;
         sauce.QueueFree();
@@ -257,11 +254,11 @@ public class PizzaControl : RigidBody, ICookable
     }
 
     public void AddCheese() {
-        if(_cookedState != CookedState.Raw) {
+        if(CookedState != CookedState.Raw) {
             return;
         }
 
-        if(_cheeseCount > cheeseQuota) {
+        if(_cheeseCount > MechGameConstants.CheeseQuota) {
             return;
         }
 
@@ -277,20 +274,18 @@ public class PizzaControl : RigidBody, ICookable
         _cookables.Add(newCheese);
 
         _cheeseCount++;
+        _pizzaState.cheeseLevel = (float)_cheeseCount / CheeseQuota;
 
         UpdateProgress();
     }
 
     private void UpdateProgress()
     {
-        if(_cookedState != CookedState.Raw) {
+        if(CookedState != CookedState.Raw) {
             _progress.SetProgresses(new []{_cookProgress});
             return;
         }
 
-        var roniProgress = Mathf.Clamp((float)_roniCount / roniQuota, 0f, 1f);
-        var cheeseProgress = Mathf.Clamp((float)_cheeseCount / cheeseQuota, 0f, 1f);
-
-        _progress.SetProgresses(new[] { roniProgress, cheeseProgress, _sauceLevel });
+        _progress.SetProgresses(new[] { _pizzaState.roniLevel, _pizzaState.cheeseLevel, _pizzaState.sauceLevel });
     }
 }
