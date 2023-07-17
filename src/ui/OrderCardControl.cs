@@ -26,6 +26,15 @@ public class OrderCardControl : PanelContainer
 
     private StyleBoxFlat _panelStyleBox;
 
+    private FadeMode _fadeMode = FadeMode.None;
+
+    private float _fadeProgress;
+    private float _fadeTarget;
+
+    private Color _startColor;
+
+    private bool _orderFailed;
+
     public override void _Ready()
     {
         _sauceIcon = GetNode<TextureRect>(sauceIconPath) ?? throw new NullReferenceException();
@@ -35,6 +44,7 @@ public class OrderCardControl : PanelContainer
         _progressFront = GetNode<Panel>(progressFrontPath) ?? throw new NullReferenceException();
 
         _panelStyleBox = GetStylebox("panel") as StyleBoxFlat ?? throw new NullReferenceException();
+        _startColor = _panelStyleBox.BgColor; 
     }
 
     public void SetOrder(OrderState order) {
@@ -49,24 +59,48 @@ public class OrderCardControl : PanelContainer
         _progressFront.RectSize = new Vector2(width, _progressFront.RectSize.y);
     }
 
-    public async Task EndOrder(bool failed) {
-        var startingBGColor = _panelStyleBox.BgColor;
+    public override void _Process(float delta)
+    {
+        if(_fadeMode == FadeMode.None) {
+            return;
+        }
+        
+        _fadeProgress += delta;
+        var t = Mathf.Clamp(_fadeProgress / _fadeTarget, 0, 1);
+        
+        switch(_fadeMode) {
+            case FadeMode.Flash:
+                _panelStyleBox.BgColor = _startColor.LinearInterpolate(Colors.White, t);
+                if(t == 1) {
+                    _fadeMode = FadeMode.Color;
+                    _fadeProgress = 0f;
+                    _fadeTarget = .2f;
+                }
+                break;
+            case FadeMode.Color:
+                _panelStyleBox.BgColor = Colors.White.LinearInterpolate(_orderFailed ? Colors.PaleVioletRed : Colors.LightGreen, t);
+                if(t == 1) {
+                    _fadeMode = FadeMode.None;
+                    GetTree().CreateTimer(2f).Connect("timeout", this, nameof(_HandleTimeoutTimer));
+                }
+                break;
+        }
+    }
 
-        var finalColor = failed ? Colors.PaleVioletRed : Colors.LightGreen;
-
-        await FadeToColor(Colors.White, .05f, .01f);
-        await FadeToColor(finalColor, .05f, .01f);
-
-        await Task.Delay(TimeSpan.FromSeconds(2));
-
+    private void _HandleTimeoutTimer() {
         QueueFree();
     }
 
-    private async Task FadeToColor(Color color, float duration, float tickDelta) {
-        for(var i=0f; i<duration; i+=tickDelta) {
-            var t = i / duration;
-            _panelStyleBox.BgColor = _panelStyleBox.BgColor.LinearInterpolate(color, t);
-            await Task.Delay(TimeSpan.FromSeconds(tickDelta));
-        }
+    public void EndOrder(bool failed) {
+        _fadeProgress = 0;
+        _fadeTarget = 0.1f;
+        _fadeMode = FadeMode.Flash;
     }
+
+    private enum FadeMode  {
+        None,
+        Flash,
+        Color,
+    }    
 }
+

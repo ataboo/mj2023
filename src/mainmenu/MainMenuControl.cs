@@ -19,6 +19,7 @@ public class MainMenuControl : Control
 
     public override void _Ready()
     {
+        Input.MouseMode = Input.MouseModeEnum.Visible;
         _audioCheckbox = GetNode<ButtonCheckbox>(audioCheckboxPath) ?? throw new NullReferenceException();
         _musicCheckbox = GetNode<ButtonCheckbox>(musicCheckboxPath) ?? throw new NullReferenceException();
         _gameManager = GameManager.MustGetNode(this);

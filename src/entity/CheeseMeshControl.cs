@@ -21,6 +21,7 @@ public class CheeseMeshControl : MeshInstance, ICookable
     public override void _Ready()
     {
         _material = GetActiveMaterial(0) as SpatialMaterial ?? throw new NullReferenceException();
+        _material.ResourceLocalToScene = true;
     }
 
     private void SetCooked(CookedState cookedState) {
