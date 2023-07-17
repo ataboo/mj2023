@@ -43,4 +43,8 @@ public class PausePanelControl : PanelContainer
         SetPaused(false);
         GetTree().ReloadCurrentScene();
     }
+
+    private void _HandlePauseButtonPush() {
+        TogglePaused();
+    }
 }

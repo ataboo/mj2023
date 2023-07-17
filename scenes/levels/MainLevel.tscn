@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://src/level/LevelManager.cs" type="Script" id=1]
 [ext_resource path="res://scenes/prefabs/doughball.tscn" type="PackedScene" id=2]
@@ -31,6 +31,8 @@
 [ext_resource path="res://fonts/RobotoMono-Medium.ttf" type="DynamicFontData" id=29]
 [ext_resource path="res://fonts/MenuButtonFont.tres" type="DynamicFont" id=30]
 [ext_resource path="res://src/ui/PausePanelControl.cs" type="Script" id=31]
+[ext_resource path="res://textures/UI/PauseNormal.png" type="Texture" id=32]
+[ext_resource path="res://textures/UI/PauseHover.png" type="Texture" id=33]
 
 [sub_resource type="CylinderShape" id=2]
 height = 15.0
@@ -270,6 +272,7 @@ layer = 2
 
 [node name="PausePanel" type="PanelContainer" parent="PauseMenuCanvas"]
 pause_mode = 2
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 8 )
@@ -318,6 +321,20 @@ margin_bottom = 308.0
 custom_fonts/font = ExtResource( 30 )
 text = "Quit"
 
+[node name="PauseButton" type="TextureButton" parent="PauseMenuCanvas"]
+pause_mode = 2
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -152.0
+margin_top = -76.0
+margin_right = -88.0
+margin_bottom = -12.0
+texture_normal = ExtResource( 32 )
+texture_pressed = ExtResource( 33 )
+texture_hover = ExtResource( 33 )
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 6 )
 
@@ -337,3 +354,4 @@ shadow_enabled = true
 [connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Instructions" to="PauseMenuCanvas/PausePanel" method="_HandleClickResume"]
 [connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Restart" to="PauseMenuCanvas/PausePanel" method="_HandleClickRestart"]
 [connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Quit" to="PauseMenuCanvas/PausePanel" method="_HandleClickQuit"]
+[connection signal="pressed" from="PauseMenuCanvas/PauseButton" to="PauseMenuCanvas/PausePanel" method="_HandlePauseButtonPush"]

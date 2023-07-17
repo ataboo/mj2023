@@ -41,5 +41,6 @@ public class GameManager : Node
 
     public void LoadMainMenu() {
         GetTree().ChangeSceneTo(mainMenuScene);
+        Input.MouseMode = Input.MouseModeEnum.Visible;
     }
 }
