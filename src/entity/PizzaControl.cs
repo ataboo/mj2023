@@ -75,8 +75,8 @@ public class PizzaControl : RigidBody, ICookable
     public override void _Ready()
     {
         _pizzaState = new PizzaState(){cookedState = CookedState.Raw};
-        _sauceMesh = GetNode<MeshInstance>("pizza/PizzaCrust/PizzaSauce") ?? throw new NullReferenceException();
-        _crustMesh = GetNode<MeshInstance>("pizza/PizzaCrust") ?? throw new NullReferenceException();
+        _sauceMesh = GetNode<MeshInstance>("PizzaMesh/PizzaCrust/PizzaSauce") ?? throw new NullReferenceException();
+        _crustMesh = GetNode<MeshInstance>("PizzaMesh/PizzaCrust") ?? throw new NullReferenceException();
 
         _sauceMaterial = _sauceMesh.GetActiveMaterial(0) as SpatialMaterial ?? throw new NullReferenceException();
         _crustMaterial = _crustMesh.GetActiveMaterial(0) as SpatialMaterial ?? throw new NullReferenceException();
@@ -196,14 +196,14 @@ public class PizzaControl : RigidBody, ICookable
     public void _HandleAreaEnteredToppingDetector(Area area) {
         if(area is OvenControl oven) {
             _cookRate = oven.CookRate;
-            oven.CookingActive(true);
+            oven.AddPizza();
         }
     } 
 
     public void _HandleAreaExitedToppingDetector(Area area) {
         if(area is OvenControl oven) {
             _cookRate = 0;
-            oven.CookingActive(false);
+            oven.RemovePizza();
         }
     } 
 

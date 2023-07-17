@@ -23,7 +23,7 @@ public class OrdersManager : Node
 
 
     [Export]
-    private float _baseTimeLimit = 60f;
+    private float _baseTimeLimit = 80f;
 
     [Export]
     private float _cheeseTimeLimitBuff = 15f;

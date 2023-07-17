@@ -18,9 +18,9 @@ height = 6.25
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.38176, 10.4045 )
 collision_mask = 6
 script = ExtResource( 5 )
-walkSpeed = 7.5
-strafeSpeed = 2.5
-rotationSpeed = 0.8
+walkSpeed = 15.0
+strafeSpeed = 7.0
+rotationSpeed = 1.5
 abilityControlPath = NodePath("Cockpit/Abilities")
 cameraPath = NodePath("Cockpit/Camera")
 

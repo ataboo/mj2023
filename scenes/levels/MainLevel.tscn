@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://src/level/LevelManager.cs" type="Script" id=1]
 [ext_resource path="res://scenes/prefabs/doughball.tscn" type="PackedScene" id=2]
@@ -28,10 +28,25 @@
 [ext_resource path="res://textures/UI/AbilityCheese.png" type="Texture" id=26]
 [ext_resource path="res://src/entity/SpawnerControl.cs" type="Script" id=27]
 [ext_resource path="res://src/player/HudControl.cs" type="Script" id=28]
+[ext_resource path="res://fonts/RobotoMono-Medium.ttf" type="DynamicFontData" id=29]
+[ext_resource path="res://fonts/MenuButtonFont.tres" type="DynamicFont" id=30]
+[ext_resource path="res://src/ui/PausePanelControl.cs" type="Script" id=31]
+[ext_resource path="res://textures/UI/PauseNormal.png" type="Texture" id=32]
+[ext_resource path="res://textures/UI/PauseHover.png" type="Texture" id=33]
 
 [sub_resource type="CylinderShape" id=2]
 height = 15.0
 radius = 5.0
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.243137, 0.243137, 0.243137, 0.729412 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 60
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
+font_data = ExtResource( 29 )
 
 [sub_resource type="PanoramaSky" id=7]
 panorama = ExtResource( 15 )
@@ -39,8 +54,10 @@ panorama = ExtResource( 15 )
 [sub_resource type="Environment" id=6]
 background_mode = 2
 background_sky = SubResource( 7 )
+background_sky_orientation = Basis( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08 )
 ambient_light_color = Color( 1, 1, 1, 1 )
-ambient_light_sky_contribution = 0.0
+ambient_light_energy = 0.1
+ambient_light_sky_contribution = 0.13
 adjustment_enabled = true
 
 [node name="Level" type="Spatial"]
@@ -55,7 +72,6 @@ ordersManagerPath = NodePath("Orders")
 [node name="Orders" type="Node" parent="."]
 script = ExtResource( 8 )
 ordersUIPath = NodePath("../HUDCanvasLayer/HUD/OrdersUI")
-_baseTimeLimit = 80.0
 
 [node name="Entities" type="Spatial" parent="."]
 
@@ -79,6 +95,7 @@ transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.9946
 
 [node name="GridMap" type="GridMap" parent="Terrain"]
 mesh_library = ExtResource( 19 )
+use_in_baked_light = true
 cell_size = Vector3( 4, 4, 4 )
 cell_scale = 2.0
 collision_layer = 2
@@ -106,6 +123,11 @@ transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 9.55307
 [node name="PlayerChassis" parent="." instance=ExtResource( 20 )]
 collision_layer = 3
 collision_mask = 1
+walkSpeed = 12.0
+strafeSpeed = 6.0
+walkAccel = 0.15
+walkCyclePeriod = 1.25
+shuffleCyclePeriod = 1.0
 
 [node name="HUDCanvasLayer" type="CanvasLayer" parent="."]
 
@@ -133,10 +155,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -16.0
-margin_top = -16.0
-margin_right = 16.0
-margin_bottom = 16.0
+margin_left = -64.0
+margin_top = -64.0
+margin_right = 64.0
+margin_bottom = 64.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
 texture = ExtResource( 24 )
 
 [node name="BottomCrosshair" type="TextureRect" parent="HUDCanvasLayer/HUD"]
@@ -243,8 +267,73 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/separation = 12
 
-[node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 36.4216, 9.03226 )
+[node name="PauseMenuCanvas" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="PausePanel" type="PanelContainer" parent="PauseMenuCanvas"]
+pause_mode = 2
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 8 )
+script = ExtResource( 31 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenuCanvas/PausePanel"]
+margin_left = 846.0
+margin_top = 386.0
+margin_right = 1074.0
+margin_bottom = 694.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_constants/separation = 10
+
+[node name="Label" type="Label" parent="PauseMenuCanvas/PausePanel/VBoxContainer"]
+margin_right = 228.0
+margin_bottom = 80.0
+custom_fonts/font = SubResource( 9 )
+text = "Paused"
+
+[node name="Resume" type="Button" parent="PauseMenuCanvas/PausePanel/VBoxContainer"]
+margin_top = 90.0
+margin_right = 228.0
+margin_bottom = 137.0
+custom_fonts/font = ExtResource( 30 )
+text = "Resume"
+
+[node name="Instructions" type="Button" parent="PauseMenuCanvas/PausePanel/VBoxContainer"]
+margin_top = 147.0
+margin_right = 228.0
+margin_bottom = 194.0
+custom_fonts/font = ExtResource( 30 )
+text = "Instructions"
+
+[node name="Restart" type="Button" parent="PauseMenuCanvas/PausePanel/VBoxContainer"]
+margin_top = 204.0
+margin_right = 228.0
+margin_bottom = 251.0
+custom_fonts/font = ExtResource( 30 )
+text = "Restart"
+
+[node name="Quit" type="Button" parent="PauseMenuCanvas/PausePanel/VBoxContainer"]
+margin_top = 261.0
+margin_right = 228.0
+margin_bottom = 308.0
+custom_fonts/font = ExtResource( 30 )
+text = "Quit"
+
+[node name="PauseButton" type="TextureButton" parent="PauseMenuCanvas"]
+pause_mode = 2
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -152.0
+margin_top = -76.0
+margin_right = -88.0
+margin_bottom = -12.0
+texture_normal = ExtResource( 32 )
+texture_pressed = ExtResource( 33 )
+texture_hover = ExtResource( 33 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 6 )
@@ -254,5 +343,15 @@ stream = ExtResource( 10 )
 autoplay = true
 bus = "Music"
 
+[node name="DirectionalLight2" type="DirectionalLight" parent="."]
+transform = Transform( 0.185355, -0.867785, 0.461078, 0.369278, 0.49633, 0.785679, -0.910647, 0.0246366, 0.412451, 16.6835, 26.8245, 23.5884 )
+light_energy = 1.5
+shadow_enabled = true
+
 [connection signal="timeout" from="Entities/DoughSpawner/Timer" to="Entities/DoughSpawner" method="_HandleTimerTimeout"]
 [connection signal="OnPizzaAte" from="Terrain/Dragon" to="Orders" method="_HandleDragonAtePizza"]
+[connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Resume" to="PauseMenuCanvas/PausePanel" method="_HandleClickResume"]
+[connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Instructions" to="PauseMenuCanvas/PausePanel" method="_HandleClickResume"]
+[connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Restart" to="PauseMenuCanvas/PausePanel" method="_HandleClickRestart"]
+[connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Quit" to="PauseMenuCanvas/PausePanel" method="_HandleClickQuit"]
+[connection signal="pressed" from="PauseMenuCanvas/PauseButton" to="PauseMenuCanvas/PausePanel" method="_HandlePauseButtonPush"]

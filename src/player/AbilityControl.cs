@@ -42,7 +42,6 @@ public class AbilityControl : Spatial
     {
         if (@event is InputEventMouseButton eventMouseButton)
         {
-
             switch ((ButtonList)eventMouseButton.ButtonIndex)
             {
                 case ButtonList.WheelUp:
@@ -58,6 +57,7 @@ public class AbilityControl : Spatial
                     }
                     break;
                 case ButtonList.Left:
+                    Input.MouseMode = Input.MouseModeEnum.Captured;
                     EmitSignal(nameof(OnClick), eventMouseButton.IsPressed(), true);
                     break;
                 case ButtonList.Right:

@@ -211,3 +211,6 @@ visible = false
 light_color = Color( 1, 0.752941, 0.32549, 1 )
 light_energy = 5.513
 omni_range = 9.0
+
+[connection signal="body_entered" from="CookArea" to="CookArea" method="_HandleBodyEntered"]
+[connection signal="body_exited" from="CookArea" to="CookArea" method="_HandleBodyExited"]
