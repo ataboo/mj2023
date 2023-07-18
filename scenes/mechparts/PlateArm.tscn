@@ -1,10 +1,14 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://models/abilities/platearm.glb" type="PackedScene" id=1]
 [ext_resource path="res://src/player/PlateArmControl.cs" type="Script" id=2]
 [ext_resource path="res://scenes/prefabs/doughpile.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/prefabs/SpinDough.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/prefabs/pizza.tscn" type="PackedScene" id=5]
+[ext_resource path="res://audio/effects/pickup item.wav" type="AudioStream" id=6]
+[ext_resource path="res://audio/effects/gatling gun accelerate.wav" type="AudioStream" id=8]
+[ext_resource path="res://audio/effects/gatling gun deccelerate.wav" type="AudioStream" id=9]
+[ext_resource path="res://audio/effects/gatling gun rev.wav" type="AudioStream" id=10]
 
 [sub_resource type="SphereShape" id=18]
 radius = 1.30728
@@ -135,9 +139,14 @@ animationTreePath = NodePath("AnimationTree")
 doughPilePrefab = ExtResource( 3 )
 pizzaPrefab = ExtResource( 5 )
 spinDoughPath = NodePath("Armature/Skeleton/BoneAttachment3/Plate/spindough")
+pickupAudioPlayerPath = NodePath("Armature/Skeleton/BoneAttachment3/Plate/PickupAudioPlayer")
+spinAudioPlayerPath = NodePath("Armature/Skeleton/BoneAttachment3/Plate/SpinAudioPlayer")
+spinRevAudioPlayerPath = NodePath("Armature/Skeleton/BoneAttachment3/Plate/SpinRevAudioPlayer")
+revUpAudio = ExtResource( 8 )
+revDownAudio = ExtResource( 9 )
 
 [node name="BoneAttachment" parent="Armature/Skeleton" index="0"]
-transform = Transform( 1, 5.25802e-13, -4.76838e-07, -5.92283e-08, -0.992256, -0.124212, -4.73145e-07, 0.124212, -0.992256, -2.90183e-12, 0.216096, -5.8206 )
+transform = Transform( 1, 5.54223e-13, -4.76838e-07, -5.92283e-08, -0.992256, -0.124212, -4.73145e-07, 0.124212, -0.992256, -2.90183e-12, 0.216096, -5.8206 )
 
 [node name="BoneAttachment2" parent="Armature/Skeleton" index="1"]
 transform = Transform( 1, -7.95808e-13, -2.38419e-07, 1.81793e-07, -0.646992, 0.762497, -1.54256e-07, -0.762497, -0.646992, 6.11514e-16, 2.75402, -2.8296 )
@@ -159,6 +168,18 @@ shape = SubResource( 18 )
 
 [node name="spindough" parent="Armature/Skeleton/BoneAttachment3/Plate" index="1" instance=ExtResource( 4 )]
 transform = Transform( 0.999997, 0.00174505, 0.00177574, -0.0017586, 0.988993, -0.00329452, -0.00178154, 0.00325518, 0.999993, 0, 0, 0 )
+
+[node name="PickupAudioPlayer" type="AudioStreamPlayer3D" parent="Armature/Skeleton/BoneAttachment3/Plate" index="2"]
+stream = ExtResource( 6 )
+unit_db = 18.718
+bus = "Plate"
+
+[node name="SpinAudioPlayer" type="AudioStreamPlayer3D" parent="Armature/Skeleton/BoneAttachment3/Plate" index="3"]
+stream = ExtResource( 10 )
+bus = "Plate"
+
+[node name="SpinRevAudioPlayer" type="AudioStreamPlayer3D" parent="Armature/Skeleton/BoneAttachment3/Plate" index="4"]
+bus = "Plate"
 
 [node name="BoneAttachment4" parent="Armature/Skeleton" index="3"]
 transform = Transform( 1, 1.98952e-13, -3.89413e-07, -4.9473e-08, -0.991897, -0.127045, -3.86258e-07, 0.127045, -0.991897, 9.97002e-12, -3.75803, -5.31989 )

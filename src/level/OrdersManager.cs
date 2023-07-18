@@ -134,7 +134,7 @@ public class OrdersManager : Node
     }
 
     private void RemoveOrder(OrderItem order, bool failed) {
-        Task.Run(() => order.ui.EndOrder(failed));
+        order.ui.EndOrder(failed);
         order.state.failed = failed;
         _finishedOrders.Add(order.state);
         _orders.Remove(order);

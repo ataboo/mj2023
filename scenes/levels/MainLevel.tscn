@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://src/level/LevelManager.cs" type="Script" id=1]
 [ext_resource path="res://scenes/prefabs/doughball.tscn" type="PackedScene" id=2]
@@ -33,10 +33,16 @@
 [ext_resource path="res://src/ui/PausePanelControl.cs" type="Script" id=31]
 [ext_resource path="res://textures/UI/PauseNormal.png" type="Texture" id=32]
 [ext_resource path="res://textures/UI/PauseHover.png" type="Texture" id=33]
+[ext_resource path="res://scenes/ui/Instructions.tscn" type="PackedScene" id=34]
+[ext_resource path="res://models/entity/Chinook.glb" type="PackedScene" id=35]
+[ext_resource path="res://src/entity/ChinookControl.cs" type="Script" id=36]
 
 [sub_resource type="CylinderShape" id=2]
 height = 15.0
 radius = 5.0
+
+[sub_resource type="BoxShape" id=10]
+extents = Vector3( 1.47534, 2.1379, 4.42446 )
 
 [sub_resource type="StyleBoxFlat" id=8]
 bg_color = Color( 0.243137, 0.243137, 0.243137, 0.729412 )
@@ -87,6 +93,19 @@ shape = SubResource( 2 )
 
 [node name="Timer" type="Timer" parent="Entities/DoughSpawner"]
 autostart = true
+
+[node name="Chinook" type="RigidBody" parent="Entities"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -41.4764, 1.658, -34.881 )
+collision_layer = 6
+collision_mask = 6
+mass = 2.0
+script = ExtResource( 36 )
+
+[node name="Chinook" parent="Entities/Chinook" instance=ExtResource( 35 )]
+
+[node name="CollisionShape" type="CollisionShape" parent="Entities/Chinook"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.51508, 0.787754 )
+shape = SubResource( 10 )
 
 [node name="Terrain" type="Spatial" parent="."]
 
@@ -277,6 +296,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 8 )
 script = ExtResource( 31 )
+instructionsPath = NodePath("InstructionsPanel")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PauseMenuCanvas/PausePanel"]
 margin_left = 846.0
@@ -321,6 +341,12 @@ margin_bottom = 308.0
 custom_fonts/font = ExtResource( 30 )
 text = "Quit"
 
+[node name="InstructionsPanel" parent="PauseMenuCanvas/PausePanel" instance=ExtResource( 34 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+
 [node name="PauseButton" type="TextureButton" parent="PauseMenuCanvas"]
 pause_mode = 2
 anchor_left = 1.0
@@ -349,8 +375,9 @@ light_energy = 1.5
 shadow_enabled = true
 
 [connection signal="timeout" from="Entities/DoughSpawner/Timer" to="Entities/DoughSpawner" method="_HandleTimerTimeout"]
+[connection signal="OnPizzaAte" from="Terrain/Dragon" to="Orders" method="_HandleDragonAtePizza"]
 [connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Resume" to="PauseMenuCanvas/PausePanel" method="_HandleClickResume"]
-[connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Instructions" to="PauseMenuCanvas/PausePanel" method="_HandleClickResume"]
+[connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Instructions" to="PauseMenuCanvas/PausePanel" method="_HandleClickInstructions"]
 [connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Restart" to="PauseMenuCanvas/PausePanel" method="_HandleClickRestart"]
 [connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Quit" to="PauseMenuCanvas/PausePanel" method="_HandleClickQuit"]
 [connection signal="pressed" from="PauseMenuCanvas/PauseButton" to="PauseMenuCanvas/PausePanel" method="_HandlePauseButtonPush"]

@@ -30,6 +30,12 @@ public class MechLegControl : Spatial
     [Export]
     public float kickForce = 250f;
 
+    [Export]
+    NodePath kickAudioPath;
+    private AudioStreamPlayer3D _kickAudio;
+
+    private Random _rng = new Random();
+
     public override void _Ready()
     {
         _tree = GetNode<AnimationTree>(animationTreePath) ?? throw new NullReferenceException();
@@ -38,6 +44,7 @@ public class MechLegControl : Spatial
         _abilityControl = GetNode<AbilityControl>(abilityControlPath) ?? throw new NullReferenceException();
         _footCollider = GetNode<KinematicBody>(footColliderPath) ?? throw new NullReferenceException();
         _footColShape = _footCollider.GetChild<CollisionShape>(0) ?? throw new NullReferenceException();
+        _kickAudio = GetNode<AudioStreamPlayer3D>(kickAudioPath);
 
         _shapeQueryParams = new PhysicsShapeQueryParameters {
             ShapeRid = _footColShape.Shape.GetRid(),
@@ -81,9 +88,11 @@ public class MechLegControl : Spatial
                     if(instance is GridMap gridMap) {
                         _playerControl.QueueImpulse(-GlobalTransform.basis.z * kickForce);       
                         _kickArmed = false;
+                        PlayKickSound();
                     } else if(instance is IKickable kickable) {
                         kickable.Kick(Vector3.Zero, GlobalTransform.basis.z * kickForce);
                         _kickArmed = false;
+                        PlayKickSound();
                     }
                 }
             }
@@ -92,6 +101,11 @@ public class MechLegControl : Spatial
         } else if (currentState == "KickWindup") {
             _kickArmed = true;
         }
+    }
+
+    private void PlayKickSound() {
+        _kickAudio.PitchScale = MechGameHelpers.RandomRangef(_rng, 0.9f, 1.1f);
+        _kickAudio.Playing = true;
     }
 
     private void _HandleAbilityChange(MechAbility ability) {

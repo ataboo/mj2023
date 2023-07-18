@@ -36,6 +36,7 @@ cameraPath = NodePath("Camera")
 raycastPath = NodePath("Camera/RayCast")
 
 [node name="Camera" type="Camera" parent="Cockpit"]
+far = 1000.0
 
 [node name="RayCast" type="RayCast" parent="Cockpit/Camera"]
 enabled = true
