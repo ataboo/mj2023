@@ -6,8 +6,13 @@ public class PausePanelControl : PanelContainer
     private LevelManager _level;
     private GameManager _gameManager;
 
+    [Export]
+    private NodePath instructionsPath;
+    private InstructionsControl _instructions;
+
     public override void _Ready()
     {
+        _instructions = GetNode<InstructionsControl>(instructionsPath) ?? throw new NullReferenceException();
         _level = LevelManager.MustGetNode(this);
         _gameManager = GameManager.MustGetNode(this);
     }
@@ -37,6 +42,10 @@ public class PausePanelControl : PanelContainer
     private void _HandleClickQuit() {
         SetPaused(false);
         _gameManager.LoadMainMenu();
+    }
+
+    private void _HandleClickInstructions() {
+        _instructions.Visible = true;
     }
 
     private void _HandleClickRestart() {

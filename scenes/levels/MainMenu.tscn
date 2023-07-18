@@ -6,7 +6,7 @@
 [ext_resource path="res://textures/UI/Credits.png" type="Texture" id=4]
 [ext_resource path="res://src/mainmenu/MainMenuControl.cs" type="Script" id=5]
 [ext_resource path="res://scenes/ui/CheckboxRow.tscn" type="PackedScene" id=6]
-[ext_resource path="res://textures/UI/Instructions.png" type="Texture" id=7]
+[ext_resource path="res://scenes/ui/Instructions.tscn" type="PackedScene" id=7]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 1, 1, 1, 0.615686 )
@@ -94,42 +94,7 @@ stream = ExtResource( 3 )
 autoplay = true
 bus = "Music"
 
-[node name="Instructions" type="PanelContainer" parent="."]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-custom_styles/panel = SubResource( 2 )
-
-[node name="MarginContainer" type="MarginContainer" parent="Instructions"]
-margin_left = 360.0
-margin_top = 40.0
-margin_right = 1560.0
-margin_bottom = 1040.0
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Instructions/MarginContainer"]
-margin_right = 1200.0
-margin_bottom = 1000.0
-rect_min_size = Vector2( 1200, 1000 )
-
-[node name="InstructionsImage" type="TextureRect" parent="Instructions/MarginContainer/ScrollContainer"]
-margin_right = 1200.0
-margin_bottom = 1700.0
-rect_min_size = Vector2( 800, 600 )
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource( 7 )
-
-[node name="CloseInstructions" type="Button" parent="Instructions/MarginContainer/ScrollContainer/InstructionsImage"]
-margin_left = 1033.0
-margin_top = 34.0
-margin_right = 1135.0
-margin_bottom = 81.0
-size_flags_horizontal = 4
-size_flags_vertical = 4
-custom_fonts/font = ExtResource( 2 )
-text = "Close"
+[node name="Instructions" parent="." instance=ExtResource( 7 )]
 
 [node name="Credits" type="PanelContainer" parent="."]
 visible = false
@@ -162,5 +127,4 @@ text = "Close"
 [connection signal="pressed" from="MainButtons/MarginContainer/VBoxContainer/Credits" to="." method="_HandleCreditsClicked"]
 [connection signal="OnChecked" from="MainButtons/MarginContainer/VBoxContainer/AudioCheckbox" to="." method="_HandleAudioChecked"]
 [connection signal="OnChecked" from="MainButtons/MarginContainer/VBoxContainer/MusicCheckbox" to="." method="_HandleMusicChecked"]
-[connection signal="pressed" from="Instructions/MarginContainer/ScrollContainer/InstructionsImage/CloseInstructions" to="." method="_HandleCloseInstructionsClicked"]
 [connection signal="pressed" from="Credits/CreditsImage/CloseCredits" to="." method="_HandleCloseCreditsClicked"]

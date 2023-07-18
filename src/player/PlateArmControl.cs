@@ -62,6 +62,8 @@ public class PlateArmControl : Spatial
 
     private float _actionTimeout = 0.25f;
 
+    private bool _queuedDoughToPizza = false;
+
     public override void _Ready()
     {
         _tree = GetNode<AnimationTree>(animationTreePath) ?? throw new NullReferenceException();
@@ -109,6 +111,15 @@ public class PlateArmControl : Spatial
         if (_holdingDough && _heldPizza == null && _spinDoughT == 1)
         {
             _actionDebounce = _actionTimeout;
+            _queuedDoughToPizza = true;
+        }
+    }
+
+    public override void _Process(float delta)
+    {
+        if(_queuedDoughToPizza) {
+            _queuedDoughToPizza = false;
+
             HideSpinDough();
 
             _heldPizza = pizzaPrefab.Instance<PizzaControl>();

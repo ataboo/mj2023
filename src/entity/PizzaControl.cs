@@ -120,6 +120,10 @@ public class PizzaControl : RigidBody, ICookable
 
             UpdateProgress();
         }
+        
+        if(Translation.y < -100) {
+            QueueFree();
+        }
     }
 
     private void InitProgressBars()
