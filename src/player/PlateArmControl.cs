@@ -64,6 +64,24 @@ public class PlateArmControl : Spatial
 
     private bool _queuedDoughToPizza = false;
 
+    [Export]
+    private NodePath pickupAudioPlayerPath;
+    private AudioStreamPlayer3D _pickupAudioPlayer;
+
+    [Export]
+    private NodePath spinAudioPlayerPath;
+    private AudioStreamPlayer3D _spinAudioPlayer;
+
+    [Export]
+    private NodePath spinRevAudioPlayerPath;
+    private AudioStreamPlayer3D _spinRevAudioPlayer;
+
+    [Export]
+    private AudioStream revUpAudio;
+
+    [Export]
+    private AudioStream revDownAudio;
+
     public override void _Ready()
     {
         _tree = GetNode<AnimationTree>(animationTreePath) ?? throw new NullReferenceException();
@@ -75,6 +93,9 @@ public class PlateArmControl : Spatial
         _levelManager = LevelManager.MustGetNode(this) ?? throw new NullReferenceException();
         _arHolder = _levelManager.ARHolder ?? throw new NullReferenceException();
         _entityHolder = _levelManager.EntityHolder ?? throw new NullReferenceException();
+        _spinAudioPlayer = GetNode<AudioStreamPlayer3D>(spinAudioPlayerPath) ?? throw new NullReferenceException();
+        _pickupAudioPlayer = GetNode<AudioStreamPlayer3D>(pickupAudioPlayerPath) ?? throw new NullReferenceException();
+        _spinRevAudioPlayer = GetNode<AudioStreamPlayer3D>(spinRevAudioPlayerPath) ?? throw new NullReferenceException();
 
         _abilityControl.Connect(nameof(AbilityControl.OnAbilityChange), this, nameof(_HandleAbilityChanged));
         _abilityControl.Connect(nameof(AbilityControl.OnClick), this, nameof(_HandleClick));
@@ -102,10 +123,13 @@ public class PlateArmControl : Spatial
 
         if (_holdingDough && _spinV > _stretchSpeedRange.x)
         {
+            _spinAudioPlayer.Playing = true;
             var stretchWeight = Mathf.Clamp(_spinV / (_stretchSpeedRange.y - _stretchSpeedRange.x), 0, 1);
             var stretchRate = Mathf.Lerp(_stretchRate.x, _stretchRate.y, stretchWeight);
             _spinDoughT = Mathf.Clamp(_spinDoughT + stretchRate * delta, 0, 1);
             ShowSpinProgress();
+        } else {
+            _spinAudioPlayer.Playing = false;
         }
 
         if (_holdingDough && _heldPizza == null && _spinDoughT == 1)
@@ -126,6 +150,7 @@ public class PlateArmControl : Spatial
             AddPizzaToPlate();
             _spinDoughT = 0;
             _stateMachine.Travel("PlateIdle");
+            _pickupAudioPlayer.Playing = true;
         }
     }
 
@@ -153,6 +178,15 @@ public class PlateArmControl : Spatial
             if (leftClick)
             {
                 _spinning = isPressed;
+                if(isPressed) {
+                    _spinRevAudioPlayer.Stream = revUpAudio;
+                    _spinRevAudioPlayer.Seek(0);
+                    _spinRevAudioPlayer.Playing = true;
+                } else {
+                    _spinRevAudioPlayer.Stream = revDownAudio;
+                    _spinRevAudioPlayer.Seek(0);
+                    _spinRevAudioPlayer.Playing = true;
+                }
             }
             else if (isPressed)
             {
@@ -190,6 +224,7 @@ public class PlateArmControl : Spatial
                 _heldPizza.SetRBActive(false, true);
                 _heldPizza = null;
                 _abilityControl.SetChangeLock(false);
+                _pickupAudioPlayer.Playing = true;
                 return;
             }
 
@@ -198,6 +233,7 @@ public class PlateArmControl : Spatial
                 mouth.DragonControl.EatPizza(_heldPizza);
                 _abilityControl.SetChangeLock(false);
                 _heldPizza = null;
+                _pickupAudioPlayer.Playing = true;
                 return;
             }
         }
@@ -229,6 +265,7 @@ public class PlateArmControl : Spatial
             _entityHolder.AddChild(instance);
             instance.Translation = _plate.GlobalTranslation;
             _abilityControl.SetChangeLock(false);
+            _pickupAudioPlayer.Playing = true;
 
             return;
         }
@@ -244,6 +281,7 @@ public class PlateArmControl : Spatial
             _heldPizza.SetRBActive(true);
             _heldPizza = null;
             _abilityControl.SetChangeLock(false);
+            _pickupAudioPlayer.Playing = true;
 
             return;
         }
@@ -274,6 +312,7 @@ public class PlateArmControl : Spatial
 
             _abilityControl.SetChangeLock(true);
             _actionDebounce = _actionTimeout;
+            _pickupAudioPlayer.Playing = true;
 
             return;
         }
@@ -291,6 +330,8 @@ public class PlateArmControl : Spatial
             _abilityControl.SetChangeLock(true);
 
             AddPizzaToPlate();
+            _pickupAudioPlayer.Playing = true;
+
             return;
         }
     }

@@ -33,11 +33,25 @@ public class CheeseArmControl : Spatial
     private float maxBarrelSpeed = 80f;
 
     [Export]
-    private float barrelAccel = 1f;
+    private float barrelAccel = 1.2f;
 
     [Export]
     private NodePath barrelPath;
     private Spatial _barrel;
+
+    [Export]
+    private NodePath revAudioPath;
+    private AudioStreamPlayer3D _revPlayer;
+
+    [Export]
+    private AudioStream revUpStream;
+
+    [Export]
+    private AudioStream revDownStream;
+
+    [Export]
+    private NodePath shootAudioPath;
+    private AudioStreamPlayer3D _shootPlayer;
 
     float cheeseTimeoutRate = 0.05f;
 	float _cheeseCooldown;
@@ -51,6 +65,8 @@ public class CheeseArmControl : Spatial
         _cockpitControl = GetNode<CockpitControl>(cockpitControlPath) ?? throw new NullReferenceException();
         _particles = GetNode<CPUParticles>(particlePath) ?? throw new NullReferenceException();
         _barrel = GetNode<Spatial>(barrelPath) ?? throw new NullReferenceException();
+        _revPlayer = GetNode<AudioStreamPlayer3D>(revAudioPath) ?? throw new NullReferenceException();
+        _shootPlayer = GetNode<AudioStreamPlayer3D>(shootAudioPath) ?? throw new NullReferenceException();
 
         _abilityControl.Connect(nameof(AbilityControl.OnAbilityChange), this, nameof(_HandleAbilityChanged));
         _abilityControl.Connect(nameof(AbilityControl.OnClick), this, nameof(_HandleClick));
@@ -67,6 +83,7 @@ public class CheeseArmControl : Spatial
         {
             _firing = false;
             _stateMachine.Travel("GunStowed");
+            _shootPlayer.Playing = false;
         }
     }
 
@@ -78,7 +95,14 @@ public class CheeseArmControl : Spatial
         }
 
         if(leftClick) {
-            _firing = isPressed;
+
+            if(_firing != isPressed) {
+                _revPlayer.Stream = isPressed ? revUpStream : revDownStream;
+                _revPlayer.Seek(0);
+                _revPlayer.Playing = true;
+                
+                _firing = isPressed;
+            }
         }
     }
 
@@ -90,6 +114,8 @@ public class CheeseArmControl : Spatial
         _barrel.RotateY(-_barrelSpeed * delta);
 
         _particles.Emitting = shooting;
+
+        _shootPlayer.Playing = shooting;
 
         if(shooting) {
             if(_cheeseCooldown > 0) {
@@ -103,34 +129,5 @@ public class CheeseArmControl : Spatial
 
             }
         }
-    }
-
-    public override void _Process(float delta)
-    {
-        // if(_shotCooldown > 0) {
-        //     _shotCooldown-=delta;
-        // }
-
-        // if(!_firing){
-        //     return;
-        // }
-
-        // if(_shotCooldown <= 0) {
-        //     var glob = sauceGlobPrefab.Instance<SauceGlobControl>();
-        //     _entityHolder.AddChild(glob);
-
-    	// 	glob.Translation = _muzzle.GlobalTranslation;
-
-        //     var aimPoint = _cockpitControl.AimPoint();
-        //     var aimDirection = (aimPoint - _muzzle.GlobalTranslation).Normalized();
-
-        //     glob.GlobalTransform = new Transform(GlobalTransform.basis, glob.Transform.origin);
-        //     glob.Rotate(glob.Transform.basis.z, Mathf.Lerp(-Mathf.Pi, Mathf.Pi, (float)_rng.NextDouble()));
-        //     glob.Rotate(glob.Transform.basis.x, Mathf.Pi / 2f);
-
-        //     glob.LinearVelocity = aimDirection * _muzzleVelocity;
-
-        //     _shotCooldown = _fireDelay;
-        // }
     }
 }
