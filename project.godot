@@ -11,12 +11,16 @@ config_version=4
 [application]
 
 config/name="mj2023"
-run/main_scene="res://scenes/levels/MainLevel.tscn"
+run/main_scene="res://scenes/levels/MainMenu.tscn"
 config/icon="res://icon.png"
+
+[audio]
+
+default_bus_layout="res://audio/default_bus_layout.tres"
 
 [autoload]
 
-GameManager="*res://src/level/GameManager.cs"
+GameManager="*res://scenes/levels/GameManagerScene.tscn"
 
 [display]
 

@@ -84,6 +84,19 @@ public class LevelManager : Node
         }
     }
 
+    [Export]
+    private NodePath ordersManagerPath;
+    private OrdersManager _ordersManager;
+    public OrdersManager OrdersManager {
+        get {
+            if(_ordersManager == null) {
+                _ordersManager = GetNode<OrdersManager>(ordersManagerPath);
+            }
+
+            return _ordersManager;
+        }
+    }
+
     public Camera Camera => PlayerControl.Camera;
 
     public override void _Ready()

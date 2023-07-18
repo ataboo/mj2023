@@ -39,8 +39,17 @@ public class HudControl: Control {
         var legsForwardPos = _camera.GlobalTranslation - _playerControl.Transform.basis.z;
 
         var screenPos = _camera.UnprojectPosition(legsForwardPos);
+        screenPos.y += 200;
         var clampedPos = new Vector2(screenPos.x, screenPos.y);
-        clampedPos.x = Mathf.Clamp(clampedPos.x, halfCrosshairWidth, GetViewportRect().Size.x - halfCrosshairWidth);
+        if(_camera.IsPositionBehind(legsForwardPos)) {
+            if(screenPos.x > GetViewportRect().Size.x / 2) {
+                clampedPos.x = halfCrosshairWidth;
+            } else {
+                clampedPos.x = GetViewportRect().Size.x - halfCrosshairWidth;
+            }
+        } else {
+            clampedPos.x = Mathf.Clamp(clampedPos.x, halfCrosshairWidth, GetViewportRect().Size.x - halfCrosshairWidth);
+        }
         clampedPos.y = Mathf.Clamp(clampedPos.y, halfCrosshairWidth, GetViewportRect().Size.y - halfCrosshairWidth);
 
         _bottomCrosshair.RectPosition = clampedPos - new Vector2(halfCrosshairWidth, halfCrosshairWidth);

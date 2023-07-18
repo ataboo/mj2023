@@ -18,7 +18,7 @@ public class CockpitControl : Spatial
     private LevelManager _levelManager;
 
     [Export]
-    float walkBobScale = 0.2f;
+    float walkBobScale = 0.4f;
 
     private Vector3 _startPos;
 

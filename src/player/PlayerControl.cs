@@ -28,7 +28,7 @@ public class PlayerControl : KinematicBody
     public float mouseSensitivity = .001f;
 
     [Export]
-    private float lookLimitX = Mathf.Pi / 3;
+    private float lookLimitX = Mathf.Pi * 7 / 8;
 
     [Export]
     private float lookLimitY = Mathf.Pi / 4;

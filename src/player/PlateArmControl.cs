@@ -60,6 +60,8 @@ public class PlateArmControl : Spatial
 
     private float _actionDebounce;
 
+    private float _actionTimeout = 0.25f;
+
     public override void _Ready()
     {
         _tree = GetNode<AnimationTree>(animationTreePath) ?? throw new NullReferenceException();
@@ -106,7 +108,7 @@ public class PlateArmControl : Spatial
 
         if (_holdingDough && _heldPizza == null && _spinDoughT == 1)
         {
-            _actionDebounce = 0.5f;
+            _actionDebounce = _actionTimeout;
             HideSpinDough();
 
             _heldPizza = pizzaPrefab.Instance<PizzaControl>();
@@ -166,9 +168,9 @@ public class PlateArmControl : Spatial
             return;
         }
         
-        if(area is StickTargetControl stickTarget) {
-            if(_heldPizza != null) {
-                _actionDebounce = 0.5f;
+        if(_heldPizza != null) {
+            if(area is StickTargetControl stickTarget) {
+                _actionDebounce = _actionTimeout;
                 _plate.RemoveChild(_heldPizza);
                 stickTarget.AddChild(_heldPizza);
                 _heldPizza.GlobalTranslation = _plate.GlobalTranslation;
@@ -176,8 +178,16 @@ public class PlateArmControl : Spatial
                 _heldPizza.Rotation = new Vector3(0, 0, -Mathf.Pi/2);
                 _heldPizza.SetRBActive(false, true);
                 _heldPizza = null;
-
                 _abilityControl.SetChangeLock(false);
+                return;
+            }
+
+            if(area is DragonMouthControl mouth) {
+                _actionDebounce = _actionTimeout;
+                mouth.DragonControl.EatPizza(_heldPizza);
+                _abilityControl.SetChangeLock(false);
+                _heldPizza = null;
+                return;
             }
         }
     }
@@ -201,7 +211,7 @@ public class PlateArmControl : Spatial
 
         if (_holdingDough)
         {
-            _actionDebounce = 0.5f;
+            _actionDebounce = _actionTimeout;
             //Drop dough on ground
             HideSpinDough();
             var instance = doughPilePrefab.Instance<Spatial>();
@@ -214,7 +224,7 @@ public class PlateArmControl : Spatial
             
         if (_heldPizza != null)
         {
-            _actionDebounce = 0.5f;
+            _actionDebounce = _actionTimeout;
             //Drop pizza on ground
 
             _plate.RemoveChild(_heldPizza);
@@ -229,7 +239,7 @@ public class PlateArmControl : Spatial
 
         if (body is DoughballControl doughBall)
         {
-            _actionDebounce = 0.5f;
+            _actionDebounce = _actionTimeout;
             // Punch doughball
 
             doughBall.Punch(GlobalTransform.basis.z * _punchForce, _punchDamage);
@@ -252,14 +262,14 @@ public class PlateArmControl : Spatial
             ShowSpinProgress();
 
             _abilityControl.SetChangeLock(true);
-            _actionDebounce = 0.5f;
+            _actionDebounce = _actionTimeout;
 
             return;
         }
         
         if (body is PizzaControl pizza)
         {
-            _actionDebounce = 0.5f;
+            _actionDebounce = _actionTimeout;
             // Pickup pizza
             if(_heldPizza != null) {
                 return;
