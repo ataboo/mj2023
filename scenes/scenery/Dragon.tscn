@@ -49,7 +49,7 @@ shape = SubResource( 7 )
 transform = Transform( 5, 0, 0, 0, 5, 0, 0, 0, 5, -2.27492, 4.42941, 5.96046e-08 )
 
 [node name="BoneAttachment" parent="DragonArmature/Skeleton" index="0"]
-transform = Transform( 0.376465, 0.925628, -0.0385515, -0.921743, 0.370056, -0.115968, -0.0930776, 0.0791927, 0.992504, 5.70459, 7.50939, 0.724748 )
+transform = Transform( 0.329553, 0.943655, 0.0301814, -0.941923, 0.326424, 0.0789257, 0.0646268, -0.0544388, 0.996423, 5.71192, 7.53095, -0.501958 )
 
 [node name="Empty" parent="DragonArmature/Skeleton/BoneAttachment" index="0"]
 transform = Transform( 0.243877, -0.969806, -8.9407e-08, 0.969807, 0.243877, 3.72529e-08, -3.72529e-09, -7.45058e-08, 1, 0.445415, 1.20323, 0.0221245 )

@@ -349,7 +349,6 @@ light_energy = 1.5
 shadow_enabled = true
 
 [connection signal="timeout" from="Entities/DoughSpawner/Timer" to="Entities/DoughSpawner" method="_HandleTimerTimeout"]
-[connection signal="OnPizzaAte" from="Terrain/Dragon" to="Orders" method="_HandleDragonAtePizza"]
 [connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Resume" to="PauseMenuCanvas/PausePanel" method="_HandleClickResume"]
 [connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Instructions" to="PauseMenuCanvas/PausePanel" method="_HandleClickResume"]
 [connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Restart" to="PauseMenuCanvas/PausePanel" method="_HandleClickRestart"]
