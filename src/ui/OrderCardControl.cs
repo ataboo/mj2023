@@ -92,6 +92,7 @@ public class OrderCardControl : PanelContainer
     }
 
     public void EndOrder(bool failed) {
+        _orderFailed = failed;
         _fadeProgress = 0;
         _fadeTarget = 0.1f;
         _fadeMode = FadeMode.Flash;

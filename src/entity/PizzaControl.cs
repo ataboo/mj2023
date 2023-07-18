@@ -81,7 +81,8 @@ public class PizzaControl : RigidBody, ICookable
         _sauceMaterial = _sauceMesh.GetActiveMaterial(0) as SpatialMaterial ?? throw new NullReferenceException();
         _crustMaterial = _crustMesh.GetActiveMaterial(0) as SpatialMaterial ?? throw new NullReferenceException();
 
-        CallDeferred("InitProgressBars");
+        InitProgressBars();
+        // CallDeferred("InitProgressBars");
     }
 
     public override void _Process(float delta)

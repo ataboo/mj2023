@@ -1,18 +1,18 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://textures/UI/TitleCard.png" type="Texture" id=1]
 [ext_resource path="res://fonts/MenuButtonFont.tres" type="DynamicFont" id=2]
 [ext_resource path="res://audio/music/PIZZ4_3x_M4CH1N4.mp3" type="AudioStream" id=3]
+[ext_resource path="res://textures/UI/Credits.png" type="Texture" id=4]
 [ext_resource path="res://src/mainmenu/MainMenuControl.cs" type="Script" id=5]
 [ext_resource path="res://scenes/ui/CheckboxRow.tscn" type="PackedScene" id=6]
+[ext_resource path="res://textures/UI/Instructions.png" type="Texture" id=7]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 1, 1, 1, 0.615686 )
 
 [sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 1, 1, 1, 0.788235 )
-
-[sub_resource type="NoiseTexture" id=3]
+bg_color = Color( 0.141176, 0.141176, 0.141176, 0.788235 )
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -100,28 +100,32 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 2 )
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Instructions"]
-margin_left = 560.0
-margin_top = 214.0
-margin_right = 1360.0
-margin_bottom = 865.0
+[node name="MarginContainer" type="MarginContainer" parent="Instructions"]
+margin_left = 360.0
+margin_top = 40.0
+margin_right = 1560.0
+margin_bottom = 1040.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="InstructionsImage" type="TextureRect" parent="Instructions/VBoxContainer"]
-margin_right = 800.0
-margin_bottom = 600.0
+[node name="ScrollContainer" type="ScrollContainer" parent="Instructions/MarginContainer"]
+margin_right = 1200.0
+margin_bottom = 1000.0
+rect_min_size = Vector2( 1200, 1000 )
+
+[node name="InstructionsImage" type="TextureRect" parent="Instructions/MarginContainer/ScrollContainer"]
+margin_right = 1200.0
+margin_bottom = 1700.0
 rect_min_size = Vector2( 800, 600 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = SubResource( 3 )
-expand = true
+texture = ExtResource( 7 )
 
-[node name="CloseInstructions" type="Button" parent="Instructions/VBoxContainer"]
-margin_left = 349.0
-margin_top = 604.0
-margin_right = 451.0
-margin_bottom = 651.0
+[node name="CloseInstructions" type="Button" parent="Instructions/MarginContainer/ScrollContainer/InstructionsImage"]
+margin_left = 1033.0
+margin_top = 34.0
+margin_right = 1135.0
+margin_bottom = 81.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_fonts/font = ExtResource( 2 )
@@ -133,28 +137,21 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 2 )
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Credits"]
-margin_left = 560.0
-margin_top = 214.0
-margin_right = 1360.0
-margin_bottom = 865.0
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="CreditsImage" type="TextureRect" parent="Credits/VBoxContainer"]
-margin_right = 800.0
-margin_bottom = 600.0
+[node name="CreditsImage" type="TextureRect" parent="Credits"]
+margin_left = 460.0
+margin_top = 225.0
+margin_right = 1460.0
+margin_bottom = 855.0
 rect_min_size = Vector2( 800, 600 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = SubResource( 3 )
-expand = true
+texture = ExtResource( 4 )
 
-[node name="CloseCredits" type="Button" parent="Credits/VBoxContainer"]
-margin_left = 349.0
-margin_top = 604.0
-margin_right = 451.0
-margin_bottom = 651.0
+[node name="CloseCredits" type="Button" parent="Credits/CreditsImage"]
+margin_left = 878.0
+margin_top = 16.0
+margin_right = 980.0
+margin_bottom = 63.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_fonts/font = ExtResource( 2 )
@@ -165,5 +162,5 @@ text = "Close"
 [connection signal="pressed" from="MainButtons/MarginContainer/VBoxContainer/Credits" to="." method="_HandleCreditsClicked"]
 [connection signal="OnChecked" from="MainButtons/MarginContainer/VBoxContainer/AudioCheckbox" to="." method="_HandleAudioChecked"]
 [connection signal="OnChecked" from="MainButtons/MarginContainer/VBoxContainer/MusicCheckbox" to="." method="_HandleMusicChecked"]
-[connection signal="pressed" from="Instructions/VBoxContainer/CloseInstructions" to="." method="_HandleCloseInstructionsClicked"]
-[connection signal="pressed" from="Credits/VBoxContainer/CloseCredits" to="." method="_HandleCloseCreditsClicked"]
+[connection signal="pressed" from="Instructions/MarginContainer/ScrollContainer/InstructionsImage/CloseInstructions" to="." method="_HandleCloseInstructionsClicked"]
+[connection signal="pressed" from="Credits/CreditsImage/CloseCredits" to="." method="_HandleCloseCreditsClicked"]
