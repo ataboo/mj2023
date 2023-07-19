@@ -71,6 +71,32 @@ public class LevelManager : Node
         }
     }
 
+    /*[Export]
+    private NodePath cockpitScreenPath;
+    private cockpitScreen _cockpitScreen;
+    public cockpitScreen CockpitScreen {
+        get {
+            if(_cockpitScreen == null) {
+                _cockpitScreen = GetNode<cockpitScreen>(cockpitScreenPath);
+            }
+
+            return _cockpitScreen;
+        }
+    }*/
+
+    [Export]
+    private NodePath cockpitTextPath;
+    private cockpitText _cockpitText;
+    public cockpitText CockpitText {
+        get {
+            if(_cockpitText == null) {
+                _cockpitText = GetNode<cockpitText>(cockpitTextPath);
+            }
+
+            return _cockpitText;
+        }
+    }
+
     [Export]
     private NodePath entityHolderPath;
     private Spatial _entityHolder;
@@ -89,5 +115,7 @@ public class LevelManager : Node
     public override void _Ready()
     {
         PlayerControl.AbilityControl.Connect(nameof(AbilityControl.OnAbilityChange), HotbarAbilityControl, nameof(HotbarAbilityControl._HandleAbilityChange));
+        //PlayerControl.AbilityControl.Connect(nameof(AbilityControl.OnAbilityChange), CockpitScreen, nameof(CockpitScreen._HandleAbilityChange));
+        PlayerControl.AbilityControl.Connect(nameof(AbilityControl.OnAbilityChange), CockpitText, nameof(CockpitText._HandleAbilityChange));
     }
 }
