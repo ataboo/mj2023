@@ -28,10 +28,12 @@ public class PlayerControl : KinematicBody
     public float mouseSensitivity = .001f;
 
     [Export]
-    private float lookLimitX = Mathf.Pi / 3;
+    private float lookLimitX = Mathf.Pi * 7 / 8;
 
     [Export]
     private float lookLimitY = Mathf.Pi / 4;
+
+    private Vector3 _startingPos;
 
     [Export]
     private NodePath abilityControlPath;
@@ -78,11 +80,17 @@ public class PlayerControl : KinematicBody
 
         Input.MouseMode = Input.MouseModeEnum.Captured;
         InitState();
+
+        _startingPos = Translation;
     }
 
     public override void _PhysicsProcess(float delta)
     {
         ProcessMove(delta);
+
+        if(Translation.y < -100) {
+            Translation = _startingPos;
+        }
 
         EmitSignal(nameof(OnPhysicsDone), delta);
     }

@@ -15,16 +15,29 @@ public class OvenControl : Area
     private NodePath cookLightPath;
     private OmniLight _cookLight;
 
+    private int _pizzaCount;
+
     public override void _Ready()
     {
         _cookParticles = cookParticlePaths.Select(p => GetNode<CPUParticles>(p) ?? throw new NullReferenceException()).ToArray();
         _cookLight = GetNode<OmniLight>(cookLightPath)?? throw new NullReferenceException();
     }
 
-    public void CookingActive(bool active) {
+    private void SetCookingActive(bool active) {
         foreach(var p in _cookParticles) {
             p.Emitting = active;
             _cookLight.Visible = active;
         }
+    }
+
+    public void AddPizza() {
+        _pizzaCount++;
+        SetCookingActive(_pizzaCount > 0);
+    }
+
+
+    public void RemovePizza() {
+        _pizzaCount--;
+        SetCookingActive(_pizzaCount > 0);
     }
 }

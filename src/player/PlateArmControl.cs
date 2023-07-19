@@ -60,6 +60,28 @@ public class PlateArmControl : Spatial
 
     private float _actionDebounce;
 
+    private float _actionTimeout = 0.25f;
+
+    private bool _queuedDoughToPizza = false;
+
+    [Export]
+    private NodePath pickupAudioPlayerPath;
+    private AudioStreamPlayer3D _pickupAudioPlayer;
+
+    [Export]
+    private NodePath spinAudioPlayerPath;
+    private AudioStreamPlayer3D _spinAudioPlayer;
+
+    [Export]
+    private NodePath spinRevAudioPlayerPath;
+    private AudioStreamPlayer3D _spinRevAudioPlayer;
+
+    [Export]
+    private AudioStream revUpAudio;
+
+    [Export]
+    private AudioStream revDownAudio;
+
     public override void _Ready()
     {
         _tree = GetNode<AnimationTree>(animationTreePath) ?? throw new NullReferenceException();
@@ -71,6 +93,9 @@ public class PlateArmControl : Spatial
         _levelManager = LevelManager.MustGetNode(this) ?? throw new NullReferenceException();
         _arHolder = _levelManager.ARHolder ?? throw new NullReferenceException();
         _entityHolder = _levelManager.EntityHolder ?? throw new NullReferenceException();
+        _spinAudioPlayer = GetNode<AudioStreamPlayer3D>(spinAudioPlayerPath) ?? throw new NullReferenceException();
+        _pickupAudioPlayer = GetNode<AudioStreamPlayer3D>(pickupAudioPlayerPath) ?? throw new NullReferenceException();
+        _spinRevAudioPlayer = GetNode<AudioStreamPlayer3D>(spinRevAudioPlayerPath) ?? throw new NullReferenceException();
 
         _abilityControl.Connect(nameof(AbilityControl.OnAbilityChange), this, nameof(_HandleAbilityChanged));
         _abilityControl.Connect(nameof(AbilityControl.OnClick), this, nameof(_HandleClick));
@@ -98,21 +123,34 @@ public class PlateArmControl : Spatial
 
         if (_holdingDough && _spinV > _stretchSpeedRange.x)
         {
+            _spinAudioPlayer.Playing = true;
             var stretchWeight = Mathf.Clamp(_spinV / (_stretchSpeedRange.y - _stretchSpeedRange.x), 0, 1);
             var stretchRate = Mathf.Lerp(_stretchRate.x, _stretchRate.y, stretchWeight);
             _spinDoughT = Mathf.Clamp(_spinDoughT + stretchRate * delta, 0, 1);
             ShowSpinProgress();
+        } else {
+            _spinAudioPlayer.Playing = false;
         }
 
         if (_holdingDough && _heldPizza == null && _spinDoughT == 1)
         {
-            _actionDebounce = 0.5f;
+            _actionDebounce = _actionTimeout;
+            _queuedDoughToPizza = true;
+        }
+    }
+
+    public override void _Process(float delta)
+    {
+        if(_queuedDoughToPizza) {
+            _queuedDoughToPizza = false;
+
             HideSpinDough();
 
             _heldPizza = pizzaPrefab.Instance<PizzaControl>();
             AddPizzaToPlate();
             _spinDoughT = 0;
             _stateMachine.Travel("PlateIdle");
+            _pickupAudioPlayer.Playing = true;
         }
     }
 
@@ -140,6 +178,15 @@ public class PlateArmControl : Spatial
             if (leftClick)
             {
                 _spinning = isPressed;
+                if(isPressed) {
+                    _spinRevAudioPlayer.Stream = revUpAudio;
+                    _spinRevAudioPlayer.Seek(0);
+                    _spinRevAudioPlayer.Playing = true;
+                } else {
+                    _spinRevAudioPlayer.Stream = revDownAudio;
+                    _spinRevAudioPlayer.Seek(0);
+                    _spinRevAudioPlayer.Playing = true;
+                }
             }
             else if (isPressed)
             {
@@ -166,9 +213,9 @@ public class PlateArmControl : Spatial
             return;
         }
         
-        if(area is StickTargetControl stickTarget) {
-            if(_heldPizza != null) {
-                _actionDebounce = 0.5f;
+        if(_heldPizza != null) {
+            if(area is StickTargetControl stickTarget) {
+                _actionDebounce = _actionTimeout;
                 _plate.RemoveChild(_heldPizza);
                 stickTarget.AddChild(_heldPizza);
                 _heldPizza.GlobalTranslation = _plate.GlobalTranslation;
@@ -176,8 +223,18 @@ public class PlateArmControl : Spatial
                 _heldPizza.Rotation = new Vector3(0, 0, -Mathf.Pi/2);
                 _heldPizza.SetRBActive(false, true);
                 _heldPizza = null;
-
                 _abilityControl.SetChangeLock(false);
+                _pickupAudioPlayer.Playing = true;
+                return;
+            }
+
+            if(area is DragonMouthControl mouth) {
+                _actionDebounce = _actionTimeout;
+                mouth.DragonControl.EatPizza(_heldPizza);
+                _abilityControl.SetChangeLock(false);
+                _heldPizza = null;
+                _pickupAudioPlayer.Playing = true;
+                return;
             }
         }
     }
@@ -201,20 +258,21 @@ public class PlateArmControl : Spatial
 
         if (_holdingDough)
         {
-            _actionDebounce = 0.5f;
+            _actionDebounce = _actionTimeout;
             //Drop dough on ground
             HideSpinDough();
             var instance = doughPilePrefab.Instance<Spatial>();
             _entityHolder.AddChild(instance);
             instance.Translation = _plate.GlobalTranslation;
             _abilityControl.SetChangeLock(false);
+            _pickupAudioPlayer.Playing = true;
 
             return;
         }
             
         if (_heldPizza != null)
         {
-            _actionDebounce = 0.5f;
+            _actionDebounce = _actionTimeout;
             //Drop pizza on ground
 
             _plate.RemoveChild(_heldPizza);
@@ -223,13 +281,14 @@ public class PlateArmControl : Spatial
             _heldPizza.SetRBActive(true);
             _heldPizza = null;
             _abilityControl.SetChangeLock(false);
+            _pickupAudioPlayer.Playing = true;
 
             return;
         }
 
         if (body is DoughballControl doughBall)
         {
-            _actionDebounce = 0.5f;
+            _actionDebounce = _actionTimeout;
             // Punch doughball
 
             doughBall.Punch(GlobalTransform.basis.z * _punchForce, _punchDamage);
@@ -252,14 +311,15 @@ public class PlateArmControl : Spatial
             ShowSpinProgress();
 
             _abilityControl.SetChangeLock(true);
-            _actionDebounce = 0.5f;
+            _actionDebounce = _actionTimeout;
+            _pickupAudioPlayer.Playing = true;
 
             return;
         }
         
         if (body is PizzaControl pizza)
         {
-            _actionDebounce = 0.5f;
+            _actionDebounce = _actionTimeout;
             // Pickup pizza
             if(_heldPizza != null) {
                 return;
@@ -270,6 +330,8 @@ public class PlateArmControl : Spatial
             _abilityControl.SetChangeLock(true);
 
             AddPizzaToPlate();
+            _pickupAudioPlayer.Playing = true;
+
             return;
         }
     }

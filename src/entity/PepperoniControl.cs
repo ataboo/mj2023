@@ -28,6 +28,8 @@ public class PepperoniControl : RigidBody, ICookable
 
 	Color _originalCookedColor;
 
+	private SpatialMaterial _cookedMaterial;
+
 	private CookedState _cookedState;
 	public CookedState CookedState {
 		get  => _cookedState;
@@ -45,9 +47,10 @@ public class PepperoniControl : RigidBody, ICookable
 		AddChild(_cookedSpatial);
 		_cookedSpatial.Visible = false;
 		_cookedMesh = _cookedSpatial.GetChild<MeshInstance>(0) ?? throw new NullReferenceException();
-		if(_cookedMesh.GetActiveMaterial(0) is SpatialMaterial mat) {
-			_originalCookedColor = mat.AlbedoColor;
-		}
+
+		_cookedMaterial = _cookedMesh.GetActiveMaterial(0) as SpatialMaterial;
+		_cookedMaterial.ResourceLocalToScene = true;
+		_originalCookedColor = _cookedMaterial.AlbedoColor;
 
 		_deathTimer = GetTree().CreateTimer(lifetimeSeconds);
 		_deathTimer.Connect("timeout", this, nameof(_HandleDeathTimer));
@@ -65,8 +68,7 @@ public class PepperoniControl : RigidBody, ICookable
 		_cookedSpatial.Visible = cooked != CookedState.Raw;
 
 		if(cooked != CookedState.Raw) {
-			var cookedMaterial = _cookedMesh.GetActiveMaterial(0) as SpatialMaterial;
-			cookedMaterial.AlbedoColor = cooked == CookedState.Burned ? burnedColour : _originalCookedColor;
+			_cookedMaterial.AlbedoColor = cooked == CookedState.Burned ? burnedColour : _originalCookedColor;
 		}
 	}
 

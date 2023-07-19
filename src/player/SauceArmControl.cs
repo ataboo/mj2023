@@ -38,6 +38,10 @@ public class SauceArmControl : Spatial
 
     private Random _rng = new Random();
 
+    [Export]
+    private NodePath shootAudioPath;
+    private AudioStreamPlayer3D _shootAudioPlayer;
+
     public override void _Ready()
     {
         _tree = GetNode<AnimationTree>(animationTreePath) ?? throw new NullReferenceException();
@@ -47,6 +51,7 @@ public class SauceArmControl : Spatial
         _entityHolder = LevelManager.MustGetNode(this).EntityHolder ?? throw new NullReferenceException();
         _cockpitControl = GetNode<CockpitControl>(cockpitControlPath) ?? throw new NullReferenceException();
         _muzzle = GetNode<Spatial>(muzzleNodePath) ?? throw new NullReferenceException();
+        _shootAudioPlayer = GetNode<AudioStreamPlayer3D>(shootAudioPath) ?? throw new NullReferenceException();
 
         _abilityControl.Connect(nameof(AbilityControl.OnAbilityChange), this, nameof(_HandleAbilityChanged));
         _abilityControl.Connect(nameof(AbilityControl.OnClick), this, nameof(_HandleClick));
@@ -62,6 +67,7 @@ public class SauceArmControl : Spatial
         else
         {
             _firing = false;
+            _shootAudioPlayer.Playing = false;
             _stateMachine.Travel("GunStowed");
         }
     }
@@ -75,6 +81,7 @@ public class SauceArmControl : Spatial
 
         if(leftClick) {
             _firing = isPressed;
+            _shootAudioPlayer.Playing = _firing;
         }
 
     }

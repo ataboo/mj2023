@@ -32,28 +32,29 @@ start_node = "DragonIdle"
 [node name="Dragon" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 animationTreePath = NodePath("AnimationTree")
+dragonMouthPath = NodePath("DragonMouth")
 
-[node name="DragonArmature" parent="." index="0"]
+[node name="DragonMouth" type="Area" parent="." index="0"]
+transform = Transform( 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 0, 0, 1, 0, 0, 0 )
+collision_layer = 6
+collision_mask = 6
+script = ExtResource( 3 )
+dragonControlPath = NodePath("..")
+followTargetPath = NodePath("../DragonArmature/Skeleton/BoneAttachment/Empty")
+
+[node name="CollisionShape" type="CollisionShape" parent="DragonMouth" index="0"]
+shape = SubResource( 7 )
+
+[node name="DragonArmature" parent="." index="1"]
 transform = Transform( 5, 0, 0, 0, 5, 0, 0, 0, 5, -2.27492, 4.42941, 5.96046e-08 )
 
-[node name="Skeleton" parent="DragonArmature" index="0"]
-bones/17/bound_children = [ NodePath("BoneAttachment") ]
-
 [node name="BoneAttachment" parent="DragonArmature/Skeleton" index="0"]
-transform = Transform( 0.331984, 0.942774, 0.0310284, -0.940714, 0.328473, 0.0846299, 0.069595, -0.0572847, 0.995929, 5.71096, 7.52821, -0.535574 )
+transform = Transform( 0.329553, 0.943655, 0.0301814, -0.941923, 0.326424, 0.0789257, 0.0646268, -0.0544388, 0.996423, 5.71192, 7.53095, -0.501958 )
 
 [node name="Empty" parent="DragonArmature/Skeleton/BoneAttachment" index="0"]
 transform = Transform( 0.243877, -0.969806, -8.9407e-08, 0.969807, 0.243877, 3.72529e-08, -3.72529e-09, -7.45058e-08, 1, 0.445415, 1.20323, 0.0221245 )
 
-[node name="DragonMouth" type="Area" parent="DragonArmature/Skeleton/BoneAttachment/Empty" index="0"]
-transform = Transform( 0.998593, -0.0473912, -0.0237809, 0.0458557, 0.997059, -0.0614065, 0.0266211, 0.0602296, 0.997829, 0.5, 0, 0 )
-script = ExtResource( 3 )
-dragonControlPath = NodePath("../../../../..")
-
-[node name="CollisionShape" type="CollisionShape" parent="DragonArmature/Skeleton/BoneAttachment/Empty/DragonMouth" index="0"]
-shape = SubResource( 7 )
-
-[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+[node name="AnimationTree" type="AnimationTree" parent="." index="3"]
 tree_root = SubResource( 2 )
 anim_player = NodePath("../AnimationPlayer")
 active = true

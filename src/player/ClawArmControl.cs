@@ -18,12 +18,17 @@ public class ClawArmControl : Spatial
     NodePath abilityControlPath;
     private AbilityControl _abilityControl;
 
+    [Export]
+    NodePath kneadDoughAudioPath;
+    private AudioStreamPlayer3D _kneadDoughAudio;
+
     public override void _Ready()
     {
         _tree = GetNode<AnimationTree>(animationTreePath) ?? throw new NullReferenceException();
         _stateMachine = (AnimationNodeStateMachinePlayback)_tree.Get("parameters/playback") ?? throw new NullReferenceException();
         _animationPlayer = _tree.GetNode<AnimationPlayer>(_tree.AnimPlayer) ?? throw new NullReferenceException();
         _abilityControl = GetNode<AbilityControl>(abilityControlPath) ?? throw new NullReferenceException();
+        _kneadDoughAudio = GetNode<AudioStreamPlayer3D>(kneadDoughAudioPath) ?? throw new NullReferenceException();
 
         _abilityControl.Connect(nameof(AbilityControl.OnAbilityChange), this, nameof(_HandleAbilityChanged));
         _abilityControl.Connect(nameof(AbilityControl.OnClick), this, nameof(_HandleClick));
@@ -62,6 +67,9 @@ public class ClawArmControl : Spatial
         }
 
         _stateMachine.Travel("ClawIdle");
+
+        _kneadDoughAudio.Playing = true;
+        _kneadDoughAudio.Seek(0);
 
         if (body is DoughballControl doughBall)
         {
