@@ -29,6 +29,10 @@ public class PausePanelControl : PanelContainer
     }
 
     private void SetPaused(bool paused) {
+        if(_level.IsOver) {
+            return;
+        }
+
         Visible = paused;
         GetTree().Paused = paused;
 

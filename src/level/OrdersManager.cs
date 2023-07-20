@@ -56,10 +56,29 @@ public class OrdersManager : Node
     [Export]
     AudioStream failOrderStream;
 
+    private TimeSpan _levelCountdown;
+
+    [Export]
+    private NodePath endPanelPath;
+    private WinPanelControl _endPanel;
+
+    private LevelManager _levelManager;
+
+    [Export]
+    NodePath countdownUIPath;
+    private Label _countdownUI;
+
+    [Export]
+    int roundLengthSeconds = 600;
+
     public override void _Ready()
     {
         _ordersUI = GetNode<OrdersUIControl>(ordersUIPath) ?? throw new NullReferenceException();
         _audioPlayer = GetNode<AudioStreamPlayer>(orderAudioPath) ?? throw new NullReferenceException();
+        _levelCountdown = TimeSpan.FromSeconds(roundLengthSeconds);
+        _endPanel = GetNode<WinPanelControl>(endPanelPath) ?? throw new NullReferenceException();
+        _levelManager = LevelManager.MustGetNode(this);
+        _countdownUI = GetNode<Label>(countdownUIPath) ?? throw new NullReferenceException();
     }
 
     public override void _Process(float delta)
@@ -78,6 +97,18 @@ public class OrdersManager : Node
         if(_orderAddCooldown <= 0 && _orders.Count < maxOrderCount) {
             GenerateOrder();
             _orderAddCooldown = RandomRangef(_rng, orderAddTimeout.x, orderAddTimeout.y);
+        }
+
+        _levelCountdown -= TimeSpan.FromSeconds(delta);
+        var levelCountString = _levelCountdown.ToString(@"mm\:ss");
+        if(_countdownUI.Text != levelCountString) {
+            _countdownUI.Text = levelCountString;
+        }
+        if(_levelCountdown <= TimeSpan.Zero) {
+            var complete = _finishedOrders.Count(o => !o.failed);
+            var failed = _finishedOrders.Count(o => o.failed);
+            _levelManager.IsOver = true;
+            _endPanel.Show(complete, failed);
         }
     }
 

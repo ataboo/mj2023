@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=2]
+[gd_scene load_steps=58 format=2]
 
 [ext_resource path="res://src/level/LevelManager.cs" type="Script" id=1]
 [ext_resource path="res://scenes/prefabs/doughball.tscn" type="PackedScene" id=2]
@@ -42,10 +42,14 @@
 [ext_resource path="res://models/terrain/BarrierWall.gltf" type="PackedScene" id=40]
 [ext_resource path="res://models/terrain/BarrierShort.gltf" type="PackedScene" id=41]
 [ext_resource path="res://models/terrain/BarrierPillar.gltf" type="PackedScene" id=42]
+[ext_resource path="res://textures/UI/gold-star.png" type="Texture" id=43]
 [ext_resource path="res://audio/effects/order success.wav" type="AudioStream" id=44]
 [ext_resource path="res://audio/effects/order failed.wav" type="AudioStream" id=45]
 [ext_resource path="res://audio/effects/order accepted.wav" type="AudioStream" id=46]
 [ext_resource path="res://scenes/prefabs/CementTruck.tscn" type="PackedScene" id=47]
+[ext_resource path="res://src/ui/WinPanelControl.cs" type="Script" id=48]
+[ext_resource path="res://textures/UI/dark-star.png" type="Texture" id=49]
+[ext_resource path="res://src/entity/BarrierHolderControl.cs" type="Script" id=50]
 
 [sub_resource type="CylinderShape" id=2]
 height = 15.0
@@ -97,6 +101,8 @@ orderAudioPath = NodePath("OrderAudio")
 addOrderStream = ExtResource( 46 )
 successOrderStream = ExtResource( 45 )
 failOrderStream = ExtResource( 44 )
+endPanelPath = NodePath("../PauseMenuCanvas/WinPanel")
+countdownUIPath = NodePath("../HUDCanvasLayer/HUD/PanelContainer/CountdownLabel")
 
 [node name="OrderAudio" type="AudioStreamPlayer" parent="Orders"]
 volume_db = -12.0
@@ -159,242 +165,246 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -39.1481, 3.8147e-06, -14.4027
 [node name="IncineratorChimney" parent="Terrain" instance=ExtResource( 22 )]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -42, 0, 31.4 )
 
+[node name="Barriers" type="Spatial" parent="Terrain"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 9.55307e-07, -31.6153, 87.3511 )
+script = ExtResource( 50 )
+
+[node name="BarrierPillar" parent="Terrain/Barriers" instance=ExtResource( 42 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 61.3511, 31.6153, -32 )
+
+[node name="BarrierPillar3" parent="Terrain/Barriers" instance=ExtResource( 42 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 71.3511, 31.6153, -32 )
+
+[node name="BarrierPillar2" parent="Terrain/Barriers" instance=ExtResource( 42 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 50.3511, 31.6153, -32 )
+
+[node name="BarrierPillar4" parent="Terrain/Barriers" instance=ExtResource( 42 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 40.3511, 31.6153, -32 )
+
+[node name="BarrierPillar5" parent="Terrain/Barriers" instance=ExtResource( 42 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 36.0111, 31.6153, -29.5 )
+
+[node name="BarrierWall" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 63.8511, 31.6153, -32 )
+
+[node name="BarrierWall2" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 68.8511, 31.6153, -32 )
+
+[node name="BarrierWall3" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 47.8511, 31.6153, -32 )
+
+[node name="BarrierWall4" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 42.8511, 31.6153, -32 )
+
+[node name="BarrierWall5" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 38.1861, 31.6153, -30.75 )
+
+[node name="BarrierPillar9" parent="Terrain/Barriers" instance=ExtResource( 42 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 159.351, 31.6153, -16 )
+
+[node name="BarrierPillar10" parent="Terrain/Barriers" instance=ExtResource( 42 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 159.351, 31.6153, 34 )
+
+[node name="BarrierWall13" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 159.351, 31.6153, -13.5 )
+
+[node name="BarrierWall14" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 159.351, 31.6153, -8.49999 )
+
+[node name="BarrierWall15" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 159.351, 31.6153, -3.49999 )
+
+[node name="BarrierWall16" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 159.351, 31.6153, 1.50001 )
+
+[node name="BarrierWall17" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 159.351, 31.6153, 6.50001 )
+
+[node name="BarrierWall18" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 159.351, 31.6153, 11.5 )
+
+[node name="BarrierWall19" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 159.351, 31.6153, 16.5 )
+
+[node name="BarrierWall20" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 159.351, 31.6153, 21.5 )
+
+[node name="BarrierWall21" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 159.351, 31.6153, 26.5 )
+
+[node name="BarrierWall22" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 159.351, 31.6153, 31.5 )
+
+[node name="BarrierPillar11" parent="Terrain/Barriers" instance=ExtResource( 42 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 68.0266, 31.6153, 37.4057 )
+
+[node name="BarrierPillar12" parent="Terrain/Barriers" instance=ExtResource( 42 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 88.0266, 31.6153, 37.4057 )
+
+[node name="BarrierWall23" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -1, 0, -8.74226e-08, 0, 1, 0, 8.74226e-08, 0, -1, 80.5266, 31.6153, 37.4057 )
+
+[node name="BarrierWall24" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -1, 0, -8.74226e-08, 0, 1, 0, 8.74226e-08, 0, -1, 75.5266, 31.6153, 37.4057 )
+
+[node name="BarrierWall25" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -1, 0, -8.74226e-08, 0, 1, 0, 8.74226e-08, 0, -1, 70.5266, 31.6153, 37.4057 )
+
+[node name="BarrierWall26" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -1, 0, -8.74226e-08, 0, 1, 0, 8.74226e-08, 0, -1, 85.5266, 31.6153, 37.4057 )
+
+[node name="BarrierPillar16" parent="Terrain/Barriers" instance=ExtResource( 42 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 84.3571, 31.6153, -39.5118 )
+
+[node name="BarrierWall33" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( 0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 73.5221, 31.6153, -33.2618 )
+
+[node name="BarrierWall34" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( 0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 77.8521, 31.6153, -35.7618 )
+
+[node name="BarrierWall35" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( 0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 82.1821, 31.6153, -38.2618 )
+
+[node name="BarrierPillar15" parent="Terrain/Barriers" instance=ExtResource( 42 )]
+transform = Transform( -0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 55.004, 31.6153, 29.8908 )
+
+[node name="BarrierWall30" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866026, 65.8341, 31.6153, 36.1492 )
+
+[node name="BarrierWall31" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866026, 61.5041, 31.6153, 33.6493 )
+
+[node name="BarrierWall32" parent="Terrain/Barriers" instance=ExtResource( 40 )]
+transform = Transform( -0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866026, 57.174, 31.6153, 31.1494 )
+
+[node name="BarrierShort" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 116.229, 31.6565, 24.2566 )
+
+[node name="BarrierShort2" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 122.229, 31.6565, 24.2566 )
+
+[node name="BarrierShort3" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 128.229, 31.6565, 24.2566 )
+
+[node name="BarrierShort4" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 134.229, 31.6565, 24.2566 )
+
+[node name="BarrierShort5" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 116.229, 31.6565, 36.2566 )
+
+[node name="BarrierShort6" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 122.229, 31.6565, 36.2566 )
+
+[node name="BarrierShort7" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 128.229, 31.6565, 36.2566 )
+
+[node name="BarrierShort18" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 134.229, 31.6565, 36.2566 )
+
+[node name="BarrierShort19" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 68.2293, 31.6565, 80.2566 )
+
+[node name="BarrierShort20" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 74.2293, 31.6565, 80.2566 )
+
+[node name="BarrierShort21" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 80.2293, 31.6565, 80.2566 )
+
+[node name="BarrierShort22" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 86.2293, 31.6565, 80.2566 )
+
+[node name="BarrierShort39" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 92.2293, 31.6565, 80.2566 )
+
+[node name="BarrierShort40" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 98.2293, 31.6565, 80.2566 )
+
+[node name="BarrierShort41" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 104.229, 31.6565, 80.2566 )
+
+[node name="BarrierShort42" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 110.229, 31.6565, 80.2566 )
+
+[node name="BarrierShort27" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 92.2293, 31.6565, -73.6434 )
+
+[node name="BarrierShort28" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 98.2293, 31.6565, -73.6434 )
+
+[node name="BarrierShort29" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 104.229, 31.6565, -73.6434 )
+
+[node name="BarrierShort30" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 110.229, 31.6565, -73.6434 )
+
+[node name="BarrierShort34" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 116.229, 31.6565, -73.6434 )
+
+[node name="BarrierShort31" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 123.378, 31.6565, -72.0935 )
+
+[node name="BarrierShort32" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 128.574, 31.6565, -69.0936 )
+
+[node name="BarrierShort33" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 133.77, 31.6565, -66.0936 )
+
+[node name="BarrierShort35" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 138.978, 31.6565, -63.0935 )
+
+[node name="BarrierShort36" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 144.174, 31.6565, -60.0936 )
+
+[node name="BarrierShort37" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 149.37, 31.6565, -57.0936 )
+
+[node name="BarrierShort38" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866025, 154.566, 31.6565, -54.0936 )
+
+[node name="BarrierShort23" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 119.518, 31.6565, 75.5439 )
+
+[node name="BarrierShort24" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 124.714, 31.6565, 72.5439 )
+
+[node name="BarrierShort25" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 129.91, 31.6565, 69.5439 )
+
+[node name="BarrierShort26" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, 135.106, 31.6565, 66.5439 )
+
+[node name="BarrierShort10" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 116.229, 31.6565, 12.2566 )
+
+[node name="BarrierShort11" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 122.229, 31.6565, 12.2566 )
+
+[node name="BarrierShort12" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 128.229, 31.6565, 12.2566 )
+
+[node name="BarrierShort13" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 134.229, 31.6565, 12.2566 )
+
+[node name="BarrierShort14" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 116.229, 31.6565, 0.256607 )
+
+[node name="BarrierShort15" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 122.229, 31.6565, 0.256607 )
+
+[node name="BarrierShort16" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 128.229, 31.6565, 0.256608 )
+
+[node name="BarrierShort17" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 134.229, 31.6565, 0.256608 )
+
+[node name="BarrierShort8" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 139.229, 31.6565, 14.9848 )
+
+[node name="BarrierShort9" parent="Terrain/Barriers" instance=ExtResource( 41 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 139.229, 31.6565, 20.9848 )
+
 [node name="Dragon" parent="Terrain" instance=ExtResource( 6 )]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 9.55307e-07, -31.6153, 87.3511 )
-
-[node name="BarrierPillar" parent="Terrain" instance=ExtResource( 42 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 0, 26 )
-
-[node name="BarrierPillar3" parent="Terrain" instance=ExtResource( 42 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 0, 16 )
-
-[node name="BarrierPillar2" parent="Terrain" instance=ExtResource( 42 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 0, 37 )
-
-[node name="BarrierPillar4" parent="Terrain" instance=ExtResource( 42 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 0, 47 )
-
-[node name="BarrierPillar5" parent="Terrain" instance=ExtResource( 42 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -29.5, 0, 51.34 )
-
-[node name="BarrierWall" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -32, 0, 23.5 )
-
-[node name="BarrierWall2" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -32, 0, 18.5 )
-
-[node name="BarrierWall3" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -32, 0, 39.5 )
-
-[node name="BarrierWall4" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -32, 0, 44.5 )
-
-[node name="BarrierWall5" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -30.75, 0, 49.165 )
-
-[node name="BarrierPillar9" parent="Terrain" instance=ExtResource( 42 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, -72 )
-
-[node name="BarrierPillar10" parent="Terrain" instance=ExtResource( 42 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, -72 )
-
-[node name="BarrierWall13" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 0, -72 )
-
-[node name="BarrierWall14" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, -72 )
-
-[node name="BarrierWall15" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, -72 )
-
-[node name="BarrierWall16" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -72 )
-
-[node name="BarrierWall17" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0, -72 )
-
-[node name="BarrierWall18" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 0, -72 )
-
-[node name="BarrierWall19" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 0, -72 )
-
-[node name="BarrierWall20" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 21.5, 0, -72 )
-
-[node name="BarrierWall21" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 26.5, 0, -72 )
-
-[node name="BarrierWall22" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5, 0, -72 )
-
-[node name="BarrierPillar11" parent="Terrain" instance=ExtResource( 42 )]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 37.4057, 0, 19.3245 )
-
-[node name="BarrierPillar12" parent="Terrain" instance=ExtResource( 42 )]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 37.4057, 0, -0.675543 )
-
-[node name="BarrierWall23" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 37.4057, 0, 6.82446 )
-
-[node name="BarrierWall24" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 37.4057, 0, 11.8245 )
-
-[node name="BarrierWall25" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 37.4057, 0, 16.8245 )
-
-[node name="BarrierWall26" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( 1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 37.4057, 0, 1.82446 )
-
-[node name="BarrierPillar16" parent="Terrain" instance=ExtResource( 42 )]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -39.5118, 0, 2.99399 )
-
-[node name="BarrierWall33" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( -0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, -33.2618, 0, 13.829 )
-
-[node name="BarrierWall34" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( -0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, -35.7618, 0, 9.49899 )
-
-[node name="BarrierWall35" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( -0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, -38.2618, 0, 5.16899 )
-
-[node name="BarrierPillar15" parent="Terrain" instance=ExtResource( 42 )]
-transform = Transform( 0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 29.8908, 0, 32.3471 )
-
-[node name="BarrierWall30" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( -0.5, 0, -0.866026, 0, 1, 0, 0.866026, 0, -0.5, 36.1492, 0, 21.517 )
-
-[node name="BarrierWall31" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( -0.5, 0, -0.866026, 0, 1, 0, 0.866026, 0, -0.5, 33.6493, 0, 25.847 )
-
-[node name="BarrierWall32" parent="Terrain" instance=ExtResource( 40 )]
-transform = Transform( -0.5, 0, -0.866026, 0, 1, 0, 0.866026, 0, -0.5, 31.1494, 0, 30.1771 )
-
-[node name="BarrierShort" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 24.2566, 0.0412292, -28.8782 )
-
-[node name="BarrierShort2" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 24.2566, 0.0412292, -34.8782 )
-
-[node name="BarrierShort3" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 24.2566, 0.0412292, -40.8782 )
-
-[node name="BarrierShort4" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 24.2566, 0.0412292, -46.8782 )
-
-[node name="BarrierShort5" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 36.2566, 0.0412292, -28.8782 )
-
-[node name="BarrierShort6" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 36.2566, 0.0412292, -34.8782 )
-
-[node name="BarrierShort7" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 36.2566, 0.0412292, -40.8782 )
-
-[node name="BarrierShort18" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 36.2566, 0.0412292, -46.8782 )
-
-[node name="BarrierShort19" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 80.2566, 0.0412292, 19.1218 )
-
-[node name="BarrierShort20" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 80.2566, 0.0412292, 13.1218 )
-
-[node name="BarrierShort21" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 80.2566, 0.0412292, 7.12177 )
-
-[node name="BarrierShort22" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 80.2566, 0.0412292, 1.12177 )
-
-[node name="BarrierShort39" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 80.2566, 0.0412292, -4.8782 )
-
-[node name="BarrierShort40" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 80.2566, 0.0412292, -10.8782 )
-
-[node name="BarrierShort41" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 80.2566, 0.0412292, -16.8782 )
-
-[node name="BarrierShort42" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 80.2566, 0.0412292, -22.8782 )
-
-[node name="BarrierShort27" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -73.6434, 0.0412292, -4.87823 )
-
-[node name="BarrierShort28" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -73.6434, 0.0412292, -10.8782 )
-
-[node name="BarrierShort29" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -73.6434, 0.0412292, -16.8782 )
-
-[node name="BarrierShort30" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -73.6434, 0.0412292, -22.8782 )
-
-[node name="BarrierShort34" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -73.6434, 0.0412292, -28.8782 )
-
-[node name="BarrierShort31" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -72.0935, 0.0412292, -36.027 )
-
-[node name="BarrierShort32" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -69.0936, 0.0412292, -41.2231 )
-
-[node name="BarrierShort33" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -66.0936, 0.0412292, -46.4192 )
-
-[node name="BarrierShort35" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -63.0935, 0.0412292, -51.627 )
-
-[node name="BarrierShort36" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -60.0936, 0.0412292, -56.8231 )
-
-[node name="BarrierShort37" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -57.0936, 0.0412292, -62.0192 )
-
-[node name="BarrierShort38" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -54.0936, 0.0412292, -67.2154 )
-
-[node name="BarrierShort23" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( 0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 75.5439, 0.0412292, -32.1665 )
-
-[node name="BarrierShort24" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( 0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 72.5439, 0.0412292, -37.3627 )
-
-[node name="BarrierShort25" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( 0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 69.5439, 0.0412292, -42.5588 )
-
-[node name="BarrierShort26" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( 0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, 66.5439, 0.0412292, -47.755 )
-
-[node name="BarrierShort10" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.2566, 0.0412292, -28.8782 )
-
-[node name="BarrierShort11" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.2566, 0.0412292, -34.8782 )
-
-[node name="BarrierShort12" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.2566, 0.0412292, -40.8782 )
-
-[node name="BarrierShort13" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 12.2566, 0.0412292, -46.8782 )
-
-[node name="BarrierShort14" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.256603, 0.0412292, -28.8782 )
-
-[node name="BarrierShort15" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.256603, 0.0412292, -34.8782 )
-
-[node name="BarrierShort16" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.256603, 0.0412292, -40.8782 )
-
-[node name="BarrierShort17" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.256603, 0.0412292, -46.8782 )
-
-[node name="BarrierShort8" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 14.9848, 0.0412292, -51.8782 )
-
-[node name="BarrierShort9" parent="Terrain" instance=ExtResource( 41 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.9848, 0.0412292, -51.8782 )
 
 [node name="PlayerChassis" parent="." instance=ExtResource( 20 )]
 collision_layer = 3
@@ -559,6 +569,24 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/separation = 12
 
+[node name="PanelContainer" type="PanelContainer" parent="HUDCanvasLayer/HUD"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -123.0
+margin_top = 11.0
+margin_right = -13.0
+margin_bottom = 66.0
+rect_min_size = Vector2( 110, 0 )
+
+[node name="CountdownLabel" type="Label" parent="HUDCanvasLayer/HUD/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 103.0
+margin_bottom = 48.0
+custom_fonts/font = ExtResource( 30 )
+text = "10:00"
+align = 1
+
 [node name="PauseMenuCanvas" type="CanvasLayer" parent="."]
 layer = 2
 
@@ -620,6 +648,82 @@ anchor_bottom = 0.0
 margin_right = 1920.0
 margin_bottom = 1080.0
 
+[node name="WinPanel" type="PanelContainer" parent="PauseMenuCanvas"]
+pause_mode = 2
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 8 )
+script = ExtResource( 48 )
+starHolderPath = NodePath("VBoxContainer/HBoxContainer")
+summaryPath = NodePath("VBoxContainer/Total")
+goldStar = ExtResource( 43 )
+blackStar = ExtResource( 49 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenuCanvas/WinPanel"]
+margin_left = 764.0
+margin_top = 357.0
+margin_right = 1156.0
+margin_bottom = 722.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_constants/separation = 10
+
+[node name="Title" type="Label" parent="PauseMenuCanvas/WinPanel/VBoxContainer"]
+margin_right = 392.0
+margin_bottom = 80.0
+custom_fonts/font = SubResource( 9 )
+text = "Time's up!"
+
+[node name="Total" type="Label" parent="PauseMenuCanvas/WinPanel/VBoxContainer"]
+margin_top = 90.0
+margin_right = 392.0
+margin_bottom = 170.0
+size_flags_vertical = 1
+custom_fonts/font = SubResource( 9 )
+text = "10/10"
+align = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PauseMenuCanvas/WinPanel/VBoxContainer"]
+margin_top = 180.0
+margin_right = 392.0
+margin_bottom = 308.0
+size_flags_horizontal = 4
+
+[node name="TextureRect" type="TextureRect" parent="PauseMenuCanvas/WinPanel/VBoxContainer/HBoxContainer"]
+margin_right = 128.0
+margin_bottom = 128.0
+texture = ExtResource( 43 )
+
+[node name="TextureRect2" type="TextureRect" parent="PauseMenuCanvas/WinPanel/VBoxContainer/HBoxContainer"]
+margin_left = 132.0
+margin_right = 260.0
+margin_bottom = 128.0
+texture = ExtResource( 43 )
+
+[node name="TextureRect3" type="TextureRect" parent="PauseMenuCanvas/WinPanel/VBoxContainer/HBoxContainer"]
+margin_left = 264.0
+margin_right = 392.0
+margin_bottom = 128.0
+texture = ExtResource( 43 )
+
+[node name="Quit" type="Button" parent="PauseMenuCanvas/WinPanel/VBoxContainer"]
+margin_left = 116.0
+margin_top = 318.0
+margin_right = 276.0
+margin_bottom = 365.0
+rect_min_size = Vector2( 160, 0 )
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 30 )
+text = "Exit"
+
+[node name="InstructionsPanel" parent="PauseMenuCanvas/WinPanel" instance=ExtResource( 34 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+
 [node name="PauseButton" type="TextureButton" parent="PauseMenuCanvas"]
 pause_mode = 2
 anchor_left = 1.0
@@ -656,4 +760,5 @@ transform = Transform( -0.999927, 0, -0.0121122, 0, 1, 0, 0.0121122, 0, -0.99992
 [connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Instructions" to="PauseMenuCanvas/PausePanel" method="_HandleClickInstructions"]
 [connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Restart" to="PauseMenuCanvas/PausePanel" method="_HandleClickRestart"]
 [connection signal="pressed" from="PauseMenuCanvas/PausePanel/VBoxContainer/Quit" to="PauseMenuCanvas/PausePanel" method="_HandleClickQuit"]
+[connection signal="pressed" from="PauseMenuCanvas/WinPanel/VBoxContainer/Quit" to="PauseMenuCanvas/WinPanel" method="_HandleClickQuit"]
 [connection signal="pressed" from="PauseMenuCanvas/PauseButton" to="PauseMenuCanvas/PausePanel" method="_HandlePauseButtonPush"]

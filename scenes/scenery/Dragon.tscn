@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://models/entity/Dragon.glb" type="PackedScene" id=1]
 [ext_resource path="res://src/entity/DragonControl.cs" type="Script" id=2]
@@ -9,6 +9,10 @@
 [ext_resource path="res://audio/effects/dragon roar#01.wav" type="AudioStream" id=7]
 
 [sub_resource type="SphereShape" id=7]
+
+[sub_resource type="CapsuleShape" id=8]
+radius = 16.8719
+height = 19.9751
 
 [sub_resource type="AnimationNodeAnimation" id=4]
 animation = "Chew"
@@ -58,7 +62,7 @@ shape = SubResource( 7 )
 transform = Transform( 5, 0, 0, 0, 5, 0, 0, 0, 5, -2.27492, 4.42941, 5.96046e-08 )
 
 [node name="BoneAttachment" parent="DragonArmature/Skeleton" index="0"]
-transform = Transform( 0.252361, 0.967574, 0.0106658, -0.967478, 0.252108, 0.0207289, 0.0173678, -0.0155501, 0.999728, 5.7182, 7.53628, -0.138714 )
+transform = Transform( 0.28412, 0.958577, 0.0201254, -0.957964, 0.282943, 0.0474198, 0.0397613, -0.0327523, 0.998672, 5.71292, 7.53829, -0.308139 )
 
 [node name="Empty" parent="DragonArmature/Skeleton/BoneAttachment" index="0"]
 transform = Transform( 0.243877, -0.969806, -8.9407e-08, 0.969807, 0.243877, 3.72529e-08, -3.72529e-09, -7.45058e-08, 1, 0.445415, 1.20323, 0.0221245 )
@@ -68,7 +72,13 @@ stream = ExtResource( 4 )
 unit_db = 25.404
 bus = "Dragon"
 
-[node name="AnimationTree" type="AnimationTree" parent="." index="3"]
+[node name="StaticBody" type="StaticBody" parent="." index="2"]
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody" index="0"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 16.7431, 0, 0 )
+shape = SubResource( 8 )
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="4"]
 tree_root = SubResource( 2 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
