@@ -1,8 +1,9 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://models/abilities/PGunArm.glb" type="PackedScene" id=1]
 [ext_resource path="res://src/player/PGunControl.cs" type="Script" id=2]
 [ext_resource path="res://scenes/prefabs/Pepperoni.tscn" type="PackedScene" id=3]
+[ext_resource path="res://audio/effects/shooting pepperoni -dsynth plip#01.wav" type="AudioStream" id=4]
 
 [sub_resource type="Animation" id=1]
 resource_name = "PGunStowed"
@@ -112,6 +113,7 @@ script = ExtResource( 2 )
 animationTreePath = NodePath("AnimationTree")
 pepperoniPrefab = ExtResource( 3 )
 muzzlePath = NodePath("Armature/Skeleton/BoneAttachment3/Gun/Muzzle")
+shootAudioPath = NodePath("Armature/Skeleton/BoneAttachment3/Gun/Muzzle/ShootAudio")
 
 [node name="BoneAttachment" parent="Armature/Skeleton" index="0"]
 transform = Transform( 1, 3.55271e-13, -4.76837e-07, -2.0774e-07, -0.90011, -0.435663, -4.29206e-07, 0.435663, -0.900109, -3.40501e-12, 0.927663, -6.30114 )
@@ -124,6 +126,12 @@ transform = Transform( 1, -5.68434e-14, -3.89414e-07, -1.70653e-07, -0.898863, -
 
 [node name="Muzzle" type="Spatial" parent="Armature/Skeleton/BoneAttachment3/Gun" index="0"]
 transform = Transform( 1, -3.75871e-21, 3.46945e-18, 8.92561e-19, 1, 0, -3.46945e-18, 0, 1, 0, 7.541, 3.5 )
+
+[node name="ShootAudio" type="AudioStreamPlayer3D" parent="Armature/Skeleton/BoneAttachment3/Gun/Muzzle" index="0"]
+transform = Transform( 1, 1.70544e-13, 9.91924e-13, -1.05798e-12, 0.438241, 0.898858, -2.94478e-13, -0.898858, 0.438241, 0, 0, 0 )
+stream = ExtResource( 4 )
+unit_db = 8.0
+bus = "Ronigun"
 
 [node name="AnimationPlayer" parent="." index="1"]
 anims/PGunStowed = SubResource( 1 )

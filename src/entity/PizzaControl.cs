@@ -122,6 +122,10 @@ public class PizzaControl : RigidBody, ICookable
         }
         
         if(Translation.y < -100) {
+            if(_progress != null) {
+                _progress.QueueFree();
+                _progress = null;
+            }
             QueueFree();
         }
     }

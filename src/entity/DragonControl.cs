@@ -24,6 +24,31 @@ public class DragonControl : Spatial
 
     private Spatial _entityHolder;
 
+    [Export]
+    private AudioStream roarStream;
+
+    [Export]
+    private AudioStream eatStream;
+    
+    [Export]
+    private AudioStream growlStream;
+    
+    [Export]
+    private AudioStream spitStream;
+
+    [Export]
+    private NodePath audioPlayerPath;
+    private AudioStreamPlayer3D _audioPlayer;
+
+
+    [Export]
+    private Vector2 growlRateRange = new Vector2(20, 40);
+
+    private float _growlCountdown;
+
+    private Random _rng = new Random();
+    
+
     public override void _Ready()
     {
         _mouth = GetNode<DragonMouthControl>(dragonMouthPath) ?? throw new NullReferenceException();
@@ -32,6 +57,9 @@ public class DragonControl : Spatial
         _levelManager = LevelManager.MustGetNode(this);
         _ordersManager = _levelManager.OrdersManager;
         _entityHolder = _levelManager.EntityHolder;
+        _audioPlayer=  GetNode<AudioStreamPlayer3D>(audioPlayerPath) ?? throw new NullReferenceException();
+
+        ScheduleGrowl();
     }
 
     public bool EatPizza(PizzaControl pizza) {
@@ -46,6 +74,8 @@ public class DragonControl : Spatial
 
         _stateMachine.Travel("Chew");
         _heldPizza = pizza;
+
+        PlaySound(eatStream);
 
         var validPizza = _ordersManager.PizzaOrderValid(_heldPizza.PizzaState);
 
@@ -70,6 +100,18 @@ public class DragonControl : Spatial
         }
     }
 
+    public override void _Process(float delta)
+    {
+        if((_growlCountdown-=delta) <= 0) {
+            ScheduleGrowl();
+            if(!_audioPlayer.Playing) {
+                _audioPlayer.Stream = MechGameHelpers.RandomBool(_rng) ? growlStream : roarStream;
+                _audioPlayer.Seek(0);
+                _audioPlayer.Playing = true;
+            }
+        }
+    }
+
     private void _RemoveHeldPizza(bool validPizza) {
         if(_heldPizza == null || _heldPizza.GetParent() != _mouth) {
             GD.PushWarning("No pizza to remove.");
@@ -88,10 +130,23 @@ public class DragonControl : Spatial
             _heldPizza.ApplyCentralImpulse((_levelManager.PlayerControl.GlobalTranslation - _mouth.GlobalTranslation) * 3f);
 
             _heldPizza = null;
+
+            PlaySound(spitStream);
+
             return;
         }
 
         _heldPizza.QueueFree();
         _heldPizza = null;
+    }
+
+    private void PlaySound(AudioStream sound) {
+        _audioPlayer.Stream = sound;
+        _audioPlayer.Seek(0);
+        _audioPlayer.Playing = true;
+    }
+
+    private void ScheduleGrowl() {
+        _growlCountdown = MechGameHelpers.RandomRangef(_rng, growlRateRange.x, growlRateRange.y);
     }
 }

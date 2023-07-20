@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/change equipment.wav-5a430c786a7c5798321feeda8ef5c7dd.sample"
+
+[deps]
+
+source_file="res://audio/effects/change equipment.wav"
+dest_files=[ "res://.import/change equipment.wav-5a430c786a7c5798321feeda8ef5c7dd.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

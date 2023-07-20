@@ -34,7 +34,7 @@ public class OrdersManager : Node
     [Export]
     private float _roniTimeLimitBuff = 15f;
 
-    private float _orderAddCooldown;
+    private float _orderAddCooldown = 3f;
 
     private Random _rng = new Random();
 
@@ -43,9 +43,23 @@ public class OrdersManager : Node
     private int _rejectedPizzaCount = 0;
     public int RejectedPizzaCount => _rejectedPizzaCount;
 
+    [Export]
+    NodePath orderAudioPath;
+    private AudioStreamPlayer _audioPlayer;
+
+    [Export]
+    AudioStream addOrderStream;
+
+    [Export]
+    AudioStream successOrderStream;
+
+    [Export]
+    AudioStream failOrderStream;
+
     public override void _Ready()
     {
         _ordersUI = GetNode<OrdersUIControl>(ordersUIPath) ?? throw new NullReferenceException();
+        _audioPlayer = GetNode<AudioStreamPlayer>(orderAudioPath) ?? throw new NullReferenceException();
     }
 
     public override void _Process(float delta)
@@ -131,6 +145,10 @@ public class OrdersManager : Node
         };
 
         _orders.Add(orderItem);
+
+        _audioPlayer.Stream = addOrderStream;
+        _audioPlayer.Seek(0);
+        _audioPlayer.Play();
     }
 
     private void RemoveOrder(OrderItem order, bool failed) {
@@ -138,6 +156,11 @@ public class OrdersManager : Node
         order.state.failed = failed;
         _finishedOrders.Add(order.state);
         _orders.Remove(order);
+
+
+        _audioPlayer.Stream = failed ? failOrderStream : successOrderStream;
+        _audioPlayer.Seek(0);
+        _audioPlayer.Play();
     }
 
     private class OrderItem {

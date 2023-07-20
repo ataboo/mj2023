@@ -47,16 +47,16 @@ public class PlateArmControl : Spatial
     private float _spinV = 0f;
     private float _spinDoughT = 0f;
 
-    private float _spinAccel = 8f;
+    private float _spinAccel = 16f;
 
-    private float _spinDeccel = 8f;
+    private float _spinDeccel = 16f;
 
     private float _maxSpinSpeed = 100f;
 
     private ARProgressGroupControl _spinProgressBar;
 
-    private Vector2 _stretchSpeedRange = new Vector2(10f, 80f);
-    private Vector2 _stretchRate = new Vector2(.1f, 0.3f);
+    private Vector2 _stretchSpeedRange = new Vector2(60f, 80f);
+    private Vector2 _stretchRate = new Vector2(.2f, 0.5f);
 
     private float _actionDebounce;
 
@@ -121,13 +121,22 @@ public class PlateArmControl : Spatial
 
         _plate.Rotate(Vector3.Forward, -_spinV * delta);
 
-        if (_holdingDough && _spinV > _stretchSpeedRange.x)
-        {
-            _spinAudioPlayer.Playing = true;
-            var stretchWeight = Mathf.Clamp(_spinV / (_stretchSpeedRange.y - _stretchSpeedRange.x), 0, 1);
-            var stretchRate = Mathf.Lerp(_stretchRate.x, _stretchRate.y, stretchWeight);
-            _spinDoughT = Mathf.Clamp(_spinDoughT + stretchRate * delta, 0, 1);
-            ShowSpinProgress();
+        if(_spinV > _stretchSpeedRange.x) {
+            if(_spinning) {
+                if(!_spinAudioPlayer.Playing) {
+                    _spinRevAudioPlayer.Playing = false;
+                    _spinAudioPlayer.Playing = true;
+                }
+            } else {
+                _spinAudioPlayer.Playing = false;
+            }
+
+            if(_holdingDough) {
+                var stretchWeight = Mathf.Clamp(_spinV / (_stretchSpeedRange.y - _stretchSpeedRange.x), 0, 1);
+                var stretchRate = Mathf.Lerp(_stretchRate.x, _stretchRate.y, stretchWeight);
+                _spinDoughT = Mathf.Clamp(_spinDoughT + stretchRate * delta, 0, 1);
+                ShowSpinProgress();
+            }
         } else {
             _spinAudioPlayer.Playing = false;
         }
