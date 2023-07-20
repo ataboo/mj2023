@@ -36,7 +36,7 @@ public class WinPanelControl : PanelContainer
         
         _starHolder.GetChild<TextureRect>(0).Texture = ratio >= .5f ? goldStar : blackStar;
         _starHolder.GetChild<TextureRect>(1).Texture = ratio >= .9f ? goldStar : blackStar;
-        _starHolder.GetChild<TextureRect>(2).Texture = ratio == 1f ? goldStar : blackStar;
+        _starHolder.GetChild<TextureRect>(2).Texture = failed == 0f ? goldStar : blackStar;
 
         Input.MouseMode = Input.MouseModeEnum.Visible;
     }
