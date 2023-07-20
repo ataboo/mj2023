@@ -42,10 +42,10 @@
 [ext_resource path="res://models/terrain/BarrierWall.gltf" type="PackedScene" id=40]
 [ext_resource path="res://models/terrain/BarrierShort.gltf" type="PackedScene" id=41]
 [ext_resource path="res://models/terrain/BarrierPillar.gltf" type="PackedScene" id=42]
-[ext_resource path="res://models/terrain/CementTruck.glb" type="PackedScene" id=43]
 [ext_resource path="res://audio/effects/order success.wav" type="AudioStream" id=44]
 [ext_resource path="res://audio/effects/order failed.wav" type="AudioStream" id=45]
 [ext_resource path="res://audio/effects/order accepted.wav" type="AudioStream" id=46]
+[ext_resource path="res://scenes/prefabs/CementTruck.tscn" type="PackedScene" id=47]
 
 [sub_resource type="CylinderShape" id=2]
 height = 15.0
@@ -647,7 +647,7 @@ transform = Transform( 0.185355, -0.867785, 0.461078, 0.369278, 0.49633, 0.78567
 light_energy = 1.5
 shadow_enabled = true
 
-[node name="CementTruck" parent="." instance=ExtResource( 43 )]
+[node name="CementTruck2" parent="." instance=ExtResource( 47 )]
 transform = Transform( -0.999927, 0, -0.0121122, 0, 1, 0, 0.0121122, 0, -0.999927, -10.5, 4.43505, -28.2004 )
 
 [connection signal="timeout" from="Entities/DoughSpawner/Timer" to="Entities/DoughSpawner" method="_HandleTimerTimeout"]
