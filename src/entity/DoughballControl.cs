@@ -28,6 +28,17 @@ public class DoughballControl : RigidBody, IKickable
         this.ApplyDamage(impulse.Length() / Mass, kickMultiplier, impulse);
     }
 
+    public override void _Process(float delta)
+    {
+        if(Translation.y < -100) {
+            if(_progress != null) {
+                _progress.QueueFree();
+                _progress = null;
+            }
+            QueueFree();
+        }
+    }
+
     public override void _Ready()
     {
         _health = startHealth;

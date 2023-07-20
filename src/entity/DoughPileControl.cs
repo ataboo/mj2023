@@ -15,6 +15,17 @@ public class DoughPileControl : RigidBody, IKickable
         CallDeferred(nameof(InitProgressBar));
     }
 
+    public override void _Process(float delta)
+    {
+        if(Translation.y < -100) {
+            if(_progress != null) {
+                _progress.QueueFree();
+                _progress = null;
+            }
+            QueueFree();
+        }
+    }
+
     private void InitProgressBar()
     {
         var level = LevelManager.MustGetNode(this);

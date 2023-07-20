@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/P1-Z4_loop.ogg-c511f1a04f2e5017c0be3fb15e79ccc3.oggstr"
+
+[deps]
+
+source_file="res://audio/music/P1-Z4_loop.ogg"
+dest_files=[ "res://.import/P1-Z4_loop.ogg-c511f1a04f2e5017c0be3fb15e79ccc3.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

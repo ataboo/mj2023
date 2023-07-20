@@ -73,10 +73,15 @@ public class PlayerControl : KinematicBody
         }
     }
 
+    [Export]
+    private NodePath walkAudioPath;
+    private AudioStreamPlayer3D _walkAudio;
+
     public override void _Ready()
     {
         _gameManager = GameManager.MustGetNode(this);
         _levelManager = LevelManager.MustGetNode(this);
+        _walkAudio = GetNode<AudioStreamPlayer3D>(walkAudioPath) ?? throw new NullReferenceException();
 
         Input.MouseMode = Input.MouseModeEnum.Captured;
         InitState();
@@ -176,6 +181,8 @@ public class PlayerControl : KinematicBody
         _state.walkSpeedSaturation = Mathf.Abs(_state.fwdVelocity.Length()) / walkSpeed;
         _state.shuffleSaturation = Mathf.Max(Mathf.Abs(_state.fwdVelocity.x) / strafeSpeed, Mathf.Abs(_state.turnInput));
 
+        var walkCycleTBefore = _state.walkCycleT;
+
         var stopped = _state.walkInput.Length() < 0.01f && Mathf.Abs(_state.turnInput) < 0.01f;
         if (stopped)
         {
@@ -194,6 +201,16 @@ public class PlayerControl : KinematicBody
             {
                 _state.walkCycleT = (_state.walkCycleT + _state.walkSpeedSaturation * delta / walkCyclePeriod) % 1f;
             }
+        }
+
+        var halfCycleBefore = (walkCycleTBefore * 2) % 1f;
+        var halfCycleAfter = (_state.walkCycleT * 2) % 1f;
+        var leftFoot = _state.walkCycleT < 0.5f;
+
+        if(halfCycleBefore < 0.5f && halfCycleAfter >= 0.5f) {
+            _walkAudio.PitchScale = leftFoot ? 0.95f : 1.05f;
+            _walkAudio.Seek(0);
+            _walkAudio.Playing = true;
         }
     }
 

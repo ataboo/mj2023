@@ -15,12 +15,24 @@ public class OvenControl : Area
     private NodePath cookLightPath;
     private OmniLight _cookLight;
 
+    [Export]
+    private NodePath ovenEndAudioPath;
+    private AudioStreamPlayer3D _ovenEndAudio;
+
+    [Export]
+    private NodePath ovenLoopAudioPath;
+    private AudioStreamPlayer3D _ovenLoopAudio;
+
     private int _pizzaCount;
+
+    private bool _active;
 
     public override void _Ready()
     {
         _cookParticles = cookParticlePaths.Select(p => GetNode<CPUParticles>(p) ?? throw new NullReferenceException()).ToArray();
         _cookLight = GetNode<OmniLight>(cookLightPath)?? throw new NullReferenceException();
+        _ovenEndAudio = GetNode<AudioStreamPlayer3D>(ovenEndAudioPath) ?? throw new NullReferenceException();
+        _ovenLoopAudio = GetNode<AudioStreamPlayer3D>(ovenLoopAudioPath) ?? throw new NullReferenceException();
     }
 
     private void SetCookingActive(bool active) {
@@ -28,6 +40,13 @@ public class OvenControl : Area
             p.Emitting = active;
             _cookLight.Visible = active;
         }
+
+        _ovenLoopAudio.Playing = active;
+        if(!active && _active) {
+            _ovenEndAudio.Playing = true;
+        }
+
+        _active = active;
     }
 
     public void AddPizza() {

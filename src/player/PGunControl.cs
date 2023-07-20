@@ -37,6 +37,10 @@ public class PGunControl : Spatial
 
 	private Random _rng;
 
+	[Export]
+	NodePath shootAudioPath;
+	private AudioStreamPlayer3D _shootAudio;
+
 
 	public override void _Ready()
 	{
@@ -47,6 +51,7 @@ public class PGunControl : Spatial
 		_muzzle = GetNode<Spatial>(muzzlePath) ?? throw new NullReferenceException();
 		_cockpit = GetNode<CockpitControl>(cockpitControlPath) ?? throw new NullReferenceException();
 		_entityHolder = LevelManager.MustGetNode(this).EntityHolder ?? throw new NullReferenceException();
+		_shootAudio = GetNode<AudioStreamPlayer3D>(shootAudioPath) ?? throw new NullReferenceException();
 
 		_abilityControl.Connect(nameof(AbilityControl.OnAbilityChange), this, nameof(_HandleAbilityChanged));
 		_abilityControl.Connect(nameof(AbilityControl.OnClick), this, nameof(_HandleClick));
@@ -98,6 +103,7 @@ public class PGunControl : Spatial
 		_stateMachine.Start("PGunFire");
 		mag -= 1;
 					
+		_shootAudio.Playing = true;
 		var roni = pepperoniPrefab.Instance<PepperoniControl>();
 		_entityHolder.AddChild(roni);
 		roni.Translation = _muzzle.GlobalTranslation;
