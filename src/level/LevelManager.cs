@@ -3,6 +3,8 @@ using Godot;
 
 public class LevelManager : Node
 {
+    public bool IsOver {get; set;}
+
     public static LevelManager MustGetNode(Node self)
     {
         return self.GetNode<LevelManager>("/root/Level") ?? throw new System.NullReferenceException();
